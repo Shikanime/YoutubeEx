@@ -7,7 +7,6 @@
 !.gitignore
 !.dockerignore
 !Dockerfile
-!Makefile
 
 # Mix format
 !**/.formatter.exs
