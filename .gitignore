@@ -1,7 +1,6 @@
 *
 
 !.formatter.exs
-!.gitlab-ci.yml
 !.gitignore
 !.editorconfig
 !.dockerignore
@@ -19,18 +18,22 @@
 !apps/*/
 !apps/*/.formatter.exs
 !apps/*/mix.exs
-!apps/*/*.md
+!apps/*/README.md
 
 !apps/*/config/
+!apps/*/config/**/
 !apps/*/config/**/*.exs
 
 !apps/*/test/
+!apps/*/test/**/
 !apps/*/test/**/*.exs
 
 !apps/*/lib/
+!apps/*/lib/**/
 !apps/*/lib/**/*.ex
 
 !apps/*/priv/
+!apps/*/priv/**/
 !apps/*/priv/**/*
 
 !rel/
@@ -40,7 +43,12 @@
 !rel/commands/*.sh
 
 !config/
-!config/*.exs
+!config/**/
+!config/**/*.exs
+
+!hack/
+!hack/**/
+!hack/**/*.sh
 
 !deploy/
 !deploy/*.yaml
