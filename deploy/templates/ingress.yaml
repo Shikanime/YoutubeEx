@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "youtube-ex.fullname" . }}-ingress
+  labels:
+    app: {{ template "youtube-ex.name" . }}
+    chart: {{ template "youtube-ex.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  backend:
+    serviceName:  {{ include "youtube-ex.fullname" . }}
+    servicePort: 80

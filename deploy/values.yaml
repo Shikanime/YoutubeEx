@@ -1,0 +1,8 @@
+replicaCount: 3
+image: youtube-ex/youtube-ex
+gossipSecret: bm8tc2VjcmV0
+erlangCookie: bm8tY29va2ll
+
+postgresql:
+  postgresqlUsername: youtube_ex
+  postgresqlPassword: bm8tY29va2ll

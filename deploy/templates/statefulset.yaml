@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "youtube-ex.fullname" . }}
+  labels:
+    app: {{ template "youtube-ex.name" . }}
+    chart: {{ template "youtube-ex.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  serviceName: "youtube-ex"
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "youtube-ex.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "youtube-ex.name" . }}
+        chart: {{ template "youtube-ex.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      containers:
+        - name: youtube-ex
+          image: {{ .Values.image }}
+          ports:
+            - name: youtube-ex
+              containerPort: {{ default 80 .Values.port }}
+            - name: erlang-daemon
+              containerPort: 80
+            - name: erlang-discover
+              containerPort: 45892
+            - name: erlang-mesh
+              containerPort: 49200
+          env:
+            - name: HOST
+              value: {{ include "youtube-ex.fullname" . }}
+            - name: PORT
+              value: "80"
+            - name: POSTGRES_HOST
+              value: {{ include "youtube-ex.fullname" . }}-postgresql
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "youtube-ex.fullname" . }}-postgresql
+                  key: postgresql-password
+            - name: GOSSIP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "youtube-ex.fullname" . }}-cluster
+                  key: gossip-secret
+            - name: ERLANG_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "youtube-ex.fullname" . }}-cluster
+                  key: erlang-cookie
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: DEPLOYMENT_NAME
+              value: {{ .Release.Name }}

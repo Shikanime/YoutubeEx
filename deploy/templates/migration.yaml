@@ -1,0 +1,49 @@
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: "{{.Release.Name}}-migration"
+#   labels:
+#     app: {{ template "youtube-ex.name" . }}
+#     chart: {{ template "youtube-ex.chart" . }}
+#     release: {{ .Release.Name | quote }}
+#     heritage: {{ .Release.Service | quote }}
+#   annotations:
+#     "helm.sh/hook": post-install
+#     "helm.sh/hook-delete-policy": hook-succeeded
+# spec:
+#   template:
+#     metadata:
+#       name: "{{.Release.Name}}-migration"
+#       labels:
+#         app: {{ template "youtube-ex.name" . }}
+#         chart: {{ template "youtube-ex.chart" . }}
+#         release: {{ .Release.Name | quote }}
+#         heritage: {{ .Release.Service | quote }}
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#         - name: youtube-ex-migration
+#           image: {{ .Values.image }}
+#           args:
+#             - migrate
+#           env:
+#             - name: POSTGRES_HOST
+#               value: {{ include "youtube-ex.fullname" . }}-postgresql
+#             - name: POSTGRES_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: {{ include "youtube-ex.fullname" . }}-postgresql
+#                   key: postgresql-password
+#             - name: NODE_NAME
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.name
+#             - name: NODE_IP
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: status.podIP
+#             - name: DEPLOYMENT_NAME
+#               value: {{ .Release.Name }}
+#       ports:
+#         - name: youtube-ex
+#           containerPort: 80
