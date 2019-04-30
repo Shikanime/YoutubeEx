@@ -11,3 +11,8 @@ deploy:
         chartPath: deployment
         values:
           image: youtube-ex/youtube-ex
+profiles:
+  - name: ci
+    build:
+      local:
+        push: false
