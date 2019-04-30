@@ -3,15 +3,11 @@ IMAGE_VERSION=0.1.0
 
 all: image
 
-.PHONY: compile
-compile:
-	mix compile
-
 .PHONY: image
 image:
 	docker build \
 		--build-arg APP_NAME=youtube-ex \
-		--build-arg APP_VSN=0.1.0 \
+		--build-arg APP_VSN=${IMAGE_VERSION} \
 		-t ${IMAGE_REGISTRY}:latest \
 		.
 
@@ -26,7 +22,3 @@ release:
 .PHONY: doc
 doc:
 	mix docs
-
-.PHONY: publish
-publish:
-	docker push ${IMAGE_REGISTRY}:latest
