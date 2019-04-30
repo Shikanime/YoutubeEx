@@ -1,4 +1,6 @@
 defmodule YoutubeEx.ReleaseTasks do
+  require Logger
+
   @start_apps [
     :crypto,
     :ssl,
@@ -28,19 +30,19 @@ defmodule YoutubeEx.ReleaseTasks do
   end
 
   defp start_services do
-    IO.puts("Starting dependencies..")
+    Logger.info("Starting dependencies..")
     # Start apps necessary for executing migrations
     Enum.each(@start_apps, &Application.ensure_all_started/1)
 
     # Start the Repo(s) for app
-    IO.puts("Starting repos..")
+    Logger.info("Starting repos..")
 
     # Switch pool_size to 2 for ecto > 3.0
     Enum.each(@repos, & &1.start_link(pool_size: 1))
   end
 
   defp stop_services do
-    IO.puts("Success!")
+    Logger.info("Success!")
     :init.stop()
   end
 
@@ -50,7 +52,7 @@ defmodule YoutubeEx.ReleaseTasks do
 
   defp run_migrations_for(repo) do
     app = Keyword.get(repo.config(), :otp_app)
-    IO.puts("Running migrations for #{app}")
+    Logger.info("Running migrations for #{app}")
     migrations_path = priv_path_for(repo, "migrations")
     Ecto.Migrator.run(repo, migrations_path, :up, all: true)
   end
@@ -64,7 +66,7 @@ defmodule YoutubeEx.ReleaseTasks do
     seed_script = priv_path_for(repo, "seeds.exs")
 
     if File.exists?(seed_script) do
-      IO.puts("Running seed script..")
+      Logger.info("Running seed script..")
       Code.eval_file(seed_script)
     end
   end
