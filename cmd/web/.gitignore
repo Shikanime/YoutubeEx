@@ -1,0 +1,54 @@
+*
+
+# Documentations
+!**/README.md
+
+# Meta files
+!.gitignore
+!.dockerignore
+!Dockerfile
+!Makefile
+
+# Mix format
+!**/.formatter.exs
+
+# Elixir config files
+!**/config/
+!**/config/**/
+!**/config/**/*.exs
+
+# Mix root
+!mix.exs
+!mix.lock
+
+# Application files
+!apps/
+!apps/*/
+!apps/*/mix.exs
+
+!apps/*/test/
+!apps/*/test/**/
+!apps/*/test/**/*.exs
+
+!apps/*/lib/
+!apps/*/lib/**/
+!apps/*/lib/**/*.ex
+!apps/*/lib/**/*.eex
+
+!apps/*/priv/
+!apps/*/priv/**/
+!apps/*/priv/**/*
+
+# Ignore Phoenix digest files
+apps/*/priv/static
+
+!apps/*/assets/
+!apps/*/assets/**/
+!apps/*/assets/**/*
+
+# Release files
+!rel/
+!rel/*.exs
+!rel/vm.args
+!rel/commands/
+!rel/commands/*.sh

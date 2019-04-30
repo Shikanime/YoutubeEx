@@ -8,9 +8,8 @@
 !LICENSE
 
 # Meta files
-!**/
-!**/.gitignore
-!**/.editorconfig
+!.gitignore
+!.editorconfig
 !skaffold.yaml
 
 # Monorepo application folder
