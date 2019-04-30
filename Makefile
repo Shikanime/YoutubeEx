@@ -27,13 +27,6 @@ release:
 doc:
 	mix docs
 
-.PHONY: changelog
-changelog:
-	yarn changelog \
-		--infile CHANGELOG.md \
-		--release-count 0 \
-		--same-file
-
 .PHONY: publish
 publish:
 	docker push ${IMAGE_REGISTRY}:latest
