@@ -5,4 +5,6 @@ gossipSecret: Ku6NwW8mvC7KVFdW
 erlangCookie: fkMpfa27NHFBz4CD
 
 postgresql:
+  postgresqlUsername: youtube_ex
   postgresqlPassword: Jn3QJrnw7pnSjFSR
+  postgresqlDatabase: youtube_ex
