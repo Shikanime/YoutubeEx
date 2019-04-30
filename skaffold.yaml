@@ -3,7 +3,7 @@ kind: Config
 build:
   artifacts:
     - image: youtube-ex/youtube-ex
-      context: cmd/web
+      context: src/web
 deploy:
   helm:
     releases:

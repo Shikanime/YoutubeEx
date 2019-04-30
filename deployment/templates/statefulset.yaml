@@ -64,5 +64,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: DEPLOYMENT_NAME
-              value: {{ .Release.Name }}
