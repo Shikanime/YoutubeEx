@@ -58,7 +58,6 @@ COPY rel rel
 
 # Set release environment
 ARG REL_ENV=prod
-ARG APP_VSN
 
 # Create release
 RUN mix release \

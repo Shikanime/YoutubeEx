@@ -4,10 +4,6 @@ build:
   artifacts:
     - image: youtube-ex/youtube-ex
       context: cmd/web
-      docker:
-        buildArgs:
-          APP_NAME: youtube_ex
-          APP_VSN: 0.1.0
 deploy:
   helm:
     releases:
