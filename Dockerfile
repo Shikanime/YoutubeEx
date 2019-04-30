@@ -16,22 +16,23 @@ RUN mix local.rebar --force && \
 # Default application directory
 WORKDIR /opt/youtube-ex
 
-# Pull dependency configurations
+# Pull dependencies
 COPY mix.* ./
-COPY config ./config
-
-COPY apps/youtube_ex/config apps/youtube_ex/config
 COPY apps/youtube_ex/mix.exs apps/youtube_ex/mix.exs
-
-COPY apps/youtube_ex_web/config apps/youtube_ex_web/config
 COPY apps/youtube_ex_web/mix.exs apps/youtube_ex_web/mix.exs
+RUN mix deps.get
+
+# Pull dependency configurations
+COPY config ./config
+COPY apps/youtube_ex/config apps/youtube_ex/config
+COPY apps/youtube_ex_web/config apps/youtube_ex_web/config
 
 # Set application environment
 ARG MIX_ENV=prod
 ENV MIX_ENV=${MIX_ENV}
 
-# Pull and precompile dependencies
-RUN mix do deps.get, deps.compile
+# Precompile dependencies
+RUN mix deps.compile
 
 # Pull and digest assets
 COPY apps/youtube_ex_web/assets apps/youtube_ex_web/assets

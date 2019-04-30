@@ -20,7 +20,6 @@ defmodule YoutubeEx.Repo do
       config
       |> Keyword.put(:hostname, hostname)
       |> Keyword.put(:password, password)
-      |> IO.inspect()
 
     {:ok, config}
   end
