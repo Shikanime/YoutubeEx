@@ -1,64 +1,32 @@
 *
 
-!.formatter.exs
-!.gitignore
-!.editorconfig
-!.dockerignore
-
+# Documentations
 !CHANGELOG.md
 !CODE_OF_CONDUCT.md
 !CONTRIBUTING.md
+!README.md
 !LICENSE
-!Dockerfile
-!Makefile
-!mix.exs
-!mix.lock
-!*.md
 
-!apps/
-!apps/*/
-!apps/*/.formatter.exs
-!apps/*/mix.exs
-!apps/*/README.md
+# Meta files
+!**/
+!**/.gitignore
+!**/.editorconfig
+!skaffold.yaml
 
-!apps/*/config/
-!apps/*/config/**/
-!apps/*/config/**/*.exs
+# Monorepo application folder
+!cmd
+!cmd/**/
+!cmd/**/*
 
-!apps/*/test/
-!apps/*/test/**/
-!apps/*/test/**/*.exs
-
-!apps/*/lib/
-!apps/*/lib/**/
-!apps/*/lib/**/*.ex
-!apps/*/lib/**/*.eex
-
-!apps/*/priv/
-!apps/*/priv/**/
-!apps/*/priv/**/*
-
-!apps/*/assets/
-!apps/*/assets/**/
-!apps/*/assets/**/*
-
-!rel/
-!rel/*.exs
-!rel/vm.args
-!rel/commands/
-!rel/commands/*.sh
-
-!config/
-!config/**/
-!config/**/*.exs
-
+# Various scripts
 !hack/
 !hack/**/
 !hack/**/*.sh
 
-!deploy/
-!deploy/*.yaml
-!deploy/templates/
-!deploy/templates/*.yaml
-!deploy/templates/_helpers.tpl
-!deploy/templates/NOTES.txt
+# Deployment scripts
+!deployment/
+!deployment/*.yaml
+!deployment/templates/
+!deployment/templates/*.yaml
+!deployment/templates/_helpers.tpl
+!deployment/templates/NOTES.txt

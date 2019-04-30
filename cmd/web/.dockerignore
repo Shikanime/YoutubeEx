@@ -3,17 +3,21 @@
 !mix.exs
 !mix.lock
 
+!**/config/
+!**/config/**/
+!**/config/**/*.exs
+
 !apps/
 !apps/*/
 !apps/*/mix.exs
 
-!apps/*/config/
-!apps/*/config/*/
-!apps/*/config/**/*.exs
+!apps/*/test/
+!apps/*/test/**/
+!apps/*/test/**/*.exs
 
 !apps/*/lib/
 !apps/*/lib/**/
-!apps/*/lib/**/*.ex
+!apps/*/lib/**/*
 
 !apps/*/priv/
 !apps/*/priv/**/
@@ -24,10 +28,7 @@
 !apps/*/assets/**/*
 
 !rel/
+!rel/*.exs
 !rel/vm.args
-!rel/*/
-!rel/*/*.exs
-
-!config/
-!config/*/
-!config/*/*.exs
+!rel/commands/
+!rel/commands/*.sh

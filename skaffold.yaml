@@ -1,0 +1,17 @@
+apiVersion: skaffold/v1beta8
+kind: Config
+build:
+  artifacts:
+    - image: youtube-ex/youtube-ex
+      context: cmd/web
+      docker:
+        buildArgs:
+          APP_NAME: youtube_ex
+          APP_VSN: 0.1.0
+deploy:
+  helm:
+    releases:
+      - name: youtube-ex
+        chartPath: deployment
+        values:
+          image: youtube-ex/youtube-ex
