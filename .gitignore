@@ -37,6 +37,10 @@
 !apps/*/priv/**/
 !apps/*/priv/**/*
 
+!apps/*/assets/
+!apps/*/assets/**/
+!apps/*/assets/**/*
+
 !rel/
 !rel/*.exs
 !rel/vm.args
