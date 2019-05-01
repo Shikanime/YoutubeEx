@@ -48,10 +48,13 @@ end
 release :youtube_ex do
   set(version: "0.1.0")
 
-  set commands: [
-    migrate: "rel/commands/migrate.sh",
-    seed: "rel/commands/seed.sh",
-  ]
+  set(pre_start_hooks: "rel/hooks/pre_start")
+
+  set(
+    commands: [
+      seed: "rel/commands/seed.sh"
+    ]
+  )
 
   set(
     applications: [

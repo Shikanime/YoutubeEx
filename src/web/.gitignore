@@ -51,3 +51,6 @@ apps/*/priv/static
 !rel/vm.args
 !rel/commands/
 !rel/commands/*.sh
+!rel/hooks/
+!rel/hooks/**/
+!rel/hooks/**/*.sh
