@@ -1,9 +1,32 @@
-image: youtube-ex/youtube-ex
-replicaCount: 3
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+global:
+  youtubeex: {}
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
+image: youtubeex/youtubeex
+
+## YoutubeEx service configuration
+service:
+  ## YoutubeEx service type
+  type: ClusterIP
+  # clusterIP: None
+  port: 80
+
+# YoutubeEx Gossip discovery secret
 gossipSecret: Ku6NwW8mvC7KVFdW
+
+# YoutubeEx Erlang distribution cookie
 erlangCookie: fkMpfa27NHFBz4CD
 
+# YoutubeEx node replication number
+replicas: 3
+
+# PostgreSQL credentials
 postgresql:
   postgresqlUsername: youtube_ex
   postgresqlPassword: Jn3QJrnw7pnSjFSR
