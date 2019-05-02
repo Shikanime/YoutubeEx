@@ -97,7 +97,10 @@ ARG MIX_ENV=prod
 COPY --from=build /opt/youtube-ex/_build/${MIX_ENV}/rel/youtube_ex/releases/0.1.0/youtube_ex.tar.gz ./
 
 # Extract tarball
-RUN  tar -xf youtube_ex.tar.gz && \
+RUN mkdir /opt/youtube-ex && \
+  tar \
+  -xf youtube_ex.tar.gz \
+  --directory /opt/youtube-ex && \
   rm youtube_ex.tar.gz
 
 # HTTP
@@ -107,4 +110,4 @@ EXPOSE 80
 COPY docker-entrypoint.sh ./
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["./youtube_ex", "foreground"]
+CMD ["/opt/youtube-ex/bin/youtube_ex", "foreground"]
