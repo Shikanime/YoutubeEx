@@ -14,12 +14,17 @@ defmodule YoutubeEx.Application do
 
     topologies = [
       replicas: [
-        strategy: Elixir.Cluster.Strategy.Gossip,
+        strategy: Cluster.Strategy.Gossip,
         config: [secret: gossip_secret]
       ]
     ]
 
     children = [
+      %{
+        id: YoutubeEx.ClusterSupervisor,
+        start: {Cluster.Supervisor, :start_link, [[topologies]]},
+        type: :supervisor
+      },
       YoutubeEx.Repo
     ]
 

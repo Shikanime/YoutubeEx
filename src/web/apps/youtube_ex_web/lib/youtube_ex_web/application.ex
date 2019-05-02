@@ -14,13 +14,18 @@ defmodule YoutubeExWeb.Application do
 
     topologies = [
       replicas: [
-        strategy: Elixir.Cluster.Strategy.Gossip,
+        strategy: Cluster.Strategy.Gossip,
         config: [secret: gossip_secret]
       ]
     ]
 
     # List all child processes to be supervised
     children = [
+      %{
+        id: YoutubeExWeb.ClusterSupervisor,
+        start: {Cluster.Supervisor, :start_link, [[topologies]]},
+        type: :supervisor
+      },
       # Start the endpoint when the application starts
       YoutubeExWeb.Endpoint
       # Starts a worker by calling: YoutubeExWeb.Worker.start_link(arg)
