@@ -30,14 +30,3 @@ Create chart name and version as used by the chart label.
 {{- define "youtubeex.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-
-{{/*
-Return YoutubeEx port
-*/}}
-{{- define "youtubeex.port" -}}
-{{- if .Values.global.youtubeex.servicePort }}
-    {{- .Values.global.youtubeex.servicePort -}}
-{{- else -}}
-    {{- .Values.service.port -}}
-{{- end -}}
-{{- end -}}

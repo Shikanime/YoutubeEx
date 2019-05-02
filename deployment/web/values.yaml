@@ -1,18 +1,9 @@
-## Global Docker image parameters
-## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
-##
-global:
-  youtubeex: {}
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-
+# YoutubeEx main image
 image: youtubeex/youtubeex
 
-## YoutubeEx service configuration
+# YoutubeEx service configuration
 service:
-  ## YoutubeEx service type
+  # YoutubeEx service type
   type: ClusterIP
   # clusterIP: None
   port: 80

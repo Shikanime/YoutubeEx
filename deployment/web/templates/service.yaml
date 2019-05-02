@@ -17,7 +17,7 @@ spec:
     release: {{ .Release.Name | quote }}
   ports:
     - name: youtubeex
-      port: {{ template "youtubeex.port" . }}
+      port: {{ .Values.service.port }}
       targetPort: youtubeex
       {{- if .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
