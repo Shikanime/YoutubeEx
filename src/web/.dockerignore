@@ -1,12 +1,16 @@
 *
 
-!mix.exs
-!mix.lock
-
+# Elixir config files
 !**/config/
 !**/config/**/
 !**/config/**/*.exs
 
+# Mix root
+!mix.exs
+!mix.lock
+!docker-entrypoint.sh
+
+# Application files
 !apps/
 !apps/*/
 !apps/*/mix.exs
@@ -17,18 +21,29 @@
 
 !apps/*/lib/
 !apps/*/lib/**/
-!apps/*/lib/**/*
+!apps/*/lib/**/*.ex
+!apps/*/lib/**/*.eex
 
 !apps/*/priv/
 !apps/*/priv/**/
 !apps/*/priv/**/*
 
+# Ignore Phoenix digest files
+apps/*/priv/static
+
 !apps/*/assets/
 !apps/*/assets/**/
 !apps/*/assets/**/*
 
+# Ignore asset node modules
+apps/*/assets/node_modules
+
+# Release files
 !rel/
 !rel/*.exs
 !rel/vm.args
 !rel/commands/
 !rel/commands/*.sh
+!rel/hooks/
+!rel/hooks/**/
+!rel/hooks/**/*.sh

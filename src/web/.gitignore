@@ -7,6 +7,7 @@
 !.gitignore
 !.dockerignore
 !Dockerfile
+!docker-entrypoint.sh
 
 # Mix format
 !**/.formatter.exs
@@ -44,6 +45,9 @@ apps/*/priv/static
 !apps/*/assets/
 !apps/*/assets/**/
 !apps/*/assets/**/*
+
+# Ignore asset node modules
+apps/*/assets/node_modules
 
 # Release files
 !rel/
