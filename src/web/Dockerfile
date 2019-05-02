@@ -20,12 +20,14 @@ WORKDIR /opt/youtube-ex
 COPY mix.* ./
 COPY apps/youtube_ex/mix.exs apps/youtube_ex/
 COPY apps/youtube_ex_web/mix.exs apps/youtube_ex_web/
+COPY apps/youtube_ex_discovery/mix.exs apps/youtube_ex_discovery/
 RUN mix deps.get
 
 # Pull dependency configurations
 COPY config/ config/
 COPY apps/youtube_ex/config/ apps/youtube_ex/config/
 COPY apps/youtube_ex_web/config/ apps/youtube_ex_web/config/
+COPY apps/youtube_ex_discovery/config/ apps/youtube_ex_discovery/config/
 
 # Set application environment
 ARG MIX_ENV=prod
@@ -50,13 +52,14 @@ RUN cd apps/youtube_ex_web \
 # Pull application code
 COPY apps/youtube_ex/lib/ apps/youtube_ex/lib/
 COPY apps/youtube_ex_web/lib/ apps/youtube_ex_web/lib/
+COPY apps/youtube_ex_discovery/lib/ apps/youtube_ex_web/lib/
 
 # Precompile applications
 RUN mix compile
 
 # Pull priv
-COPY apps/youtube_ex_web/priv/ apps/youtube_ex_web/priv/
 COPY apps/youtube_ex/priv/ apps/youtube_ex/priv/
+COPY apps/youtube_ex_web/priv/ apps/youtube_ex_web/priv/
 
 # Pull release configurations
 COPY rel rel

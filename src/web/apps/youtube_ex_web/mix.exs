@@ -45,7 +45,6 @@ defmodule YoutubeExWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:youtube_ex, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:libcluster, "~> 3.0"},
       {:plug_cowboy, "~> 2.0"}
     ]
   end

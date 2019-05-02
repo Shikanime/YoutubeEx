@@ -36,7 +36,6 @@ end
 environment :prod do
   set(include_erts: true)
   set(include_src: false)
-  set(cookie: :"g3A5s7)TCnTg9FeB0o_eTPf9nuJViui2Mqj.6i<K9lzv?0,E^k)de!8rSz!*4w=W")
   set(vm_args: "rel/vm.args")
 end
 
@@ -60,7 +59,8 @@ release :youtube_ex do
     applications: [
       :runtime_tools,
       youtube_ex: :permanent,
-      youtube_ex_web: :permanent
+      youtube_ex_web: :permanent,
+      youtube_ex_discovery: :permanent
     ]
   )
 end
