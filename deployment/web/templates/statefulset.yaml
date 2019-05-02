@@ -49,12 +49,12 @@ spec:
             - name: GOSSIP_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "youtube-ex.fullname" . }}-cluster
+                  name: {{ include "youtube-ex.fullname" . }}
                   key: gossipSecret
             - name: ERLANG_COOKIE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "youtube-ex.fullname" . }}-cluster
+                  name: {{ include "youtube-ex.fullname" . }}
                   key: erlangCookie
             - name: NODE_NAME
               valueFrom:
