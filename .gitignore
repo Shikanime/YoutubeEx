@@ -13,9 +13,9 @@
 !skaffold.yaml
 
 # Monorepo application folder
-!src/
-!src/**/
-!src/**/*
+!cmd/
+!cmd/**/
+!cmd/**/*
 
 # Various scripts
 !hack/
