@@ -34,10 +34,15 @@ ENV MIX_ENV=${MIX_ENV}
 # Precompile dependencies
 RUN mix deps.compile
 
+# Pull node dependencies
+COPY apps/youtube_ex_web/assets/package.json apps/youtube_ex_web/assets/package.json
+COPY apps/youtube_ex_web/assets/yarn.lock apps/youtube_ex_web/assets/yarn.lock
+RUN cd apps/youtube_ex_web/assets && \
+  yarn install
+
 # Pull and digest assets
 COPY apps/youtube_ex_web/assets apps/youtube_ex_web/assets
 RUN cd apps/youtube_ex_web/assets && \
-  yarn install && \
   yarn deploy
 RUN cd apps/youtube_ex_web \
   mix phx.digest

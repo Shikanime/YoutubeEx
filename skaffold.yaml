@@ -4,6 +4,8 @@ build:
   artifacts:
     - image: youtube-ex/youtube-ex
       context: src/web
+  local:
+    useBuildkit: true
 deploy:
   helm:
     releases:
