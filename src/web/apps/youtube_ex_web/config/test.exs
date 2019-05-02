@@ -4,6 +4,10 @@
 # the umbrella root.
 use Mix.Config
 
+# Cluster discovery
+config :libcluster,
+  gossip_secret: "S8mAcyw8nyfJcj6ixr6ffWUFgiLIWOhaFLc53vcDxG49Nzp2xVclTv+0veZbPQxI"
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :youtube_ex_web, YoutubeExWeb.Endpoint,
