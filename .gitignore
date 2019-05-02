@@ -24,8 +24,12 @@
 
 # Deployment scripts
 !deployment/
-!deployment/*.yaml
-!deployment/templates/
-!deployment/templates/*.yaml
-!deployment/templates/_helpers.tpl
-!deployment/templates/NOTES.txt
+!deployment/**/
+!deployment/**/Chart.yaml
+!deployment/**/requirements.yaml
+!deployment/**/values.yaml
+!deployment/**/requirements.lock
+!deployment/**/templates/
+!deployment/**/templates/*.yaml
+!deployment/**/templates/_helpers.tpl
+!deployment/**/templates/NOTES.txt

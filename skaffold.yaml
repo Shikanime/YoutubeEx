@@ -10,11 +10,6 @@ deploy:
   helm:
     releases:
       - name: youtube-ex
-        chartPath: deployment
+        chartPath: deployment/web
         values:
           image: youtube-ex/youtube-ex
-profiles:
-  - name: ci
-    build:
-      local:
-        push: false
