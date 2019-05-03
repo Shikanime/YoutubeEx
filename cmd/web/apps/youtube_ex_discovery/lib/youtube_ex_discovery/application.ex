@@ -7,10 +7,8 @@ defmodule YoutubeExDiscovery.Application do
 
   def start(_type, _args) do
     gossip_secret =
-      case System.get_env("GOSSIP_SECRET") do
-        nil -> Application.get_env(:libcluster, :gossip_secret, "no-secret")
-        other -> other
-      end
+      System.get_env("GOSSIP_SECRET") ||
+        Application.get_env(:libcluster, :gossip_secret, "no-secret")
 
     topologies = [
       replicas: [
@@ -25,7 +23,7 @@ defmodule YoutubeExDiscovery.Application do
         id: YoutubeExDiscovery.ClusterSupervisor,
         start: {Cluster.Supervisor, :start_link, [[topologies]]},
         type: :supervisor
-      },
+      }
       # Starts a worker by calling: YoutubeExDiscovery.Worker.start_link(arg)
       # {YoutubeExDiscovery.Worker, arg}
     ]

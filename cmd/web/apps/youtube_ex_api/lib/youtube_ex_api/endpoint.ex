@@ -47,20 +47,16 @@ defmodule YoutubeExApi.Endpoint do
     port =
       case System.get_env("PORT") do
         nil -> config[:http][:port]
-        other -> String.to_integer(other)
+        env -> String.to_integer(env)
       end
 
     host =
-      case System.get_env("HOST") do
-        nil -> config[:url][:host]
-        other -> other
-      end
+      System.get_env("HOST") ||
+        config[:url][:host]
 
     secret_key_base =
-      case System.get_env("PHOENIX_SECRET_KEY") do
-        nil -> config[:secret_key_base]
-        other -> other
-      end
+      System.get_env("PHOENIX_SECRET_KEY") ||
+        config[:secret_key_base]
 
     config =
       config

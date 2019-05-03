@@ -5,16 +5,12 @@ defmodule YoutubeEx.Repo do
 
   def init(_type, config) do
     hostname =
-      case System.get_env("POSTGRES_HOST") do
-        nil -> config[:hostname]
-        other -> other
-      end
+      System.get_env("POSTGRES_HOST") ||
+        config[:hostname]
 
     password =
-      case System.get_env("POSTGRES_PASSWORD") do
-        nil -> config[:password]
-        other -> other
-      end
+      System.get_env("POSTGRES_PASSWORD") ||
+        config[:password]
 
     config =
       config
