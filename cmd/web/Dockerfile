@@ -3,9 +3,7 @@ FROM elixir:1.8-alpine AS build
 # Elixir build toolchain
 RUN apk update && \
   apk upgrade --no-cache
-RUN apk update && \
-  apk upgrade --no-cache && \
-  apk add --no-cache \
+RUN apk add --no-cache \
   nodejs \
   yarn \
   git \
