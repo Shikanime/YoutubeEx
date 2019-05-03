@@ -20,7 +20,7 @@ defmodule YoutubeExDiscovery.Application do
     # List all child processes to be supervised
     children = [
       %{
-        id: YoutubeExDiscovery.ClusterSupervisor,
+        id: YoutubeExDiscovery.Cluster.Supervisor,
         start: {Cluster.Supervisor, :start_link, [[topologies]]},
         type: :supervisor
       }
