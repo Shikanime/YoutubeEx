@@ -4,7 +4,7 @@ image: youtubeex/youtubeex
 # YoutubeEx service configuration
 service:
   # YoutubeEx service type
-  type: ClusterIP
+  type: LoadBalancer
   # clusterIP: None
   port: 80
 

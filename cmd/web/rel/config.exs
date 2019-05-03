@@ -59,7 +59,7 @@ release :youtube_ex do
     applications: [
       :runtime_tools,
       youtube_ex: :permanent,
-      youtube_ex_web: :permanent,
+      youtube_ex_api: :permanent,
       youtube_ex_discovery: :permanent
     ]
   )

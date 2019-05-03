@@ -33,7 +33,6 @@
 !apps/*/lib/
 !apps/*/lib/**/
 !apps/*/lib/**/*.ex
-!apps/*/lib/**/*.eex
 
 !apps/*/priv/
 !apps/*/priv/**/
