@@ -3,6 +3,7 @@ defmodule YoutubeExApi.VideoController do
 
   alias YoutubeEx.Contents
   alias YoutubeEx.Contents.Video
+  alias YoutubeEx.Contents.VideoFormat
 
   action_fallback YoutubeExApi.FallbackController
 
@@ -38,7 +39,7 @@ defmodule YoutubeExApi.VideoController do
       extension when extension in [".mp4", ".avi"] ->
         File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
 
-        with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video, video_params) do
+        with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
         render(conn, "show.json", video: video)
       end
 

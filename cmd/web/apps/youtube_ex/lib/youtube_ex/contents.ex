@@ -200,7 +200,7 @@ defmodule YoutubeEx.Contents do
 
   def list_user_videos(id) do
     query = from v in Video,
-      where: v.user == id
+      where: v.user == ^id
 
     Repo.all(query)
   end

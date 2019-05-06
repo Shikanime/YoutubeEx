@@ -16,7 +16,7 @@ defmodule YoutubeExApi.ErrorView do
 
   def render("400.json", %{code: code, error_stack: error_stack}) do
     %{message: "Bad Request",
-      code: code
+      code: code,
       data: error_stack}
   end
 

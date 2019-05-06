@@ -18,6 +18,8 @@ defmodule YoutubeExApi.UserVideoController do
       extension when extension in [".mp4", ".avi"] ->
         File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
 
+        video_params = Map.put(video_params, :user, id)
+
         with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
           conn
           |> put_status(:created)
