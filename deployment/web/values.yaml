@@ -1,5 +1,5 @@
 # YoutubeEx main image
-image: youtubeex/youtubeex
+image: youtube-ex/web
 
 # YoutubeEx service configuration
 service:
