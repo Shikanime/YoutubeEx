@@ -1,9 +1,4 @@
-#-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
-#-------------------------------------------------------------------------------------------------------------
-
-# You can use any Debian/Ubuntu based image as a base
+# Use latest Debian/Ubuntu based image as a base
 FROM debian:9
 
 # Copy settings file so Docker extension is installed inside the container
@@ -33,13 +28,33 @@ RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | (OUT=$(apt-k
 # Install Helm
 RUN curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash -
 
+# Install Skaffold
+RUN curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 \
+    && chmod +x skaffold \
+    && mv skaffold /usr/local/bin
+
 # Copy localhost's ~/.kube/config file into the container and swap out localhost
 # for host.docker.internal whenever a new shell starts to keep them in sync.
-RUN echo 'if [ "$SYNC_LOCALHOST_KUBECONFIG" == "true" ]; then \
-        mkdir -p $HOME/.kube \
-        && cp -r $HOME/.kube-localhost/* $HOME/.kube \
-        && sed -i -e "s/localhost/host.docker.internal/g" $HOME/.kube/config; \
-        fi' >> $HOME/.bashrc
+RUN echo '\n\
+if [ "$SYNC_LOCALHOST_KUBECONFIG" == "true" ]; then\n\
+    mkdir -p $HOME/.kube\n\
+    cp -r $HOME/.kube-localhost/* $HOME/.kube\n\
+    sed -i -e "s/localhost/host.docker.internal/g" $HOME/.kube/config;\n\
+fi'\
+>> $HOME/.bashrc
+
+# Copy localhost's minikube certificate file into the container and swap out localhost
+RUN echo '\n\
+if [ "$SYNC_LOCALHOST_MINIKUBE" == "true" ]; then\n\
+    mkdir -p $HOME/.minikube\n\
+    cp -r $HOME/.minikube-localhost/ca.crt $HOME/.minikube\n\
+    cp -r $HOME/.minikube-localhost/client.crt $HOME/.minikube\n\
+    cp -r $HOME/.minikube-localhost/client.key $HOME/.minikube\n\
+    sed -i -r "s|(\s*client-key:\s).*|\\1$HOME\/.minikube\/client.key|g" $HOME/.kube/config;\n\
+    sed -i -r "s|(\s*client-certificate:\s).*|\\1$HOME\/.minikube\/client.crt|g" $HOME/.kube/config\n\
+    sed -i -r "s|(\s*certificate-authority:\s).*|\\1$HOME\/.minikube\/ca.crt|g" $HOME/.kube/config;\n\
+fi'\
+>> $HOME/.bashrc
 
 # Clean up
 RUN apt-get autoremove -y \

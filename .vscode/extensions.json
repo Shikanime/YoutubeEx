@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "ms-kubernetes-tools.vscode-kubernetes-tools",
-    "PeterJausovec.vscode-docker"
+    "ms-vscode-remote.remote-containers"
   ]
 }
