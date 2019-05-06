@@ -18,6 +18,8 @@ defmodule YoutubeEx.Accounts.User do
     user
     |> cast(attrs, [:username, :email, :pseudo, :password])
     |> validate_required([:username, :email, :pseudo, :password])
+    |> validate_format(:email, ~r/@/)
+    |> validate_format(:username, ~r/[a-zA-Z0-9_-]/)
     |> unique_constraint(:email)
     |> unique_constraint(:pseudo)
     |> put_change(:password, Argon2.hash_pwd_salt(user.password))

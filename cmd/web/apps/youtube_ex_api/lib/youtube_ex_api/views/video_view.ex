@@ -24,8 +24,4 @@ defmodule YoutubeExApi.VideoView do
               format: video.format,
               created_at: video.created_at}}
   end
-
-  def render("upload_fail.json", _assigns) do
-    %{errors: "Unvalid video format"}
-  end
 end

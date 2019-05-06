@@ -10,7 +10,7 @@ defmodule YoutubeEx.Contents.Video do
     field :format, :map
     field :name, :string
     field :source, :string
-    field :view, :integer
+    field :view, :integer, default: 0
     field :user, :binary_id
 
     timestamps()

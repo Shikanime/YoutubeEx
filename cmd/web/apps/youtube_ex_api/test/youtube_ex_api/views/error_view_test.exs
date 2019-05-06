@@ -5,11 +5,11 @@ defmodule YoutubeExApi.ErrorViewTest do
   import Phoenix.View
 
   test "renders 404.json" do
-    assert render(YoutubeExApi.ErrorView, "404.json", []) == %{errors: "Not Found"}
+    assert render(YoutubeExApi.ErrorView, "404.json", []) == %{message: "Not Found"}
   end
 
   test "renders 500.json" do
     assert render(YoutubeExApi.ErrorView, "500.json", []) ==
-             %{errors:  "Internal Server Error"}
+             %{message:  "Internal Server Error"}
   end
 end

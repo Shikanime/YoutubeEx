@@ -11,26 +11,6 @@ defmodule YoutubeExApi.VideoController do
     render(conn, "index.json", videos: videos)
   end
 
-  def create(conn, %{"video" => video_params}) do
-    {video_upload, video_params} = Map.pop(video_params, :source)
-
-    case Path.extname(video_upload.filename) do
-      extension when extension in [".mp4", ".avi"] ->
-        File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
-
-        with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
-          conn
-          |> put_status(:created)
-          |> render("show.json", video: video)
-        end
-
-      _ ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("upload_fail.json", [])
-    end
-  end
-
   def show(conn, %{"id" => id}) do
     video = Contents.get_video!(id)
     render(conn, "show.json", video: video)
@@ -41,6 +21,31 @@ defmodule YoutubeExApi.VideoController do
 
     with {:ok, %Video{} = video} <- Contents.update_video(video, video_params) do
       render(conn, "show.json", video: video)
+    end
+  end
+
+  def encode(conn, %{"id" => id, "video" => video_params}) do
+    video = Contents.get_video!(id)
+
+    video_params = Map.new(fn
+      :format -> :code
+      other -> other
+    end)
+
+    {video_upload, video_params} = Map.pop(video_params, :source)
+
+    case Path.extname(video_upload.filename) do
+      extension when extension in [".mp4", ".avi"] ->
+        File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
+
+        with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video, video_params) do
+        render(conn, "show.json", video: video)
+      end
+
+      _ ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render("400.json", code: "", error_stack: []) # TODO: Send stack error
     end
   end
 

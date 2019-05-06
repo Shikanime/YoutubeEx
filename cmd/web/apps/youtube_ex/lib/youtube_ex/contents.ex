@@ -197,4 +197,11 @@ defmodule YoutubeEx.Contents do
   def change_video_format(%VideoFormat{} = video_format) do
     VideoFormat.changeset(video_format, %{})
   end
+
+  def list_user_videos(id) do
+    query = from v in Video,
+      where: v.user == id
+
+    Repo.all(query)
+  end
 end
