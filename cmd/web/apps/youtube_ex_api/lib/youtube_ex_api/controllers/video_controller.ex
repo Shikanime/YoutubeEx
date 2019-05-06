@@ -25,23 +25,23 @@ defmodule YoutubeExApi.VideoController do
     end
   end
 
-  def encode(conn, %{"id" => id, "video" => video_params}) do
-    video = Contents.get_video!(id)
-
-    video_params = Map.new(fn
-      :format -> :code
-      other -> other
-    end)
-
+  def encode(conn, %{"id" => id} = video_params) do
     {video_upload, video_params} = Map.pop(video_params, :source)
 
     case Path.extname(video_upload.filename) do
       extension when extension in [".mp4", ".avi"] ->
         File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
 
+        video_params =
+          Map.new(fn
+            :format -> :code
+            other -> other
+          end)
+          |> Map.put(:video, id)
+
         with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
-        render(conn, "show.json", video: video)
-      end
+          render(conn, "show.json", video: video)
+        end
 
       _ ->
         conn

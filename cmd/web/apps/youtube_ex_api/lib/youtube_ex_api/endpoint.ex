@@ -1,6 +1,30 @@
 defmodule YoutubeExApi.Endpoint do
   use Phoenix.Endpoint, otp_app: :youtube_ex_api
 
+  def init(_type, config) do
+    port =
+      case System.get_env("PORT") do
+        nil -> config[:http][:port]
+        env -> String.to_integer(env)
+      end
+
+    host =
+      System.get_env("HOST") ||
+        config[:url][:host]
+
+    secret_key_base =
+      System.get_env("PHOENIX_SECRET") ||
+        config[:secret_key_base]
+
+    config =
+      config
+      |> Keyword.put(:http, [:inet6, port: port])
+      |> Keyword.put(:url, host: host, port: port)
+      |> Keyword.put(:secret_key_base, secret_key_base)
+
+    {:ok, config}
+  end
+
   socket "/socket", YoutubeExApi.UserSocket,
     websocket: true,
     longpoll: false
@@ -42,28 +66,4 @@ defmodule YoutubeExApi.Endpoint do
     signing_salt: "BlkoCmpC"
 
   plug YoutubeExApi.Router
-
-  def init(_type, config) do
-    port =
-      case System.get_env("PORT") do
-        nil -> config[:http][:port]
-        env -> String.to_integer(env)
-      end
-
-    host =
-      System.get_env("HOST") ||
-        config[:url][:host]
-
-    secret_key_base =
-      System.get_env("PHOENIX_SECRET_KEY") ||
-        config[:secret_key_base]
-
-    config =
-      config
-      |> Keyword.put(:http, [:inet6, port: port])
-      |> Keyword.put(:url, host: host, port: port)
-      |> Keyword.put(:secret_key_base, secret_key_base)
-
-    {:ok, config}
-  end
 end

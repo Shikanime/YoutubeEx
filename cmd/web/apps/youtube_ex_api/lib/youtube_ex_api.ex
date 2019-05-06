@@ -21,6 +21,7 @@ defmodule YoutubeExApi do
     quote do
       use Phoenix.Controller, namespace: YoutubeExApi
       import Plug.Conn
+      import YoutubeExApi.Gettext
       alias YoutubeExApi.Router.Helpers, as: Routes
     end
   end
@@ -35,6 +36,7 @@ defmodule YoutubeExApi do
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
 
       import YoutubeExApi.ErrorHelpers
+      import YoutubeExApi.Gettext
       alias YoutubeExApi.Router.Helpers, as: Routes
     end
   end
@@ -50,6 +52,7 @@ defmodule YoutubeExApi do
   def channel do
     quote do
       use Phoenix.Channel
+      import YoutubeExApi.Gettext
     end
   end
 

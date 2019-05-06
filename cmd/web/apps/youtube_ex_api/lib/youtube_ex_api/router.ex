@@ -5,31 +5,37 @@ defmodule YoutubeExApi.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", YoutubeExApi do
+  pipeline :protected do
+    plug YoutubeExApi.AuthenticationController
+  end
+
+  scope "/", YoutubeExApi do
     pipe_through :api
 
     post "/auth", AuthController, :create
 
     get "/users", UserController, :index
-    scope "/user" do
-      get "/:id", UserController, :show
-      put "/:id", UserController, :update
-      patch "/:id", UserController, :update
-      delete "/:id", UserController, :delete
-
-      get "/:id/videos", UserVideoController, :index
-      post "/:id/video", UserVideoController, :create
-    end
+    post "/user", UserController, :create
+    get "/user/:id/videos", UserVideoController, :index
 
     get "/videos", VideoController, :index
-    scope "/video" do
-      get "/:id", VideoController, :show
-      put "/:id", VideoController, :update
+    get "/video/:id", VideoController, :show
+    get "/video/:id/comments", VideoCommentController, :index
+
+    scope "/" do
+      pipe_through :protected
+
+      get "/user/:id", UserController, :show
+      put "/user/:id", UserController, :update
+      patch "/user/:id", UserController, :update
+      delete "/user/:id", UserController, :delete
+      post "/user/:id/video", UserVideoController, :create
+
       patch "/:id", VideoController, :encode
+      put "/:id", VideoController, :update
       delete "/:id", VideoController, :delete
 
-      get "/:id/comments", VideoCommentController, :index
-      post "/:id/comment", VideoCommentController, :create
+      post "/video/:id/comment", VideoCommentController, :create
     end
   end
 end

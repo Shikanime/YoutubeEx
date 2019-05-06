@@ -11,7 +11,7 @@ defmodule YoutubeExApi.UserVideoController do
     render(conn, "index.json", videos: videos)
   end
 
-  def create(conn, %{"id" => id, "video" => video_params}) do
+  def create(conn, %{"id" => id} = video_params) do
     {video_upload, video_params} = Map.pop(video_params, :source)
 
     case Path.extname(video_upload.filename) do

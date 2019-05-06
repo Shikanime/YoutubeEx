@@ -15,8 +15,7 @@ use Mix.Config
 # before starting your production server.
 config :youtube_ex_api, YoutubeExApi.Endpoint,
   server: true,
-  root: ".",
-  version: Application.spec(:phoenix_distillery, :vsn)
+  version: Application.spec(:youtube_ex, :vsn)
 
 # ## SSL Support
 #

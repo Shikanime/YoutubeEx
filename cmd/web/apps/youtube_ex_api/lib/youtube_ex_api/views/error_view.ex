@@ -14,17 +14,11 @@ defmodule YoutubeExApi.ErrorView do
     %{message: Phoenix.Controller.status_message_from_template(template)}
   end
 
-  def render("400.json", %{code: code, error_stack: error_stack}) do
-    %{message: "Bad Request",
-      code: code,
-      data: error_stack}
-  end
-
-  def render("401.json", []) do
+  def render("401.json", _assigns) do
     %{message: "Unauthorized"}
   end
 
-  def render("403.json", []) do
+  def render("403.json", _assigns) do
     %{message: "Forbidden"}
   end
 end

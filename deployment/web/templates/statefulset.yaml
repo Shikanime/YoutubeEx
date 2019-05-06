@@ -38,16 +38,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "youtubeex.fullname" . }}-postgresql
                   key: postgresql-password
+            - name: PHOENIX_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "youtubeex.fullname" . }}
+                  key: phoenix-secret
             - name: GOSSIP_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "youtubeex.fullname" . }}
-                  key: gossipSecret
+                  key: gossip-secret
             - name: ERLANG_COOKIE
               valueFrom:
                 secretKeyRef:
                   name: {{ include "youtubeex.fullname" . }}
-                  key: erlangCookie
+                  key: erlang-cookie
             - name: NODE_NAME
               valueFrom:
                 fieldRef:

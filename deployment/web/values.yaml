@@ -9,13 +9,16 @@ service:
   port: 80
 
 # YoutubeEx Gossip discovery secret
-gossipSecret: Ku6NwW8mvC7KVFdW
+gossipSecret: Yy1d/NKVUWXnHvps8YAG82IhliY1Qa8nfhl+Qt9eKTioRKtsW4J0lUL4tankbk3R
+
+# YoutubeEx Gossip discovery secret
+phoenixSecret: JScUlQe+INcOfoMn+JG3RQP8BCu+QbKNy5ByCUxlsufJLPXt7DpyZId0DU/iODcR
 
 # YoutubeEx Erlang distribution cookie
-erlangCookie: fkMpfa27NHFBz4CD
+erlangCookie: jeAuFKBxxxTth0LrbTDncsyFOdGWqNCgPXaLjdl5hc65Ec+WLrYXL5nmPdnRp3LG
 
 # YoutubeEx node replication number
-replicas: 3
+replicas: 1
 
 # PostgreSQL credentials
 postgresql:

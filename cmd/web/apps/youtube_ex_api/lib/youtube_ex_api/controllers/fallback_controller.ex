@@ -19,4 +19,18 @@ defmodule YoutubeExApi.FallbackController do
     |> put_view(YoutubeExApi.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :forbidden}) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(YoutubeExApi.ErrorView)
+    |> render(:"403")
+  end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(YoutubeExApi.ErrorView)
+    |> render(:"401")
+  end
 end

@@ -13,6 +13,7 @@ use Mix.Config
 config :youtube_ex_api, YoutubeExApi.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "TxKULpxOaPXk40uyol9BwpfJDGqxqHUpO6tvdBJde9gIGTulK0MiQPDvRIbqt+fq",
+  server: true,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,

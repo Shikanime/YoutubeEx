@@ -202,7 +202,7 @@ defmodule YoutubeEx.Accounts do
     user = Repo.get_by!(User, attrs.login)
 
     if Argon2.verify_pass(user.password, attrs.password) do
-      Repo.get(Token, user.id)
+      user
     end
   end
 end

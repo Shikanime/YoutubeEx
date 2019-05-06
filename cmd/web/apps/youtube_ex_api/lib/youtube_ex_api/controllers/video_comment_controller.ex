@@ -11,7 +11,7 @@ defmodule YoutubeExApi.VideoCommentController do
     render(conn, "index.json", comments: comments)
   end
 
-  def create(conn, %{"id" => id, "comment" => comment_params}) do
+  def create(conn, %{"id" => id} = comment_params) do
     comment_params = Map.put(comment_params, :user, id)
 
     with {:ok, %Comment{} = comment} <- Activities.create_comment(comment_params) do
