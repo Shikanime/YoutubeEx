@@ -1,28 +1,36 @@
 *
 
+# Configurations
+!.gitignore
+!.editorconfig
+
+# Development environment
+!.devcontainer/
+!.devcontainer/Dockerfile
+!.devcontainer/*.json
+!.vscode/
+!.vscode/*.json
+
 # Documentations
-!CHANGELOG.md
 !CODE_OF_CONDUCT.md
 !CONTRIBUTING.md
 !README.md
+!CHANGELOG.md
 !LICENSE
 
-# Meta files
-!.gitignore
-!.editorconfig
+# Entrypoints
+!Makefile
 !skaffold.yaml
 
-# Monorepo application folder
+# Application sources
 !cmd/
-!cmd/**/
 !cmd/**/*
 
-# Various scripts
-!hack/
-!hack/**/
-!hack/**/*.sh
+# Shared application libraries
+!pkg/
+!pkg/**/*
 
-# Deployment scripts
+# Service deployments
 !deployment/
 !deployment/**/
 !deployment/**/Chart.yaml
@@ -33,3 +41,19 @@
 !deployment/**/templates/*.yaml
 !deployment/**/templates/_helpers.tpl
 !deployment/**/templates/NOTES.txt
+
+# Shared build
+!build/
+!build/**/*
+
+# Global documentations
+!docs/
+!docs/**/*
+
+# Shared mesh APIs
+!api/
+!api/**/*
+
+# Scripts
+!hack/
+!hack/**/*
