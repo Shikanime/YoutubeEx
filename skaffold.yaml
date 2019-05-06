@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta9
 kind: Config
 build:
   artifacts:
-    - image: youtube-ex/youtube-ex
+    - image: youtube-ex/web
       context: cmd/web
   local:
     useBuildkit: true
@@ -12,4 +12,4 @@ deploy:
       - name: youtube-ex
         chartPath: deployment/web
         values:
-          image: youtube-ex/youtube-ex
+          image: youtube-ex/web
