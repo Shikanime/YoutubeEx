@@ -7,19 +7,29 @@ defmodule YoutubeExApi.AuthController do
   action_fallback YoutubeExApi.FallbackController
 
   def create(conn, auth_params) do
-    with {:ok, %User{} = user} <- Accounts.auth_user(auth_params) do
-      {:ok, conn, token} = register_token(conn, user)
+    login = Map.fetch!(auth_params, "login")
+    password = Map.fetch!(auth_params, "password")
 
+    with {:ok, %User{} = user} <- Accounts.auth_user(login, password),
+         {:ok, token}          <- generate_and_register_token(user) do
       conn
       |> put_status(:created)
       |> render("show.json", token: token)
     end
+  rescue
+    _ in KeyError ->
+      {:error, :unprocessable_entity}
   end
 
-  def register_token(conn, user) do
-    conn
-    |> Phoenix.Token.sign(conn, "secret", user.id)
+  defp generate_and_register_token(user) do
+    token = Phoenix.Token.sign(YoutubeExApi.Endpoint, "secret", user.id)
+    entry = %{
+      user: user.id,
+      token: token
+    }
 
-    {:ok, conn, ""}
+    with :ok <- Accounts.create_token(entry) do
+      {:ok, token}
+    end
   end
 end

@@ -101,4 +101,13 @@ defmodule YoutubeEx.Activities do
   def change_comment(%Comment{} = comment) do
     Comment.changeset(comment, %{})
   end
+
+  alias YoutubeEx.Activities
+
+  def can_comment_video?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.comment_video == true
+
+    Repo.exists?(query)
+  end
 end

@@ -198,11 +198,41 @@ defmodule YoutubeEx.Accounts do
     Token.changeset(token, %{})
   end
 
-  def auth_user(attrs \\ %{}) do
-    user = Repo.get_by!(User, attrs.login)
+  def auth_user(login, password) do
+    user = Repo.get_by!(User, email: login)
 
-    if Argon2.verify_pass(user.password, attrs.password) do
-      user
-    end
+    if Argon2.verify_pass(password, user.password),
+      do: {:ok, user},
+      else: {:error, :bad_credentials}
+  end
+
+  alias YoutubeEx.Accounts
+
+  def can_show_user?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.show_user == true
+
+    Repo.exists?(query)
+  end
+
+  def can_update_user?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.pdate_user == true
+
+    Repo.exists?(query)
+  end
+
+  def can_delete_user?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.delete_user == true
+
+    Repo.exists?(query)
+  end
+
+  def can_user_create_video?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.create_video == true
+
+    Repo.exists?(query)
   end
 end

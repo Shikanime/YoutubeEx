@@ -204,4 +204,27 @@ defmodule YoutubeEx.Contents do
 
     Repo.all(query)
   end
+
+  alias YoutubeEx.Content.Policy
+
+  def can_update_video?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.update_video == true
+
+    Repo.exists?(query)
+  end
+
+  def can_delete_video?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.delete_video == true
+
+    Repo.exists?(query)
+  end
+
+  def can_create_video_format?(id) do
+    query = from p in Policy,
+      where: p.user == ^id and p.create_video_format == true
+
+    Repo.exists?(query)
+  end
 end

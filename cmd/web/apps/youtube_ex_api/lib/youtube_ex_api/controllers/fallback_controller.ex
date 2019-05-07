@@ -33,4 +33,11 @@ defmodule YoutubeExApi.FallbackController do
     |> put_view(YoutubeExApi.ErrorView)
     |> render(:"401")
   end
+
+  def call(conn, {:error, :unprocessable_entity}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(YoutubeExApi.ErrorView)
+    |> render("error.json", %{})
+  end
 end
