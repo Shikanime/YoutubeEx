@@ -205,7 +205,7 @@ defmodule YoutubeEx.Contents do
     Repo.all(query)
   end
 
-  alias YoutubeEx.Content.Policy
+  alias YoutubeEx.Contents.Policy
 
   def can_update_video?(id) do
     query = from p in Policy,

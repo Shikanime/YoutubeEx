@@ -102,111 +102,17 @@ defmodule YoutubeEx.Accounts do
     User.changeset(user, %{})
   end
 
-  alias YoutubeEx.Accounts.Token
-
-  @doc """
-  Returns the list of tokens.
-
-  ## Examples
-
-      iex> list_tokens()
-      [%Token{}, ...]
-
-  """
-  def list_tokens do
-    Repo.all(Token)
-  end
-
-  @doc """
-  Gets a single token.
-
-  Raises `Ecto.NoResultsError` if the Token does not exist.
-
-  ## Examples
-
-      iex> get_token!(123)
-      %Token{}
-
-      iex> get_token!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_token!(id), do: Repo.get!(Token, id)
-
-  @doc """
-  Creates a token.
-
-  ## Examples
-
-      iex> create_token(%{field: value})
-      {:ok, %Token{}}
-
-      iex> create_token(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_token(attrs \\ %{}) do
-    %Token{}
-    |> Token.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a token.
-
-  ## Examples
-
-      iex> update_token(token, %{field: new_value})
-      {:ok, %Token{}}
-
-      iex> update_token(token, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_token(%Token{} = token, attrs) do
-    token
-    |> Token.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Token.
-
-  ## Examples
-
-      iex> delete_token(token)
-      {:ok, %Token{}}
-
-      iex> delete_token(token)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_token(%Token{} = token) do
-    Repo.delete(token)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking token changes.
-
-  ## Examples
-
-      iex> change_token(token)
-      %Ecto.Changeset{source: %Token{}}
-
-  """
-  def change_token(%Token{} = token) do
-    Token.changeset(token, %{})
-  end
-
   def auth_user(login, password) do
     user = Repo.get_by!(User, email: login)
 
     if Argon2.verify_pass(password, user.password),
       do: {:ok, user},
       else: {:error, :bad_credentials}
+    rescue
+      _ in Ecto.NoResultsError -> {:error, :unknow_user}
   end
 
-  alias YoutubeEx.Accounts
+  alias YoutubeEx.Accounts.Policy
 
   def can_show_user?(id) do
     query = from p in Policy,
@@ -229,7 +135,7 @@ defmodule YoutubeEx.Accounts do
     Repo.exists?(query)
   end
 
-  def can_user_create_video?(id) do
+  def can_create_video?(id) do
     query = from p in Policy,
       where: p.user == ^id and p.create_video == true
 

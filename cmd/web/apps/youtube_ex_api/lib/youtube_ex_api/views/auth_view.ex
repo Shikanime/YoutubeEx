@@ -13,8 +13,7 @@ defmodule YoutubeExApi.AuthView do
   end
 
   def render("token.json", %{token: token}) do
-    %{id: token.id,
-      token: token.token,
+    %{token: token.token,
       user: token.user}
   end
 end

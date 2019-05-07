@@ -102,7 +102,7 @@ defmodule YoutubeEx.Activities do
     Comment.changeset(comment, %{})
   end
 
-  alias YoutubeEx.Activities
+  alias YoutubeEx.Activities.Policy
 
   def can_comment_video?(id) do
     query = from p in Policy,
