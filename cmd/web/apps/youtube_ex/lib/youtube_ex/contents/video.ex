@@ -2,6 +2,8 @@ defmodule YoutubeEx.Contents.Video do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias YoutubeEx.Accounts.User
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "videos" do
@@ -11,7 +13,8 @@ defmodule YoutubeEx.Contents.Video do
     field :name, :string
     field :source, :string
     field :view, :integer, default: 0
-    field :user, :binary_id
+
+    belongs_to :user, User
 
     timestamps()
   end

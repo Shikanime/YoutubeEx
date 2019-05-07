@@ -10,11 +10,11 @@ defmodule YoutubeEx.Repo.Migrations.CreateVideos do
       add :view, :integer
       add :enabled, :boolean, default: false, null: false
       add :format, :map
-      add :user, references(:users, on_delete: :nothing, type: :binary_id)
+      add :user_id, references(:users, on_delete: :nothing, type: :binary_id)
 
       timestamps()
     end
 
-    create index(:videos, [:user])
+    create index(:videos, [:user_id])
   end
 end

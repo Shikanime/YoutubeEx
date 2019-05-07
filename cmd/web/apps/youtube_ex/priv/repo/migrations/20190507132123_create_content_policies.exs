@@ -7,11 +7,11 @@ defmodule YoutubeEx.Repo.Migrations.CreateContentPolicies do
       add :update_video, :boolean, default: false, null: false
       add :delete_video, :boolean, default: false, null: false
       add :create_video_format, :boolean, default: false, null: false
-      add :user, references(:users, on_delete: :nothing, type: :binary_id)
+      add :user_id, references(:users, on_delete: :nothing, type: :binary_id)
 
       timestamps()
     end
 
-    create index(:content_policies, [:user])
+    create index(:content_policies, [:user_id])
   end
 end

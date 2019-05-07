@@ -7,7 +7,6 @@ defmodule YoutubeEx.Repo.Migrations.CreateUsers do
       add :username, :string
       add :email, :string
       add :pseudo, :string
-      add :password, :string
 
       timestamps()
     end

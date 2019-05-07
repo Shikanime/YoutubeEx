@@ -6,17 +6,15 @@ defmodule YoutubeExApi.UserControllerTest do
 
   @create_attrs %{
     email: "some email",
-    password: "some password",
     pseudo: "some pseudo",
     username: "some username"
   }
   @update_attrs %{
     email: "some updated email",
-    password: "some updated password",
     pseudo: "some updated pseudo",
     username: "some updated username"
   }
-  @invalid_attrs %{email: nil, password: nil, pseudo: nil, username: nil}
+  @invalid_attrs %{email: nil, pseudo: nil, username: nil}
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
@@ -44,7 +42,6 @@ defmodule YoutubeExApi.UserControllerTest do
       assert %{
                "id" => id,
                "email" => "some email",
-               "password" => "some password",
                "pseudo" => "some pseudo",
                "username" => "some username"
              } = json_response(conn, 200)["data"]
@@ -68,7 +65,6 @@ defmodule YoutubeExApi.UserControllerTest do
       assert %{
                "id" => id,
                "email" => "some updated email",
-               "password" => "some updated password",
                "pseudo" => "some updated pseudo",
                "username" => "some updated username"
              } = json_response(conn, 200)["data"]

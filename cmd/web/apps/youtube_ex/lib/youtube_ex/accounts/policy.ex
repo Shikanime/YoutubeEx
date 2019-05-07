@@ -2,6 +2,8 @@ defmodule YoutubeEx.Accounts.Policy do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias YoutubeEx.Accounts.User
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "account_policies" do
@@ -9,7 +11,8 @@ defmodule YoutubeEx.Accounts.Policy do
     field :delete_user, :boolean, default: false
     field :get_user, :boolean, default: false
     field :update_user, :boolean, default: false
-    field :user, :binary_id
+
+    belongs_to :user, User
 
     timestamps()
   end

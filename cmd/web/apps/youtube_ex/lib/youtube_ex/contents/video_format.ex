@@ -2,12 +2,15 @@ defmodule YoutubeEx.Contents.VideoFormat do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias YoutubeEx.Contents.Video
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "video_formats" do
     field :code, :string
     field :uri, :string
-    field :video, :binary_id
+
+    belongs_to :video, Video
 
     timestamps()
   end

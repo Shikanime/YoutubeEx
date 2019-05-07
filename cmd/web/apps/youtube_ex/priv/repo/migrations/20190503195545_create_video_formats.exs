@@ -6,11 +6,11 @@ defmodule YoutubeEx.Repo.Migrations.CreateVideoFormats do
       add :id, :binary_id, primary_key: true
       add :code, :string
       add :uri, :string
-      add :video, references(:videos, on_delete: :nothing, type: :binary_id)
+      add :video_id, references(:videos, on_delete: :nothing, type: :binary_id)
 
       timestamps()
     end
 
-    create index(:video_formats, [:video])
+    create index(:video_formats, [:video_id])
   end
 end

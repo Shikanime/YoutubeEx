@@ -2,18 +2,18 @@ defmodule YoutubeExApi.AuthView do
   use YoutubeExApi, :view
   alias YoutubeExApi.AuthView
 
-  def render("index.json", %{tokens: tokens}) do
+  def render("index.json", %{auths: auths}) do
     %{message: "OK",
-      data: render_many(tokens, AuthView, "token.json")}
+      data: render_many(auths, AuthView, "auth.json")}
   end
 
-  def render("show.json", %{token: token}) do
+  def render("show.json", %{auth: auth}) do
     %{message: "OK",
-      data: render_one(token, AuthView, "token.json")}
+      data: render_one(auth, AuthView, "auth.json")}
   end
 
-  def render("token.json", %{token: token}) do
-    %{token: token.token,
-      user: token.user}
+  def render("auth.json", %{auth: auth}) do
+    %{token: auth.token,
+      user: auth.user}
   end
 end
