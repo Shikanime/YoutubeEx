@@ -1,5 +1,5 @@
 {
-  "name": "Kubernetes & Helm",
+  "name": "Youtube.Ex",
   "dockerFile": "Dockerfile",
   "extensions": [
     "peterjausovec.vscode-docker",
