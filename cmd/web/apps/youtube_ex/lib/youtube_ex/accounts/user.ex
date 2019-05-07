@@ -3,6 +3,7 @@ defmodule YoutubeEx.Accounts.User do
   import Ecto.Changeset
 
   alias YoutubeEx.Accounts.Credential
+  alias YoutubeEx.Accounts.Autorisation
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -11,7 +12,8 @@ defmodule YoutubeEx.Accounts.User do
     field :pseudo, :string
     field :username, :string
 
-    has_one :credential, Credential
+    has_one :credential, Credential, on_delete: :delete_all
+    has_one :Autorisation, Autorisation, on_delete: :delete_all
 
     timestamps()
   end

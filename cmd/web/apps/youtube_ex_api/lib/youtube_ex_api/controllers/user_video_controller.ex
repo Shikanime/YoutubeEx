@@ -13,7 +13,7 @@ defmodule YoutubeExApi.UserVideoController do
   end
 
   def create(conn, %{"id" => id} = video_params) do
-    if Accounts.can_create_video?(conn.assigs.current_user.id) do
+    if Accounts.user_can_create_video?(conn.assigs.current_user.id) do
       {video_upload, video_params} = Map.pop(video_params, :source)
 
       case Path.extname(video_upload.filename) do

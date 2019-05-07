@@ -1,6 +1,7 @@
 defmodule YoutubeExApi.VideoController do
   use YoutubeExApi, :controller
 
+  alias YoutubeEx.Accounts
   alias YoutubeEx.Contents
   alias YoutubeEx.Contents.Video
   alias YoutubeEx.Contents.VideoFormat
@@ -18,7 +19,7 @@ defmodule YoutubeExApi.VideoController do
   end
 
   def update(conn, %{"id" => id, "video" => video_params}) do
-    if Contents.can_update_video?(conn.assigs.current_user.id) do
+    if Accounts.user_can_update_video?(conn.assigs.current_user.id) do
       video = Contents.get_video!(id)
 
       with {:ok, %Video{} = video} <- Contents.update_video(video, video_params) do
@@ -30,7 +31,7 @@ defmodule YoutubeExApi.VideoController do
   end
 
   def encode(conn, %{"id" => id} = video_params) do
-    if Contents.can_create_video_format?(conn.assigs.current_user.id) do
+    if Accounts.user_can_create_video_format?(conn.assigs.current_user.id) do
       {video_upload, video_params} = Map.pop(video_params, :source)
 
       case Path.extname(video_upload.filename) do
@@ -59,7 +60,7 @@ defmodule YoutubeExApi.VideoController do
   end
 
   def delete(conn, %{"id" => id}) do
-    if Contents.can_delete_video?(conn.assigs.current_user.id) do
+    if Accounts.user_can_delete_video?(conn.assigs.current_user.id) do
       video = Contents.get_video!(id)
 
       with {:ok, %Video{}} <- Contents.delete_video(video) do

@@ -1,6 +1,7 @@
 defmodule YoutubeExApi.VideoCommentController do
   use YoutubeExApi, :controller
 
+  alias YoutubeEx.Accounts
   alias YoutubeEx.Activities
   alias YoutubeEx.Activities.Comment
 
@@ -12,7 +13,7 @@ defmodule YoutubeExApi.VideoCommentController do
   end
 
   def create(conn, %{"id" => id} = comment_params) do
-    if Activities.can_comment_video?(conn.assigs.current_user.id) do
+    if Accounts.user_can_comment_video?(conn.assigs.current_user.id) do
       comment_params = Map.put(comment_params, :user, id)
 
       with {:ok, %Comment{} = comment} <- Activities.create_comment(comment_params) do

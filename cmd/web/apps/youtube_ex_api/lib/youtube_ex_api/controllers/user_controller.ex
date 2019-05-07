@@ -23,6 +23,23 @@ defmodule YoutubeExApi.UserController do
       })
     end
   end
+  # def register(conn, user_params) do
+  #   with {:ok, user}        <- Accounts.create_user(user_params),
+  #        {:ok, _credential} <- Accounts.create_credential(user_params),
+  #        {:ok, _policy}     <- Accounts.create_policy(%{id: user.id}),
+  #        {:ok, _policy}     <- Activities.create_policy(%{id: user.id}),
+  #        {:ok, _policy}     <- Contents.create_policy(%{id: user.id}) do
+  #     conn
+  #     |> put_status(:created)
+  #     |> render("show.json", user: %{
+  #       id: user.id,
+  #       username: user.username,
+  #       email: user.email,
+  #       pseudo: user.pseudo
+  #     })
+  #   end
+  # end
+
 
   def get(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)

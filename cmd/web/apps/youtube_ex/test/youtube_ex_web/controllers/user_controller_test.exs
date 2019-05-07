@@ -1,5 +1,5 @@
-defmodule YoutubeExWeb.UserControllerTest do
-  use YoutubeExWeb.ConnCase
+defmodule YoutubeExApi.UserControllerTest do
+  use YoutubeExApi.ConnCase
 
   alias YoutubeEx.Accounts
   alias YoutubeEx.Accounts.User

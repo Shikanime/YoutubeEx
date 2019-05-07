@@ -1,5 +1,5 @@
-defmodule YoutubeExWeb.VideoControllerTest do
-  use YoutubeExWeb.ConnCase
+defmodule YoutubeExApi.VideoControllerTest do
+  use YoutubeExApi.ConnCase
 
   alias YoutubeEx.Contents
   alias YoutubeEx.Contents.Video

@@ -250,4 +250,146 @@ defmodule YoutubeEx.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_credential(credential)
     end
   end
+
+  describe "autorisations" do
+    alias YoutubeEx.Accounts.Autorisation
+
+    @valid_attrs %{comment_video: true, create_video: true, create_video_format: true, delete_user: true, delete_video: true, update_user: true, update_video: true}
+    @update_attrs %{comment_video: false, create_video: false, create_video_format: false, delete_user: false, delete_video: false, update_user: false, update_video: false}
+    @invalid_attrs %{comment_video: nil, create_video: nil, create_video_format: nil, delete_user: nil, delete_video: nil, update_user: nil, update_video: nil}
+
+    def autorisation_fixture(attrs \\ %{}) do
+      {:ok, autorisation} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_autorisation()
+
+      autorisation
+    end
+
+    test "list_autorisations/0 returns all autorisations" do
+      autorisation = autorisation_fixture()
+      assert Accounts.list_autorisations() == [autorisation]
+    end
+
+    test "get_autorisation!/1 returns the autorisation with given id" do
+      autorisation = autorisation_fixture()
+      assert Accounts.get_autorisation!(autorisation.id) == autorisation
+    end
+
+    test "create_autorisation/1 with valid data creates a autorisation" do
+      assert {:ok, %Autorisation{} = autorisation} = Accounts.create_autorisation(@valid_attrs)
+      assert autorisation.comment_video == true
+      assert autorisation.create_video == true
+      assert autorisation.create_video_format == true
+      assert autorisation.delete_user == true
+      assert autorisation.delete_video == true
+      assert autorisation.update_user == true
+      assert autorisation.update_video == true
+    end
+
+    test "create_autorisation/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_autorisation(@invalid_attrs)
+    end
+
+    test "update_autorisation/2 with valid data updates the autorisation" do
+      autorisation = autorisation_fixture()
+      assert {:ok, %Autorisation{} = autorisation} = Accounts.update_autorisation(autorisation, @update_attrs)
+      assert autorisation.comment_video == false
+      assert autorisation.create_video == false
+      assert autorisation.create_video_format == false
+      assert autorisation.delete_user == false
+      assert autorisation.delete_video == false
+      assert autorisation.update_user == false
+      assert autorisation.update_video == false
+    end
+
+    test "update_autorisation/2 with invalid data returns error changeset" do
+      autorisation = autorisation_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_autorisation(autorisation, @invalid_attrs)
+      assert autorisation == Accounts.get_autorisation!(autorisation.id)
+    end
+
+    test "delete_autorisation/1 deletes the autorisation" do
+      autorisation = autorisation_fixture()
+      assert {:ok, %Autorisation{}} = Accounts.delete_autorisation(autorisation)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_autorisation!(autorisation.id) end
+    end
+
+    test "change_autorisation/1 returns a autorisation changeset" do
+      autorisation = autorisation_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_autorisation(autorisation)
+    end
+  end
+
+  describe "autorisations" do
+    alias YoutubeEx.Accounts.Autorisation
+
+    @valid_attrs %{arsdelete_user: true, comment_video: true, create_video: true, create_video_format: true, delete_video: true, update_user: true, update_video: true}
+    @update_attrs %{arsdelete_user: false, comment_video: false, create_video: false, create_video_format: false, delete_video: false, update_user: false, update_video: false}
+    @invalid_attrs %{arsdelete_user: nil, comment_video: nil, create_video: nil, create_video_format: nil, delete_video: nil, update_user: nil, update_video: nil}
+
+    def autorisation_fixture(attrs \\ %{}) do
+      {:ok, autorisation} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_autorisation()
+
+      autorisation
+    end
+
+    test "list_autorisations/0 returns all autorisations" do
+      autorisation = autorisation_fixture()
+      assert Accounts.list_autorisations() == [autorisation]
+    end
+
+    test "get_autorisation!/1 returns the autorisation with given id" do
+      autorisation = autorisation_fixture()
+      assert Accounts.get_autorisation!(autorisation.id) == autorisation
+    end
+
+    test "create_autorisation/1 with valid data creates a autorisation" do
+      assert {:ok, %Autorisation{} = autorisation} = Accounts.create_autorisation(@valid_attrs)
+      assert autorisation.arsdelete_user == true
+      assert autorisation.comment_video == true
+      assert autorisation.create_video == true
+      assert autorisation.create_video_format == true
+      assert autorisation.delete_video == true
+      assert autorisation.update_user == true
+      assert autorisation.update_video == true
+    end
+
+    test "create_autorisation/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_autorisation(@invalid_attrs)
+    end
+
+    test "update_autorisation/2 with valid data updates the autorisation" do
+      autorisation = autorisation_fixture()
+      assert {:ok, %Autorisation{} = autorisation} = Accounts.update_autorisation(autorisation, @update_attrs)
+      assert autorisation.arsdelete_user == false
+      assert autorisation.comment_video == false
+      assert autorisation.create_video == false
+      assert autorisation.create_video_format == false
+      assert autorisation.delete_video == false
+      assert autorisation.update_user == false
+      assert autorisation.update_video == false
+    end
+
+    test "update_autorisation/2 with invalid data returns error changeset" do
+      autorisation = autorisation_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_autorisation(autorisation, @invalid_attrs)
+      assert autorisation == Accounts.get_autorisation!(autorisation.id)
+    end
+
+    test "delete_autorisation/1 deletes the autorisation" do
+      autorisation = autorisation_fixture()
+      assert {:ok, %Autorisation{}} = Accounts.delete_autorisation(autorisation)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_autorisation!(autorisation.id) end
+    end
+
+    test "change_autorisation/1 returns a autorisation changeset" do
+      autorisation = autorisation_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_autorisation(autorisation)
+    end
+  end
 end
