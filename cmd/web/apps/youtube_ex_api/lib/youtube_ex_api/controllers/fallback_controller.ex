@@ -6,6 +6,10 @@ defmodule YoutubeExApi.FallbackController do
   """
   use YoutubeExApi, :controller
 
+  def call(conn, {:error, _, %Ecto.Changeset{} = changeset, _}) do
+    call(conn, {:error, changeset})
+  end
+
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
