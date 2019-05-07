@@ -13,8 +13,7 @@ defmodule YoutubeExApi.CommentView do
   end
 
   def render("comment.json", %{comment: comment}) do
-    %{message: "OK",
-      data: %{id: comment.id,
-              body: comment.body}}
+    %{id: comment.id,
+      body: comment.body}
   end
 end

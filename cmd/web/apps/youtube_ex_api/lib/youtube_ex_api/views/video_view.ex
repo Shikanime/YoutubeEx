@@ -13,15 +13,14 @@ defmodule YoutubeExApi.VideoView do
   end
 
   def render("video.json", %{video: video}) do
-    %{message: "OK",
-      data: %{id: video.id,
-              name: video.name,
-              duration: video.duration,
-              source: video.source,
-              view: video.view,
-              user: video.user,
-              enabled: video.enabled,
-              format: video.format,
-              created_at: video.created_at}}
+    %{id: video.id,
+      name: video.name,
+      duration: video.duration,
+      source: video.source,
+      view: video.view,
+      user: video.user,
+      enabled: video.enabled,
+      format: video.format,
+      created_at: video.created_at}
   end
 end

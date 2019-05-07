@@ -13,10 +13,9 @@ defmodule YoutubeExApi.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{message: "OK",
-      data: %{id: user.id,
-              username: user.username,
-              email: user.email,
-              created_at: user.inserted_at}}
+    %{id: user.id,
+      username: user.username,
+      email: user.email,
+      created_at: user.inserted_at}
   end
 end
