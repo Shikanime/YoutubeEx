@@ -1,5 +1,5 @@
 {
-  "remote.extensionKind": {
-    "peterjausovec.vscode-docker": "workspace"
-  }
+    "remote.extensionKind": {
+        "peterjausovec.vscode-docker": "workspace"
+    }
 }

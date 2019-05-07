@@ -1,5 +1,10 @@
-# Use latest Debian/Ubuntu based image as a base
-FROM debian:9
+#-------------------------------------------------------------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
+#-------------------------------------------------------------------------------------------------------------
+
+# You can use any Debian/Ubuntu based image as a base
+FROM debian:8
 
 # Copy settings file so Docker extension is installed inside the container
 COPY settings.vscode.json /root/.vscode-remote/data/Machine/settings.json
@@ -36,24 +41,26 @@ RUN curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/sk
 # Copy localhost's ~/.kube/config file into the container and swap out localhost
 # for host.docker.internal whenever a new shell starts to keep them in sync.
 RUN echo '\n\
-if [ "$SYNC_LOCALHOST_KUBECONFIG" == "true" ]; then\n\
-    mkdir -p $HOME/.kube\n\
-    cp -r $HOME/.kube-localhost/* $HOME/.kube\n\
-    sed -i -e "s/localhost/host.docker.internal/g" $HOME/.kube/config;\n\
-fi'\
+mkdir -p $HOME/.kube\n\
+cp -r $HOME/.kube-localhost/* $HOME/.kube\n\
+sed -i -e "s/localhost/host.docker.internal/g" $HOME/.kube/config' \
 >> $HOME/.bashrc
 
 # Copy localhost's minikube certificate file into the container and swap out localhost
 RUN echo '\n\
-if [ "$SYNC_LOCALHOST_MINIKUBE" == "true" ]; then\n\
-    mkdir -p $HOME/.minikube\n\
+mkdir -p $HOME/.minikube\n\
+if [[ -f "$HOME/.minikube-localhost/ca.crt" ]]; then\n\
     cp -r $HOME/.minikube-localhost/ca.crt $HOME/.minikube\n\
+    sed -i -r "s|(\s*certificate-authority:\s).*|\\1$HOME\/.minikube\/ca.crt|g" $HOME/.kube/config\n\
+fi\n\
+if [[ -f "$HOME/.minikube-localhost/client.crt" ]]; then\n\
     cp -r $HOME/.minikube-localhost/client.crt $HOME/.minikube\n\
-    cp -r $HOME/.minikube-localhost/client.key $HOME/.minikube\n\
-    sed -i -r "s|(\s*client-key:\s).*|\\1$HOME\/.minikube\/client.key|g" $HOME/.kube/config;\n\
     sed -i -r "s|(\s*client-certificate:\s).*|\\1$HOME\/.minikube\/client.crt|g" $HOME/.kube/config\n\
-    sed -i -r "s|(\s*certificate-authority:\s).*|\\1$HOME\/.minikube\/ca.crt|g" $HOME/.kube/config;\n\
-fi'\
+fi\n\
+if [[ -f "$HOME/.minikube-localhost/client.key" ]]; then\n\
+    cp -r $HOME/.minikube-localhost/client.key $HOME/.minikube\n\
+    sed -i -r "s|(\s*client-key:\s).*|\\1$HOME\/.minikube\/client.key|g" $HOME/.kube/config\n\
+fi' \
 >> $HOME/.bashrc
 
 # Clean up
