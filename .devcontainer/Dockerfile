@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------------------------------------------------
 
 # You can use any Debian/Ubuntu based image as a base
-FROM debian:8
+FROM debian:9
 
 # Copy settings file so Docker extension is installed inside the container
 COPY settings.vscode.json /root/.vscode-remote/data/Machine/settings.json
@@ -62,6 +62,13 @@ if [[ -f "$HOME/.minikube-localhost/client.key" ]]; then\n\
     sed -i -r "s|(\s*client-key:\s).*|\\1$HOME\/.minikube\/client.key|g" $HOME/.kube/config\n\
 fi' \
 >> $HOME/.bashrc
+
+# Install Elixir
+RUN curl -Lo erlang.deb https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && dpkg -i erlang.deb \
+    && rm erlang.deb \
+    && apt-get update \
+    && apt-get install -y esl-erlang \
+    && apt-get install -y elixir
 
 # Clean up
 RUN apt-get autoremove -y \
