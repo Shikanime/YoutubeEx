@@ -42,29 +42,29 @@ defmodule YoutubeEx.Accounts do
 
   alias YoutubeEx.Accounts.Autorisation
 
-  def permit_show_user(user_id),
-    do: user_have_permission(:show_user, user_id)
+  def permit_show_user(user_id, id),
+    do: verify_permission(user_id == id or can_user?(:show_user, user_id))
 
-  def permit_update_user(user_id, _),
-    do: user_have_permission(:update_user, user_id)
+  def permit_update_user(user_id, id),
+    do: verify_permission(user_id == id or can_user?(:update_user, user_id))
 
-  def permit_delete_user(user_id),
-    do: user_have_permission(:delete_user, user_id)
+  def permit_delete_user(user_id, id),
+    do: verify_permission(user_id == id or can_user?(:delete_user, user_id))
 
   def permit_create_video(user_id),
-    do: user_have_permission(:create_video, user_id)
+    do: verify_permission(can_user?(:create_video, user_id))
 
   def permit_update_video(user_id),
-    do: user_have_permission(:update_video, user_id)
+    do: verify_permission(can_user?(:update_video, user_id))
 
   def permit_delete_video(user_id),
-    do: user_have_permission(:delete_video, user_id)
+    do: verify_permission(can_user?(:delete_video, user_id))
 
   def permit_create_video_format(user_id),
-    do: user_have_permission(:create_video_format, user_id)
+    do: verify_permission(can_user?(:create_video_format, user_id))
 
   def permit_comment_video(user_id),
-    do: user_have_permission(:comment_video, user_id)
+    do: verify_permission(can_user?(:comment_video, user_id))
 
   def register_user(attrs \\ %{}) do
     user = User.changeset(%User{}, attrs)
@@ -82,11 +82,15 @@ defmodule YoutubeEx.Accounts do
     |> Repo.transaction()
   end
 
-  defp user_have_permission(permission, user_id) do
+  defp can_user?(permission, user_id) do
     query = from p in Autorisation,
-      where: p.user == ^user_id and field(p, ^permission) == true
+      where: p.user_id == ^user_id and field(p, ^permission) == true
 
-    if Repo.exists?(query),
+    Repo.exists?(query)
+  end
+
+  def verify_permission(condittion) do
+    if condittion,
       do: :ok,
       else: {:error, :forbidden}
   end

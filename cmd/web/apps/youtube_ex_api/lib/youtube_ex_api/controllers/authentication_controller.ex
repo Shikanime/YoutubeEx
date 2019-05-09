@@ -18,11 +18,8 @@ defmodule YoutubeExApi.AuthenticationController do
 
   def check_required_token(conn) do
     case get_req_header(conn, "authorization") do
-      ["Bearer " <> token] ->
-        {:ok, token}
-
-      _ ->
-        {:error, :missing_token}
+      ["Bearer " <> token] -> {:ok, token}
+      _ -> {:error, :missing_token}
     end
   end
 

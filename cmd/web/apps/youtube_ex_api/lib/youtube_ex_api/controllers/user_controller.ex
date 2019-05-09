@@ -25,14 +25,14 @@ defmodule YoutubeExApi.UserController do
   end
 
   def get(conn, %{"id" => id}) do
-    with :ok <- Accounts.permit_show_user(conn.assigs.current_user.id) do
+    with :ok <- Accounts.permit_show_user(conn.assigns.current_user.id, id) do
       user = Accounts.get_user!(id)
       render(conn, "show.json", user: user)
     end
   end
 
   def update(conn, %{"id" => id} = user_params) do
-    with :ok <- Accounts.permit_update_user(conn.assigs.current_user.id, id) do
+    with :ok <- Accounts.permit_update_user(conn.assigns.current_user.id, id) do
       user = Accounts.get_user!(id)
 
       with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
@@ -42,10 +42,12 @@ defmodule YoutubeExApi.UserController do
   end
 
   def delete(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+    with :ok <- Accounts.permit_delete_user(conn.assigns.current_user.id, id) do
+      user = Accounts.get_user!(id)
 
-    with {:ok, %User{}} <- Accounts.delete_user(user) do
-      send_resp(conn, :no_content, "")
+      with {:ok, %User{}} <- Accounts.delete_user(user) do
+        send_resp(conn, :no_content, "")
+      end
     end
   end
 end
