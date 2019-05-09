@@ -25,15 +25,19 @@ defmodule YoutubeExApi.UserController do
   end
 
   def get(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    render(conn, "show.json", user: user)
+    with :ok <- Accounts.permit_show_user(conn.assigs.current_user.id) do
+      user = Accounts.get_user!(id)
+      render(conn, "show.json", user: user)
+    end
   end
 
   def update(conn, %{"id" => id} = user_params) do
-    user = Accounts.get_user!(id)
+    with :ok <- Accounts.permit_update_user(conn.assigs.current_user.id, id) do
+      user = Accounts.get_user!(id)
 
-    with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
-      render(conn, "show.json", user: user)
+      with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
+        render(conn, "show.json", user: user)
+      end
     end
   end
 

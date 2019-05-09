@@ -42,61 +42,29 @@ defmodule YoutubeEx.Accounts do
 
   alias YoutubeEx.Accounts.Autorisation
 
-  def user_can_show_user?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.show_user == true
+  def permit_show_user(user_id),
+    do: user_have_permission(:show_user, user_id)
 
-    Repo.exists?(query)
-  end
+  def permit_update_user(user_id, _),
+    do: user_have_permission(:update_user, user_id)
 
-  def user_can_update_user?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.update_user == true
+  def permit_delete_user(user_id),
+    do: user_have_permission(:delete_user, user_id)
 
-    Repo.exists?(query)
-  end
+  def permit_create_video(user_id),
+    do: user_have_permission(:create_video, user_id)
 
-  def user_can_delete_user?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.delete_user == true
+  def permit_update_video(user_id),
+    do: user_have_permission(:update_video, user_id)
 
-    Repo.exists?(query)
-  end
+  def permit_delete_video(user_id),
+    do: user_have_permission(:delete_video, user_id)
 
-  def user_can_create_video?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.create_video == true
+  def permit_create_video_format(user_id),
+    do: user_have_permission(:create_video_format, user_id)
 
-    Repo.exists?(query)
-  end
-
-  def user_can_update_video?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.update_video == true
-
-    Repo.exists?(query)
-  end
-
-  def user_can_delete_video?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.delete_video == true
-
-    Repo.exists?(query)
-  end
-
-  def user_can_create_video_format?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.create_video_format == true
-
-    Repo.exists?(query)
-  end
-
-  def user_can_comment_video?(id) do
-    query = from p in Autorisation,
-      where: p.user == ^id and p.comment_video == true
-
-    Repo.exists?(query)
-  end
+  def permit_comment_video(user_id),
+    do: user_have_permission(:comment_video, user_id)
 
   def register_user(attrs \\ %{}) do
     user = User.changeset(%User{}, attrs)
@@ -112,5 +80,14 @@ defmodule YoutubeEx.Accounts do
       |> Autorisation.changeset(%{})
     end)
     |> Repo.transaction()
+  end
+
+  defp user_have_permission(permission, user_id) do
+    query = from p in Autorisation,
+      where: p.user == ^user_id and field(p, ^permission) == true
+
+    if Repo.exists?(query),
+      do: :ok,
+      else: {:error, :forbidden}
   end
 end

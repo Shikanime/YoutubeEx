@@ -12,7 +12,7 @@ defmodule YoutubeExApi.AuthController do
 
     with {:ok, %User{} = user} <- Accounts.authentitcate_user(login, password) do
       token = Phoenix.Token.sign(YoutubeExApi.Endpoint, "secret", user.id)
-IO.inspect(user)
+
       conn
       |> put_status(:created)
       |> render("show.json", auth: %{token: token, user: user.id})

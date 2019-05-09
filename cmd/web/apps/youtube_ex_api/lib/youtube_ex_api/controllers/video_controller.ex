@@ -19,19 +19,17 @@ defmodule YoutubeExApi.VideoController do
   end
 
   def update(conn, %{"id" => id, "video" => video_params}) do
-    if Accounts.user_can_update_video?(conn.assigs.current_user.id) do
+    with :ok <- Accounts.permit_update_video(conn.assigs.current_user.id) do
       video = Contents.get_video!(id)
 
       with {:ok, %Video{} = video} <- Contents.update_video(video, video_params) do
         render(conn, "show.json", video: video)
       end
-    else
-      {:error, :forbidden}
     end
   end
 
   def encode(conn, %{"id" => id} = video_params) do
-    if Accounts.user_can_create_video_format?(conn.assigs.current_user.id) do
+    with :ok <- Accounts.permit_create_video_format(conn.assigs.current_user.id) do
       {video_upload, video_params} = Map.pop(video_params, :source)
 
       case Path.extname(video_upload.filename) do
@@ -54,20 +52,16 @@ defmodule YoutubeExApi.VideoController do
           |> put_status(:unprocessable_entity)
           |> render("400.json", code: "", error_stack: []) # TODO: Send stack error
       end
-    else
-      {:error, :forbidden}
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    if Accounts.user_can_delete_video?(conn.assigs.current_user.id) do
+    with :ok <- Accounts.permit_delete_video(conn.assigs.current_user.id) do
       video = Contents.get_video!(id)
 
       with {:ok, %Video{}} <- Contents.delete_video(video) do
         send_resp(conn, :no_content, "")
       end
-    else
-      {:error, :forbidden}
     end
   end
 end

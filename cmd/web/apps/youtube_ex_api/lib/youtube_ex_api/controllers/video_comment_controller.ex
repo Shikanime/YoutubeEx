@@ -13,7 +13,7 @@ defmodule YoutubeExApi.VideoCommentController do
   end
 
   def create(conn, %{"id" => id} = comment_params) do
-    if Accounts.user_can_comment_video?(conn.assigs.current_user.id) do
+    with :ok <- Accounts.permit_comment_video(conn.assigs.current_user.id) do
       comment_params = Map.put(comment_params, :user, id)
 
       with {:ok, %Comment{} = comment} <- Activities.create_comment(comment_params) do
@@ -21,8 +21,6 @@ defmodule YoutubeExApi.VideoCommentController do
         |> put_status(:created)
         |> render("show.json", comment: comment)
       end
-    else
-      {:error, :forbidden}
     end
   end
 end

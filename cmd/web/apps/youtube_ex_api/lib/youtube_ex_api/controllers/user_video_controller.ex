@@ -13,12 +13,12 @@ defmodule YoutubeExApi.UserVideoController do
   end
 
   def create(conn, %{"id" => id} = video_params) do
-    if Accounts.user_can_create_video?(conn.assigs.current_user.id) do
+    with :ok <- Accounts.permit_create_video(conn.assigs.current_user.id) do
       {video_upload, video_params} = Map.pop(video_params, :source)
 
       case Path.extname(video_upload.filename) do
-        extension when extension in [".mp4", ".avi"] ->
-          File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
+        ext when ext in [".mp4", ".avi"] ->
+          File.cp(video_upload.path, "/media/#{video_params.id}#{ext}")
 
           video_params = Map.put(video_params, :user, id)
 
@@ -33,8 +33,6 @@ defmodule YoutubeExApi.UserVideoController do
           |> put_status(:unprocessable_entity)
           |> render("400.json", code: "", error_stack: []) # TODO: Send stack error
       end
-    else
-      {:error, :forbidden}
     end
   end
 end
