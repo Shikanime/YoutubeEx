@@ -78,6 +78,9 @@ EXPOSE 49200-49210
 # Application environment
 ARG MIX_ENV=prod
 
+# Copy docker entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
 # Pull build
 COPY --from=build /opt/youtube-ex/_build/${MIX_ENV}/rel/youtube_ex/releases/0.1.0/youtube_ex.tar.gz ./
 
@@ -87,12 +90,10 @@ RUN mkdir /opt/youtube-ex && \
   -xf youtube_ex.tar.gz \
   --directory /opt/youtube-ex && \
   rm youtube_ex.tar.gz
+RUN ln -s /opt/youtube-ex/bin/youtube_ex /usr/local/bin/youtube_ex
 
 # HTTP
 EXPOSE 80
 
-# Copy docker entrypoint
-COPY docker-entrypoint.sh ./
-
-ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["/opt/youtube-ex/bin/youtube_ex", "foreground"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["youtube_ex", "foreground"]
