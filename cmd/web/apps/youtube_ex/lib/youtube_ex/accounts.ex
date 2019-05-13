@@ -51,8 +51,8 @@ defmodule YoutubeEx.Accounts do
   def permit_delete_user(user_id, id),
     do: verify_permission(user_id == id or can_user?(:delete_user, user_id))
 
-  def permit_create_video(user_id),
-    do: verify_permission(can_user?(:create_video, user_id))
+  def permit_create_video(user_id, id),
+    do: verify_permission(user_id == id or can_user?(:create_video, user_id))
 
   def permit_update_video(user_id),
     do: verify_permission(can_user?(:update_video, user_id))
