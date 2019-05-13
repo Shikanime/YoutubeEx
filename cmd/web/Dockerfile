@@ -90,10 +90,9 @@ RUN mkdir /opt/youtube-ex && \
   -xf youtube_ex.tar.gz \
   --directory /opt/youtube-ex && \
   rm youtube_ex.tar.gz
-RUN ln -s /opt/youtube-ex/bin/youtube_ex /usr/local/bin/youtube_ex
 
 # HTTP
 EXPOSE 80
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["youtube_ex", "foreground"]
+CMD ["/opt/youtube-ex/bin/youtube_ex", "foreground"]
