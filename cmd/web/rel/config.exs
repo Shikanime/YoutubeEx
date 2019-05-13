@@ -47,10 +47,9 @@ end
 release :youtube_ex do
   set version: "0.1.0"
 
-  set pre_start_hooks: "rel/hooks/pre_start"
-
   set commands: [
-    seed: "rel/commands/seed.sh"
+    seed: "rel/commands/seed.sh",
+    migrate: "rel/commands/migrate.sh"
   ]
 
   set applications: [
