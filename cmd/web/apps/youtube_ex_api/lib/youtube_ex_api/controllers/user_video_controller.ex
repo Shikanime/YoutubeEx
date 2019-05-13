@@ -13,19 +13,31 @@ defmodule YoutubeExApi.UserVideoController do
   end
 
   def create(conn, %{"id" => id} = video_params) do
-    with :ok <- Accounts.permit_create_video(conn.assigns.current_user.id) do
-      {video_upload, video_params} = Map.pop(video_params, :source)
+    with :ok <- Accounts.permit_create_video(conn.assigns.current_user.id, id) do
+      {video_upload, video_params} = Map.pop(video_params, "source")
 
       case Path.extname(video_upload.filename) do
         ext when ext in [".mp4", ".avi"] ->
-          File.cp(video_upload.path, "/media/#{video_params.id}#{ext}")
+          uri = :code.priv_dir(:youtube_ex_api) |> to_string()
+          uri = uri <> "/static/#{video_params["id"]}/#{video_params["name"]}#{ext}"
 
-          video_params = Map.put(video_params, :user, id)
+          with :ok <- File.cp(video_upload.path, uri) do
+            video_params =
+              video_params
+              |> Map.put("user", id)
+              |> Map.put("duration", 0)
+              |> Map.put("source", uri)
 
-          with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
-            conn
-            |> put_status(:created)
-            |> render("show.json", video: video)
+            with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
+              conn
+              |> put_status(:created)
+              |> render("show.json", video: video)
+            end
+          else
+            {:error, reason} ->
+              conn
+              |> put_status(:unprocessable_entity)
+              |> render("400.json", code: "", error_stack: []) # TODO: Send stack error
           end
 
         _ ->
