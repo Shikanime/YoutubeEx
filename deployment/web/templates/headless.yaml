@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "youtubeex.fullname" . }}-headless
+  name: {{ include "youtube-ex-web.fullname" . }}-headless
   labels:
-    app: {{ template "youtubeex.name" . }}
-    chart: {{ template "youtubeex.chart" . }}
+    app: {{ template "youtube-ex-web.name" . }}
+    chart: {{ template "youtube-ex-web.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
   clusterIP: None
   selector:
-    app.kubernetes.io/name: {{ include "youtubeex.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: {{ template "youtube-ex-web.name" . }}
+    release: {{ .Release.Name | quote }}

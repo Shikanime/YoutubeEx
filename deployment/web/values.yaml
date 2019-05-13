@@ -1,23 +1,23 @@
-# YoutubeEx main image
+# YoutubeExWeb main image
 image: youtube-ex/web
 
-# YoutubeEx service configuration
+# YoutubeExWeb service configuration
 service:
-  # YoutubeEx service type
+  # YoutubeExWeb service type
   type: LoadBalancer
   # clusterIP: None
   port: 80
 
-# YoutubeEx Gossip discovery secret
+# YoutubeExWeb Gossip discovery secret
 gossipSecret: Yy1d/NKVUWXnHvps8YAG82IhliY1Qa8nfhl+Qt9eKTioRKtsW4J0lUL4tankbk3R
 
-# YoutubeEx Gossip discovery secret
+# YoutubeExWeb Gossip discovery secret
 phoenixSecret: JScUlQe+INcOfoMn+JG3RQP8BCu+QbKNy5ByCUxlsufJLPXt7DpyZId0DU/iODcR
 
-# YoutubeEx Erlang distribution cookie
+# YoutubeExWeb Erlang distribution cookie
 erlangCookie: jeAuFKBxxxTth0LrbTDncsyFOdGWqNCgPXaLjdl5hc65Ec+WLrYXL5nmPdnRp3LG
 
-# YoutubeEx node replication number
+# YoutubeExWeb node replication number
 replicas: 1
 
 # PostgreSQL credentials
