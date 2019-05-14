@@ -34,19 +34,13 @@ defmodule YoutubeExApi.VideoController do
 
       case Path.extname(video_upload.filename) do
         extension when extension in [".mp4", ".avi"] ->
-          File.cp(video_upload.path, "/media/#{video_params.id}#{extension}")
+          with :ok <- File.cp(video_upload.path, "/media/#{video_params.id}#{extension}") do
+            video_params = Map.put(video_params, :video, id)
 
-          video_params =
-            Map.new(fn
-              :format -> :code
-              other -> other
-            end)
-            |> Map.put(:video, id)
-
-          with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
-            render(conn, "show.json", video: video)
+            with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
+              render(conn, "show.json", video: video)
+            end
           end
-
         _ ->
           conn
           |> put_status(:unprocessable_entity)

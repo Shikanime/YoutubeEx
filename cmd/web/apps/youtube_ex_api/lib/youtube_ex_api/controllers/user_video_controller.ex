@@ -18,23 +18,25 @@ defmodule YoutubeExApi.UserVideoController do
 
       case Path.extname(video_upload.filename) do
         ext when ext in [".mp4", ".avi"] ->
-          uri = :code.priv_dir(:youtube_ex_api) |> to_string()
-          uri = uri <> "/static/#{video_params["id"]}/#{video_params["name"]}#{ext}"
+          uri = "/static/videos/#{video_params["id"]}/#{video_params["name"]}#{ext}"
+          path = (:code.priv_dir(:youtube_ex_api) |> to_string()) <> uri
+          dir = Path.dirname(path)
 
-          with :ok <- File.cp(video_upload.path, uri) do
+          with :ok <- File.mkdir_p(dir),
+               :ok <- File.cp(video_upload.path, path) do
             video_params =
               video_params
               |> Map.put("user", id)
               |> Map.put("duration", 0)
               |> Map.put("source", uri)
 
-            with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
+            with {:ok, %Video{} = video} = Contents.create_video(video_params) do
               conn
               |> put_status(:created)
               |> render("show.json", video: video)
             end
           else
-            {:error, reason} ->
+            {:error, _reason} ->
               conn
               |> put_status(:unprocessable_entity)
               |> render("400.json", code: "", error_stack: []) # TODO: Send stack error

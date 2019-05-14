@@ -37,7 +37,7 @@ defmodule YoutubeExApi.Endpoint do
     at: "/",
     from: :youtube_ex_api,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts videos images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

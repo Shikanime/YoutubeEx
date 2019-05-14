@@ -20,7 +20,6 @@ defmodule YoutubeExApi.VideoView do
       view: video.view,
       user: video.user,
       enabled: video.enabled,
-      format: video.format,
       created_at: video.created_at}
   end
 end
