@@ -17,7 +17,8 @@ defmodule YoutubeExApi.AuthenticationController do
       |> put_status(:created)
       |> render("show.json", authentication: %{token: token, user: user})
     else
-      {:error, :bad_credentials} -> {:error, %{password: "doesn't match"}}
+      {:error, :bad_credentials} ->
+        {:error, %{password: "doesn't match"}}
     end
   end
 end
