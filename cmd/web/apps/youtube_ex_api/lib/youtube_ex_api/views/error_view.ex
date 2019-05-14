@@ -22,9 +22,9 @@ defmodule YoutubeExApi.ErrorView do
     %{message: "Forbidden"}
   end
 
-  def render("error.json", %{stack: stack}) do
+  def render("error.json", %{error_stack: error_stack}) do
     %{message: "Bad Request",
       code: "10000",
-      data: stack}
+      data: error_stack}
   end
 end

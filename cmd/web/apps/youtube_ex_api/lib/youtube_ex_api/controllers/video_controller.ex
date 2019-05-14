@@ -1,6 +1,7 @@
 defmodule YoutubeExApi.VideoController do
   use YoutubeExApi, :controller
 
+  alias YoutubeExApi.Bucket
   alias YoutubeEx.Accounts
   alias YoutubeEx.Contents
   alias YoutubeEx.Contents.Video
@@ -29,23 +30,33 @@ defmodule YoutubeExApi.VideoController do
   end
 
   def encode(conn, %{"id" => id} = video_params) do
-    with :ok <- Accounts.permit_create_video_format(conn.assigns.current_user.id) do
-      {video_upload, video_params} = Map.pop(video_params, :source)
+    case Map.pop(video_params, "source") do
+      {nil, _} -> (
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render("error.json", error_stack: [
+          source: "can't be blank"
+        ])
+      )
 
-      case Path.extname(video_upload.filename) do
-        extension when extension in [".mp4", ".avi"] ->
-          with :ok <- File.cp(video_upload.path, "/media/#{video_params.id}#{extension}") do
+      {video_upload, video_params} -> (
+        with :ok <- Accounts.permit_create_video_format(conn.assigns.current_user.id) do
+          with {:ok, _} <- Bucket.store_video(id, video_upload, format: video_params.format) do
             video_params = Map.put(video_params, :video, id)
 
             with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
               render(conn, "show.json", video: video)
             end
+          else
+            {:error, _reason} ->
+              conn
+              |> put_status(:unprocessable_entity)
+              |> render("error.json", error_stack: [
+                source: "is invalid"
+              ])
           end
-        _ ->
-          conn
-          |> put_status(:unprocessable_entity)
-          |> render("400.json", code: "", error_stack: []) # TODO: Send stack error
-      end
+        end
+      )
     end
   end
 

@@ -2,32 +2,22 @@ defmodule YoutubeExApi.AuthenticationController do
   use YoutubeExApi, :controller
 
   alias YoutubeEx.Accounts
+  alias YoutubeEx.Accounts.User
 
-  def call(conn, _) do
-    with {:ok, token} <- check_required_token(conn),
-         {:ok, id}    <- extract_token_payload(token) do
+  action_fallback YoutubeExApi.FallbackController
+
+  def authenticate(conn, auth_params) do
+    login = Map.get(auth_params, "login")
+    password = Map.get(auth_params, "password")
+
+    with {:ok, %User{} = user} <- Accounts.authentitcate_user(login, password) do
+      token = Phoenix.Token.sign(YoutubeExApi.Endpoint, "secret", user.id)
+
       conn
-      |> assign(:current_user, Accounts.get_user!(id))
+      |> put_status(:created)
+      |> render("show.json", authentication: %{token: token, user: user})
     else
-      {:error, _} ->
-        conn
-        |> YoutubeExApi.FallbackController.call({:error, :unauthorized})
-        |> halt()
-    end
-  end
-
-  def check_required_token(conn) do
-    case get_req_header(conn, "authorization") do
-      ["Bearer " <> token] -> {:ok, token}
-      _ -> {:error, :missing_token}
-    end
-  end
-
-  def extract_token_payload(token) do
-    case Phoenix.Token.verify(YoutubeExApi.Endpoint, "secret", token, max_age: 86400) do
-      {:error, :expired} -> {:error, :expired_token}
-      {:error, :invalid} -> {:error, :invalid_token}
-      other -> other
+      {:error, :bad_credentials} -> {:error, %{password: "doesn't match"}}
     end
   end
 end

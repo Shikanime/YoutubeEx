@@ -6,13 +6,13 @@ defmodule YoutubeExApi.Router do
   end
 
   pipeline :protected do
-    plug YoutubeExApi.AuthenticationController
+    plug YoutubeExApi.AuthorizationController
   end
 
   scope "/", YoutubeExApi do
     pipe_through :api
 
-    post "/auth", AuthController, :authenticate
+    post "/auth", AuthenticationController, :authenticate
 
     get "/users", UserController, :list
     post "/user", UserController, :register

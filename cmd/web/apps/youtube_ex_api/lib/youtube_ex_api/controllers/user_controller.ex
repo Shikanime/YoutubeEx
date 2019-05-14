@@ -15,12 +15,7 @@ defmodule YoutubeExApi.UserController do
     with {:ok, user_and_credential} <- Accounts.register_user(user_params) do
       conn
       |> put_status(:created)
-      |> render("show.json", user: %{
-        id: user_and_credential.user.id,
-        username: user_and_credential.user.username,
-        email: user_and_credential.user.email,
-        pseudo: user_and_credential.user.pseudo
-      })
+      |> render("show.json", user: user_and_credential.user)
     end
   end
 
