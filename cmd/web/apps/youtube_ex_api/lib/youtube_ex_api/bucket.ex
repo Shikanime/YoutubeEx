@@ -2,17 +2,21 @@ defmodule YoutubeExApi.Bucket do
   @video_formats ["1080", "720", "480", "360", "240", "120"]
   @video_extensions [".mp4", ".avi"]
 
-  def store_video(namespace, video, opts \\ []) do
+  def store_video(video_namespace, video_name, video, opts \\ []) do
     with {:ok, format} <- fetch_video_format(opts),
          {:ok, ext} <- fetch_video_extension(video) do
       priv_dir = Application.app_dir(:youtube_ex_api, "priv")
-      video_file_name = Path.basename(video.filename, ext)
-      video_dir = "#{priv_dir}/static/videos/#{namespace}/#{video_file_name}"
-      video_path = "#{video_dir}/#{format}#{ext}"
+      static_dir = "#{priv_dir}/static"
 
-      with :ok <- File.mkdir_p(video_dir),
-            :ok <- File.cp(video.path, video_path),
-            do: {:ok, video_path}
+      video_dir = "videos/#{video_namespace}/#{video_name}"
+      video_uri = "#{video_dir}/#{format}#{ext}"
+
+      static_video_dir = "#{static_dir}/#{video_dir}"
+      static_video_file = "#{static_dir}/#{video_dir}/#{format}#{ext}"
+
+      with :ok <- File.mkdir_p(static_video_dir),
+            :ok <- File.cp(video.path, static_video_file),
+            do: {:ok, video_uri}
     end
   end
 
