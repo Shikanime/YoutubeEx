@@ -16,18 +16,18 @@ defmodule YoutubeExApi.UserVideoController do
   def create(conn, %{"id" => id} = video_params) do
     case Map.pop(video_params, "source") do
       {nil, _} ->
-        {:error, source: "can't be blank"}
+        {:error, %{source: "can't be blank"}}
 
       {video_upload, video_params} -> (
         with :ok <- Accounts.permit_create_video(conn.assigns.current_user.id, id) do
-          with {:ok, video_path} <- Bucket.store_video(id, video_upload) do
+          with {:ok, video_path} <- Bucket.store_video(id, video_params["name"], video_upload) do
             video_params =
               video_params
               |> Map.put("user_id", id)
               |> Map.put("duration", 0)
               |> Map.put("source", video_path)
 
-            with {:ok, %Video{} = video} = Contents.create_video(video_params) do
+            with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
               video = Map.put(video, :user, Accounts.get_user!(id))
 
               conn

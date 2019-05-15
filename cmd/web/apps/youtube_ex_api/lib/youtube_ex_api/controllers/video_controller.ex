@@ -41,8 +41,8 @@ defmodule YoutubeExApi.VideoController do
 
       {video_upload, video_params} -> (
         with :ok <- Accounts.permit_create_video_format(conn.assigns.current_user.id) do
-          with {:ok, _} <- Bucket.store_video(id, video_upload, format: video_params.format) do
-            video_params = Map.put(video_params, :video, id)
+          with {:ok, _} <- Bucket.store_video(id, video_params["name"], video_upload, format: video_params.format) do
+            video_params = Map.put(video_params, "user", id)
 
             with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
               render(conn, "show.json", video: video)
