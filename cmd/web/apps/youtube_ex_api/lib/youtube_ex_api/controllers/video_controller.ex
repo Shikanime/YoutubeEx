@@ -9,8 +9,14 @@ defmodule YoutubeExApi.VideoController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def index(conn, _params) do
-    videos = Contents.list_videos()
+  def index(conn, params) do
+    index = Map.get(params, "page", 1)
+    offset = Map.get(params, "perPage", 1)
+
+    page = Contents.paginate_videos(index, offset)
+    videos = %{entries: page.entries,
+              cursor: %{current: page.page_number,
+                        total: page.total_pages}}
     render(conn, "index.json", videos: videos)
   end
 

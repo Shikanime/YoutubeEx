@@ -37,6 +37,7 @@ defmodule YoutubeEx.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.0"},
+      {:scrivener_ecto, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:argon2_elixir, "~> 2.0"}
