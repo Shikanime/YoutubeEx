@@ -14,7 +14,6 @@ defmodule YoutubeExApi.VideoView do
   end
 
   def render("video.json", %{video: video}) do
-    IO.inspect(video)
     %{id: video.id,
       name: video.name,
       duration: video.duration,
