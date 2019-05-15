@@ -23,7 +23,7 @@ defmodule YoutubeEx.Accounts.Autorisation do
   @doc false
   def changeset(autorisation, attrs) do
     autorisation
-    |> cast(attrs, [:update_video, :delete_video, :create_video_format, :comment_video, :update_user, :delete_user, :create_video])
-    |> validate_required([:update_video, :delete_video, :create_video_format, :comment_video, :update_user, :delete_user, :create_video])
+    |> cast(attrs, [:update_video, :delete_video, :create_video_format, :comment_video, :update_user, :delete_user, :create_video, :user_id])
+    |> validate_required([:update_video, :delete_video, :create_video_format, :comment_video, :update_user, :delete_user, :create_video, :user_id])
   end
 end

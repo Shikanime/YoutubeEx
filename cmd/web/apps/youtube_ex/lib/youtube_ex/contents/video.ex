@@ -21,7 +21,7 @@ defmodule YoutubeEx.Contents.Video do
   @doc false
   def changeset(video, attrs) do
     video
-    |> cast(attrs, [:name, :duration, :source, :view, :enabled])
-    |> validate_required([:name, :duration, :source, :view, :enabled])
+    |> cast(attrs, [:name, :duration, :source, :view, :enabled, :user_id])
+    |> validate_required([:name, :duration, :source, :view, :enabled, :user_id])
   end
 end

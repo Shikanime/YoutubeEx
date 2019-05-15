@@ -17,8 +17,8 @@ defmodule YoutubeEx.Accounts.Credential do
   @doc false
   def changeset(credential, attrs) do
     credential
-    |> cast(attrs, [:password])
-    |> validate_required([:password])
+    |> cast(attrs, [:password, :user_id])
+    |> validate_required([:password, :user_id])
     |> put_change(:password, Argon2.hash_pwd_salt(attrs["password"]))
   end
 end
