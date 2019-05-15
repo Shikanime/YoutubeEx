@@ -15,8 +15,8 @@ defmodule YoutubeExApi.VideoController do
 
     page = Contents.paginate_videos(index, offset)
     videos = %{entries: page.entries,
-              cursor: %{current: page.page_number,
-                        total: page.total_pages}}
+               cursor: %{current: page.page_number,
+                         total: page.total_pages}}
     render(conn, "index.json", videos: videos)
   end
 

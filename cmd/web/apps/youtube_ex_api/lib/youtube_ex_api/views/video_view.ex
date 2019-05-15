@@ -21,7 +21,7 @@ defmodule YoutubeExApi.VideoView do
       duration: video.duration,
       source: video.source,
       view: video.view,
-      user: render_one(video.user, UserView, "user.json"),
+      user: video.user_id,
       enabled: video.enabled,
       created_at: video.inserted_at}
   end
