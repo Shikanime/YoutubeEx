@@ -3,24 +3,17 @@ defmodule YoutubeEx.Accounts do
   The Accounts context.
   """
 
+  import YoutubeEx.Repo.Helpers, warn: false
   import Ecto.Query, warn: false
   alias YoutubeEx.Repo
 
   alias YoutubeEx.Contents
   alias YoutubeEx.Accounts.User
 
-  def list_users do
-    Repo.all(User)
-  end
-
-  def paginate_users(index, offset, pseudo) when is_nil(pseudo) do
-    Repo.paginate(User, page: index, page_size: offset)
-  end
-
-  def paginate_users(index, offset, pseudo) do
+  def paginate_users_by_pseudo(pseudo, opts \\ []) do
     User
     |> where([u], like(u.pseudo, ^"%#{String.replace(pseudo, "%", "\\%")}%"))
-    |> Repo.paginate(page: index, page_size: offset)
+    |> with_pagination(opts)
   end
 
   def get_user!(id), do: Repo.get!(User, id)
@@ -38,76 +31,113 @@ defmodule YoutubeEx.Accounts do
   alias YoutubeEx.Accounts.Credential
 
   def authentitcate_user(login, password) do
-    query = from u in User,
-      where: u.email == ^login or u.username == ^login,
-      preload: [:credential]
+    User
+    |> where(email: ^login)
+    |> or_where(username: ^login)
+    |> preload(:credential)
+    |> Repo.one!()
+    |> verify_password(password)
+  end
 
-    with user <- Repo.one(query),
-         false <- is_nil(user),
-         true <- Argon2.verify_pass(password, user.credential.password)
-    do
+  defp verify_password(user, password) do
+    if Argon2.verify_pass(password, user.credential.password) do
       {:ok, user}
     else
-      _ ->
-        {:error, :bad_credentials}
+      {:error, :bad_credentials}
     end
   end
 
   alias YoutubeEx.Accounts.Autorisation
 
-  def permit_show_user(user_id, id),
-    do: verify_permission(user_id == id)
+  def create_user(attrs \\ %{}) do
+    Repo.transaction(fn ->
+      user =
+        %User{}
+        |> User.changeset(attrs)
+        |> Repo.insert!()
 
-  def permit_update_user(user_id, id),
-    do: verify_permission(user_id == id or can_user?(:update_user, user_id))
-
-  def permit_delete_user(user_id, id),
-    do: verify_permission(user_id == id or can_user?(:delete_user, user_id))
-
-  def permit_create_video(user_id, id),
-    do: verify_permission(user_id == id or can_user?(:create_video, user_id))
-
-  def permit_update_video(video_id, user_id),
-    do: verify_permission(Contents.get_video!(video_id).user_id == user_id or
-                          can_user?(:update_video, user_id))
-
-  def permit_delete_video(video_id, user_id),
-    do: verify_permission(Contents.get_video!(video_id).user_id == user_id or
-                          can_user?(:delete_video, user_id))
-
-  def permit_create_video_format(video_id, user_id),
-    do: verify_permission(Contents.get_video!(video_id).user_id == user_id or
-                          can_user?(:create_video_format, user_id))
-
-  def permit_comment_video(user_id),
-    do: verify_permission(can_user?(:comment_video, user_id))
-
-  def register_user(attrs \\ %{}) do
-    user = User.changeset(%User{}, attrs)
-
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:user, user)
-    |> Ecto.Multi.insert(:credential, fn %{user: user} ->
-      Ecto.build_assoc(user, :credential)
+      user
+      |> Ecto.build_assoc(:credential)
       |> Credential.changeset(attrs)
+      |> Repo.insert!()
+
+      user
+      |> Ecto.build_assoc(:autorisation)
+      |> Autorisation.changeset(attrs)
+      |> Repo.insert!()
+
+      user
     end)
-    |> Ecto.Multi.insert(:Autorisation, fn %{user: user} ->
-      Ecto.build_assoc(user, :Autorisation)
-      |> Autorisation.changeset(%{})
-    end)
-    |> Repo.transaction()
   end
 
-  defp can_user?(permission, user_id) do
-    query = from p in Autorisation,
-      where: p.user_id == ^user_id and field(p, ^permission) == true
+  def permit_user(user_id, permission) do
+    have_authorisation? =
+      Autorisation
+      |> where(user_id: ^user_id)
+      |> filter_authorisation(permission)
+      |> Repo.exists?()
 
-    Repo.exists?(query)
+    if have_authorisation? do
+      :ok
+    else
+      {:error, :forbidden}
+    end
   end
 
-  def verify_permission(condittion) do
-    if condittion,
-      do: :ok,
-      else: {:error, :forbidden}
+  def permit_show_user(id, id), do: :ok
+  def permit_show_user(user_id, _),
+    do: permit_user(user_id, :show_user)
+
+  def permit_update_user(id, id), do: :ok
+  def permit_update_user(user_id, _),
+    do: permit_user(user_id, :update_user)
+
+  def permit_delete_user(id, id), do: :ok
+  def permit_delete_user(user_id, _),
+    do: permit_user(user_id, :delete_user)
+
+  def permit_create_video(user_id),
+    do: permit_user(user_id, :create_video)
+
+  def permit_update_video(user_id, video_id) do
+    if user_own_video?(user_id, video_id) do
+      :ok
+    else
+      permit_user(user_id, :update_video)
+    end
+  end
+
+  def permit_delete_video(user_id, video_id) do
+    if user_own_video?(user_id, video_id) do
+      :ok
+    else
+      permit_user(user_id, :delete_video)
+    end
+  end
+
+  def permit_create_video_format(user_id, video_id) do
+    if user_own_video?(user_id, video_id) do
+      :ok
+    else
+      permit_user(user_id, :create_video_format)
+    end
+  end
+
+  def permit_comment_video(user_id, video_id) do
+    if user_own_video?(user_id, video_id) do
+      :ok
+    else
+      permit_user(user_id, :comment_video)
+    end
+  end
+
+  defp user_own_video?(user_id, video_id) do
+    video = Contents.get_video!(video_id)
+    video.user_id == user_id
+  end
+
+  defp filter_authorisation(query, permission) do
+    from p in query,
+      where: field(p, ^permission) == true
   end
 end

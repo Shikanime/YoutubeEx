@@ -11,7 +11,9 @@ defmodule YoutubeExApi.AuthorizationController do
     else
       {:error, _} ->
         conn
-        |> YoutubeExApi.FallbackController.call({:error, :unauthorized})
+        |> put_status(:unauthorized)
+        |> put_view(YoutubeExApi.ErrorView)
+        |> render(:"401")
         |> halt()
     end
   end

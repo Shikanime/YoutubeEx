@@ -7,11 +7,14 @@ defmodule YoutubeExApi.VideoCommentController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def index(conn, params) do
-    index = Map.get(params, "page", 1)
-    offset = Map.get(params, "perPage", 1)
+  def index(conn, %{"id" => id} = comment_params) do
+    index = Map.get(comment_params, "page", 1)
+    offset = Map.get(comment_params, "perPage", 1)
 
-    page = Activities.paginate_comments(index, offset)
+    page = Activities.paginate_video_comments(id,
+             index: index,
+             offset: offset)
+
     comments = %{entries: page.entries,
                  cursor: %{current: page.page_number,
                            total: page.total_pages}}
@@ -21,9 +24,11 @@ defmodule YoutubeExApi.VideoCommentController do
   end
 
   def create(conn, %{"id" => id} = comment_params) do
-    with :ok <- Accounts.permit_comment_video(conn.assigns.current_user.id) do
-      comment_params = Map.put(comment_params, "user_id", conn.assigns.current_user.id)
-      comment_params = Map.put(comment_params, "video_id", id)
+    with :ok <- Accounts.permit_comment_video(conn.assigns.current_user.id, id) do
+      comment_params =
+        comment_params
+        |> Map.put("user_id", conn.assigns.current_user.id)
+        |> Map.put("video_id", id)
 
       with {:ok, %Comment{} = comment} <- Activities.create_comment(comment_params) do
         conn

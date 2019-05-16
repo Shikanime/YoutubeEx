@@ -2,8 +2,7 @@ defmodule YoutubeEx.Repo do
   use Ecto.Repo,
     otp_app: :youtube_ex,
     adapter: Ecto.Adapters.Postgres
-  use Scrivener,
-    page_size: 10
+  use Scrivener
 
   def init(_type, config) do
     hostname =

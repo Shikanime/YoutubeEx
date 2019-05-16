@@ -12,10 +12,10 @@ defmodule YoutubeExApi.Router do
   scope "/", YoutubeExApi do
     pipe_through :api
 
-    post "/auth", AuthenticationController, :authenticate
+    post "/auth", AuthenticationController, :index
 
     get "/users", UserController, :index
-    post "/user", UserController, :register
+    post "/user", UserController, :create
     get "/user/:id/videos", UserVideoController, :index
 
     get "/videos", VideoController, :index
@@ -31,7 +31,7 @@ defmodule YoutubeExApi.Router do
       delete "/user/:id", UserController, :delete
       post "/user/:id/video", UserVideoController, :create
 
-      patch "/video/:id", VideoController, :encode
+      patch "/video/:id", VideoController, :patch
       put "/video/:id", VideoController, :update
       delete "/video/:id", VideoController, :delete
 

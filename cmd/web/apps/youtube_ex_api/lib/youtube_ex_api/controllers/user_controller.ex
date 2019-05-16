@@ -6,12 +6,14 @@ defmodule YoutubeExApi.UserController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def index(conn, params) do
-    index = Map.get(params, "page", 1)
-    offset = Map.get(params, "perPage", 1)
-    pseudo = Map.get(params, "pseudo")
+  def index(conn, user_params) do
+    index = Map.get(user_params, "page", 1)
+    offset = Map.get(user_params, "perPage", 1)
+    pseudo = Map.fetch!(user_params, "pseudo")
 
-    page = Accounts.paginate_users(index, offset, pseudo)
+    page = Accounts.paginate_users_by_pseudo(pseudo,
+             index: index,
+             offset: offset)
 
     users = %{entries: page.entries,
               cursor: %{current: page.page_number,
@@ -19,11 +21,11 @@ defmodule YoutubeExApi.UserController do
     render(conn, "index.json", users: users)
   end
 
-  def register(conn, user_params) do
-    with {:ok, user_and_credential} <- Accounts.register_user(user_params) do
+  def create(conn, user_params) do
+    with {:ok, user} <- Accounts.create_user(user_params) do
       conn
       |> put_status(:created)
-      |> render("show.json", user: user_and_credential.user)
+      |> render("show.json", user: user)
     end
   end
 
@@ -48,9 +50,8 @@ defmodule YoutubeExApi.UserController do
     with :ok <- Accounts.permit_delete_user(conn.assigns.current_user.id, id) do
       user = Accounts.get_user!(id)
 
-      with {:ok, %User{}} <- Accounts.delete_user(user) do
-        send_resp(conn, :no_content, "")
-      end
+      with {:ok, %User{}} <- Accounts.delete_user(user),
+        do: send_resp(conn, :no_content, "")
     end
   end
 end

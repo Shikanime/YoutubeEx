@@ -6,11 +6,11 @@ defmodule YoutubeExApi.AuthenticationController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def authenticate(conn, auth_params) do
-    with {:ok, login} <- Map.fetch(auth_params, "login"),
-         {:ok, password} <- Map.fetch(auth_params, "password"),
-         {:ok, %User{} = user} <- Accounts.authentitcate_user(login, password)
-    do
+  def index(conn, auth_params) do
+    login = Map.fetch!(auth_params, "login")
+    password = Map.fetch!(auth_params, "password")
+
+    with {:ok, %User{} = user} <- Accounts.authentitcate_user(login, password) do
       token = Phoenix.Token.sign(YoutubeExApi.Endpoint, "secret", user.id)
 
       conn
@@ -18,10 +18,10 @@ defmodule YoutubeExApi.AuthenticationController do
       |> render("show.json", authentication: %{token: token, user: user})
     else
       {:error, :bad_credentials} ->
-        {:error, %{password: "doesn't match"}}
-
-      :error ->
-        {:error, %{message: "Invalid parameters"}}
+        conn
+        |> put_status(:unprocessable_entity)
+        |> put_view(YoutubeExApi.ErrorView)
+        |> render("error.json", error:  %{password: "doesn't match"})
     end
   end
 end

@@ -6,22 +6,11 @@ defmodule YoutubeExApi.FallbackController do
   """
   use YoutubeExApi, :controller
 
-  def call(conn, {:error, _, %Ecto.Changeset{} = changeset, _}) do
-    call(conn, {:error, changeset})
-  end
-
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
     |> put_view(YoutubeExApi.ChangesetView)
     |> render("error.json", changeset: changeset)
-  end
-
-  def call(conn, {:error, %{} = error_stack}) do
-    conn
-    |> put_status(:unprocessable_entity)
-    |> put_view(YoutubeExApi.ErrorView)
-    |> render("error.json", error_stack: error_stack)
   end
 
   def call(conn, {:error, :not_found}) do
@@ -36,19 +25,5 @@ defmodule YoutubeExApi.FallbackController do
     |> put_status(:forbidden)
     |> put_view(YoutubeExApi.ErrorView)
     |> render(:"403")
-  end
-
-  def call(conn, {:error, :unauthorized}) do
-    conn
-    |> put_status(:unauthorized)
-    |> put_view(YoutubeExApi.ErrorView)
-    |> render(:"401")
-  end
-
-  def call(conn, {:error, :unprocessable_entity}) do
-    conn
-    |> put_status(:unprocessable_entity)
-    |> put_view(YoutubeExApi.ErrorView)
-    |> render("error.json", %{})
   end
 end

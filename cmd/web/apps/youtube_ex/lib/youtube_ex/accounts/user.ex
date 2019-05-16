@@ -13,7 +13,7 @@ defmodule YoutubeEx.Accounts.User do
     field :username, :string
 
     has_one :credential, Credential, on_delete: :delete_all
-    has_one :Autorisation, Autorisation, on_delete: :delete_all
+    has_one :autorisation, Autorisation, on_delete: :delete_all
 
     timestamps()
   end

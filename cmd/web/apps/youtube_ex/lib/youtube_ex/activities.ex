@@ -3,17 +3,16 @@ defmodule YoutubeEx.Activities do
   The Activities context.
   """
 
+  import YoutubeEx.Repo.Helpers, warn: false
   import Ecto.Query, warn: false
   alias YoutubeEx.Repo
 
   alias YoutubeEx.Activities.Comment
 
-  def list_comments do
-    Repo.all(Comment)
-  end
-
-  def paginate_comments(index, offset) do
-    Repo.paginate(Comment, page: index, page_size: offset)
+  def paginate_video_comments(id, opts \\ []) do
+    Comment
+    |> where(video_id: ^id)
+    |> with_pagination(opts)
   end
 
   def create_comment(attrs \\ %{}) do

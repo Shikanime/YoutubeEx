@@ -3,11 +3,6 @@ defmodule YoutubeExApi.AuthenticationView do
   alias YoutubeExApi.UserView
   alias YoutubeExApi.AuthenticationView
 
-  def render("index.json", %{authentications: authentications}) do
-    %{message: "OK",
-      data: render_many(authentications, AuthenticationView, "authentication.json")}
-  end
-
   def render("show.json", %{authentication: authentication}) do
     %{message: "OK",
       data: render_one(authentication, AuthenticationView, "authentication.json")}

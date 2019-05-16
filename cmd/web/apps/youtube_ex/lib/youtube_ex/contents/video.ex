@@ -2,6 +2,7 @@ defmodule YoutubeEx.Contents.Video do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias YoutubeEx.Contents.VideoFormat
   alias YoutubeEx.Accounts.User
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -14,14 +15,19 @@ defmodule YoutubeEx.Contents.Video do
     field :view, :integer, default: 0
 
     belongs_to :user, User
+    has_many :formats, VideoFormat
 
     timestamps()
   end
 
-  @doc false
-  def changeset(video, attrs) do
+  def create_changeset(video, attrs) do
     video
     |> cast(attrs, [:name, :duration, :source, :view, :enabled, :user_id])
     |> validate_required([:name, :duration, :source, :view, :enabled, :user_id])
+  end
+
+  def update_changeset(video, attrs) do
+    video
+    |> cast(attrs, [:name, :duration, :source, :view, :enabled, :user_id])
   end
 end
