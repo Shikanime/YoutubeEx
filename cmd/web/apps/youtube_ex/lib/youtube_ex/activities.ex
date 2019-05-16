@@ -16,8 +16,6 @@ defmodule YoutubeEx.Activities do
     Repo.paginate(Comment, page: index, page_size: offset)
   end
 
-  def get_comment!(id), do: Repo.get!(Comment, id)
-
   def create_comment(attrs \\ %{}) do
     %Comment{}
     |> Comment.changeset(attrs)
