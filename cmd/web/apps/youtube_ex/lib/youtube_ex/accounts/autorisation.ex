@@ -8,7 +8,7 @@ defmodule YoutubeEx.Accounts.Autorisation do
   @foreign_key_type :binary_id
   schema "autorisations" do
     field :comment_video, :boolean, default: false
-    field :create_video, :boolean, default: false
+    field :create_video, :boolean, default: true
     field :create_video_format, :boolean, default: false
     field :delete_user, :boolean, default: false
     field :delete_video, :boolean, default: false
