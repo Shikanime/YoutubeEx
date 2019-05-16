@@ -23,7 +23,7 @@ defmodule YoutubeExApi.UserVideoController do
           with {:ok, video_path} <- Bucket.store_video(id, video_params["name"], video_upload) do
             video_params =
               video_params
-              |> Map.put("user_id", id)
+              |> Map.put("user_id", conn.assigns.current_user.id)
               |> Map.put("duration", 0)
               |> Map.put("source", video_path)
 
@@ -36,7 +36,10 @@ defmodule YoutubeExApi.UserVideoController do
               |> render("show.json", video: video)
             end
           else
-            {:error, reason} ->
+            {:error, :unsupported_format} ->
+              {:error, %{format: "is invalid"}}
+
+            {:error, _reason} ->
               {:error, %{source: "is invalid"}}
           end
         end
