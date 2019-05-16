@@ -56,7 +56,7 @@ defmodule YoutubeEx.Accounts do
   alias YoutubeEx.Accounts.Autorisation
 
   def permit_show_user(user_id, id),
-    do: verify_permission(user_id == id or can_user?(:show_user, user_id))
+    do: verify_permission(user_id == id)
 
   def permit_update_user(user_id, id),
     do: verify_permission(user_id == id or can_user?(:update_user, user_id))
