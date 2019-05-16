@@ -2,10 +2,12 @@ defmodule YoutubeExApi.VideoView do
   use YoutubeExApi, :view
   alias YoutubeExApi.UserView
   alias YoutubeExApi.VideoView
+  alias YoutubeExApi.CursorView
 
   def render("index.json", %{videos: videos}) do
     %{message: "OK",
-      data: render_many(videos, VideoView, "video.json")}
+      data: render_many(videos.entries, VideoView, "video.json"),
+      pager: render_one(videos.cursor, CursorView, "cursor.json")}
   end
 
   def render("show.json", %{video: video}) do
@@ -19,7 +21,7 @@ defmodule YoutubeExApi.VideoView do
       duration: video.duration,
       source: video.source,
       view: video.view,
-      user: render_one(video.user, UserView, "user.json"),
+      user: video.user_id,
       enabled: video.enabled,
       created_at: video.inserted_at}
   end

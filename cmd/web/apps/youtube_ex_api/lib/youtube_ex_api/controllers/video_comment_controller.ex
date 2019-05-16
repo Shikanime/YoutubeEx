@@ -7,8 +7,14 @@ defmodule YoutubeExApi.VideoCommentController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def index(conn, _params) do
-    comments = Activities.list_comments()
+  def index(conn, params) do
+    index = Map.get(params, "page", 1)
+    offset = Map.get(params, "perPage", 1)
+
+    page = Activities.paginate_comments(index, offset)
+    comments = %{entries: page.entries,
+              cursor: %{current: page.page_number,
+                        total: page.total_pages}}
     render(conn, "index.json", comments: comments)
   end
 

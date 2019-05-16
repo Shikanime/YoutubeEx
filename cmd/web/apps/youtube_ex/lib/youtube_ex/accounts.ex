@@ -12,6 +12,10 @@ defmodule YoutubeEx.Accounts do
     Repo.all(User)
   end
 
+  def paginate_users(index, offset) do
+    Repo.paginate(User, page: index, page_size: offset)
+  end
+
   def get_user!(id), do: Repo.get!(User, id)
 
   def update_user(%User{} = user, attrs) do

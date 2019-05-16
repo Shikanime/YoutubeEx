@@ -14,9 +14,9 @@ defmodule YoutubeExApi.Router do
 
     post "/auth", AuthenticationController, :authenticate
 
-    get "/users", UserController, :list
+    get "/users", UserController, :index
     post "/user", UserController, :register
-    get "/user/:id/videos", UserVideoController, :list
+    get "/user/:id/videos", UserVideoController, :index
 
     get "/videos", VideoController, :index
     get "/video/:id", VideoController, :show

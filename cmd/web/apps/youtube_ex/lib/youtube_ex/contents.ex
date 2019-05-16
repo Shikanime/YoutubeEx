@@ -12,6 +12,10 @@ defmodule YoutubeEx.Contents do
     Repo.all(Video)
   end
 
+  def paginate_videos(index, offset) do
+    Repo.paginate(Video, page: index, page_size: offset)
+  end
+
   def get_video!(id), do: Repo.get!(Video, id)
 
   def create_video(attrs \\ %{}) do

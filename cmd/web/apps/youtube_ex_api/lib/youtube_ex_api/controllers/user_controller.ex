@@ -6,8 +6,14 @@ defmodule YoutubeExApi.UserController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def list(conn, _params) do
-    users = Accounts.list_users()
+  def index(conn, params) do
+    index = Map.get(params, "page", 1)
+    offset = Map.get(params, "perPage", 1)
+
+    page = Accounts.paginate_users(index, offset)
+    users = %{entries: page.entries,
+              cursor: %{current: page.page_number,
+                        total: page.total_pages}}
     render(conn, "index.json", users: users)
   end
 
