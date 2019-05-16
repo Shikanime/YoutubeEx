@@ -22,7 +22,7 @@ defmodule YoutubeEx.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :email, :pseudo])
-    |> validate_required([:username, :email, :pseudo])
+    |> validate_required([:username, :email])
     |> unique_constraint(:email)
     |> unique_constraint(:pseudo)
   end
