@@ -20,7 +20,12 @@ defmodule YoutubeEx.Contents do
     |> with_paginated_videos(opts)
   end
 
-  def get_video!(id), do: Repo.get!(Video, id)
+  def get_video!(id) do
+    Video
+    |> where(id: ^id)
+    |> preload(:formats)
+    |> Repo.one!()
+  end
 
   def create_video(attrs \\ %{}) do
     Repo.transaction(fn ->
@@ -29,10 +34,7 @@ defmodule YoutubeEx.Contents do
         |> Video.create_changeset(attrs)
         |> Repo.insert!()
 
-      Video
-      |> where(id: ^video.id)
-      |> preload(:formats)
-      |> Repo.one()
+      get_video!(video.id)
     end)
   end
 
@@ -58,16 +60,12 @@ defmodule YoutubeEx.Contents do
     attrs = Map.put(attrs, "video_id", video_id)
 
     Repo.transaction(fn ->
-      video =
-        Video
-        |> where(id: ^video_id)
-        |> preload(:formats)
-        |> Repo.one()
+      video = get_video!(video_id)
 
       video
       |> Ecto.build_assoc(:formats)
       |> VideoFormat.changeset(attrs)
-      |> Repo.insert()
+      |> Repo.insert!()
 
       video
     end)

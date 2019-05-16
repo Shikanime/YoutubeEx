@@ -22,6 +22,12 @@ defmodule YoutubeExApi.VideoController do
     render(conn, "index.json", videos: videos)
   end
 
+  def show(conn, %{"id" => id}) do
+    video = Contents.get_video!(id)
+    with {:ok, _} <- Contents.update_video(video, %{view: video.view + 1}),
+      do: render(conn, "show.json", video: video)
+  end
+
   def update(conn, %{"id" => id} = video_params) do
     with :ok <- Accounts.permit_update_video(id, conn.assigns.current_user.id) do
       video = Contents.get_video!(id)
@@ -62,6 +68,12 @@ defmodule YoutubeExApi.VideoController do
 
       other -> other
     end
+  rescue
+    e in KeyError ->
+      conn
+      |> put_status(:unprocessable_entity)
+      |> put_view(YoutubeExApi.ErrorView)
+      |> render("error.json", error:  Map.put(%{}, e.key, "can't be empty"))
   end
 
   def delete(conn, %{"id" => id}) do

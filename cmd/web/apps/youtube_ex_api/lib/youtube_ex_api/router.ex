@@ -25,7 +25,7 @@ defmodule YoutubeExApi.Router do
     scope "/" do
       pipe_through :protected
 
-      get "/user/:id", UserController, :get
+      get "/user/:id", UserController, :show
       put "/user/:id", UserController, :update
       patch "/user/:id", UserController, :update
       delete "/user/:id", UserController, :delete

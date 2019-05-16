@@ -23,5 +23,11 @@ defmodule YoutubeExApi.AuthenticationController do
         |> put_view(YoutubeExApi.ErrorView)
         |> render("error.json", error:  %{password: "doesn't match"})
     end
+  rescue
+    e in KeyError ->
+      conn
+      |> put_status(:unprocessable_entity)
+      |> put_view(YoutubeExApi.ErrorView)
+      |> render("error.json", error:  Map.put(%{}, e.key, "can't be empty"))
   end
 end
