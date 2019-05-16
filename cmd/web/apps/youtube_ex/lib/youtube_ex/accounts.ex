@@ -6,6 +6,7 @@ defmodule YoutubeEx.Accounts do
   import Ecto.Query, warn: false
   alias YoutubeEx.Repo
 
+  alias YoutubeEx.Contents
   alias YoutubeEx.Accounts.User
 
   def list_users do
@@ -58,14 +59,17 @@ defmodule YoutubeEx.Accounts do
   def permit_create_video(user_id, id),
     do: verify_permission(user_id == id or can_user?(:create_video, user_id))
 
-  def permit_update_video(user_id),
-    do: verify_permission(can_user?(:update_video, user_id))
+  def permit_update_video(video_id, user_id),
+    do: verify_permission(Contents.get_video!(video_id).user_id == user_id or
+                          can_user?(:update_video, user_id))
 
-  def permit_delete_video(user_id),
-    do: verify_permission(can_user?(:delete_video, user_id))
+  def permit_delete_video(video_id, user_id),
+    do: verify_permission(Contents.get_video!(video_id).user_id == user_id or
+                          can_user?(:delete_video, user_id))
 
-  def permit_create_video_format(user_id),
-    do: verify_permission(can_user?(:create_video_format, user_id))
+  def permit_create_video_format(video_id, user_id),
+    do: verify_permission(Contents.get_video!(video_id).user_id == user_id or
+                          can_user?(:create_video_format, user_id))
 
   def permit_comment_video(user_id),
     do: verify_permission(can_user?(:comment_video, user_id))
