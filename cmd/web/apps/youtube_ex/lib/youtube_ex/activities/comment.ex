@@ -19,7 +19,7 @@ defmodule YoutubeEx.Activities.Comment do
   @doc false
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [:body])
-    |> validate_required([:body])
+    |> cast(attrs, [:body, :user_id, :video_id])
+    |> validate_required([:body, :user_id, :video_id])
   end
 end

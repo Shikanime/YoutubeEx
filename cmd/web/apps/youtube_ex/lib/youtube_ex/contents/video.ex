@@ -9,7 +9,6 @@ defmodule YoutubeEx.Contents.Video do
   schema "videos" do
     field :duration, :integer
     field :enabled, :boolean, default: false
-    field :format, :map
     field :name, :string
     field :source, :string
     field :view, :integer, default: 0
@@ -22,7 +21,7 @@ defmodule YoutubeEx.Contents.Video do
   @doc false
   def changeset(video, attrs) do
     video
-    |> cast(attrs, [:name, :duration, :source, :view, :enabled, :format])
-    |> validate_required([:name, :duration, :source, :view, :enabled, :format])
+    |> cast(attrs, [:name, :duration, :source, :view, :enabled, :user_id])
+    |> validate_required([:name, :duration, :source, :view, :enabled, :user_id])
   end
 end

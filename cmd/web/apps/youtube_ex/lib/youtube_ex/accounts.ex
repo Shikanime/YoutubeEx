@@ -28,7 +28,7 @@ defmodule YoutubeEx.Accounts do
 
   def authentitcate_user(login, password) do
     query = from u in User,
-      where: u.email == ^login,
+      where: u.email == ^login or u.username == ^login,
       preload: [:credential]
 
     user = Repo.one!(query)

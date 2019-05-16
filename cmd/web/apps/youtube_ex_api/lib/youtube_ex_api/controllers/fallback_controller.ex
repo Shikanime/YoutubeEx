@@ -2,7 +2,7 @@ defmodule YoutubeExApi.FallbackController do
   @moduledoc """
   Translates controller action results into valid `Plug.Conn` responses.
 
-  See `Phoenix.Controller.action_fallback/1` for more details.
+  See `Phoenix.Controller.action_fallback/1` for more error_stacks.
   """
   use YoutubeExApi, :controller
 
@@ -17,11 +17,11 @@ defmodule YoutubeExApi.FallbackController do
     |> render("error.json", changeset: changeset)
   end
 
-  def call(conn, {:error, %{} = detail}) do
+  def call(conn, {:error, %{} = error_stack}) do
     conn
     |> put_status(:unprocessable_entity)
     |> put_view(YoutubeExApi.ErrorView)
-    |> render("error.json", detail)
+    |> render("error.json", error_stack: error_stack)
   end
 
   def call(conn, {:error, :not_found}) do

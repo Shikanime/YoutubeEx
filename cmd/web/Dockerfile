@@ -77,6 +77,7 @@ EXPOSE 49200-49210
 
 # Application environment
 ARG MIX_ENV=prod
+ENV MIX_ENV=${MIX_ENV}
 
 # Copy docker entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

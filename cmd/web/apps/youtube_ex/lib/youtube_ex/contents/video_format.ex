@@ -18,7 +18,7 @@ defmodule YoutubeEx.Contents.VideoFormat do
   @doc false
   def changeset(video_format, attrs) do
     video_format
-    |> cast(attrs, [:code, :uri])
-    |> validate_required([:code, :uri])
+    |> cast(attrs, [:code, :uri, :video_id])
+    |> validate_required([:code, :uri, :video_id])
   end
 end

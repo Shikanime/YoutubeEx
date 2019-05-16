@@ -1,6 +1,7 @@
 defmodule YoutubeExApi.UserVideoController do
   use YoutubeExApi, :controller
 
+  alias YoutubeExApi.Bucket
   alias YoutubeEx.Accounts
   alias YoutubeEx.Contents
   alias YoutubeEx.Contents.Video
@@ -13,26 +14,33 @@ defmodule YoutubeExApi.UserVideoController do
   end
 
   def create(conn, %{"id" => id} = video_params) do
-    with :ok <- Accounts.permit_create_video(conn.assigns.current_user.id) do
-      {video_upload, video_params} = Map.pop(video_params, :source)
+    case Map.pop(video_params, "source") do
+      {nil, _} ->
+        {:error, %{source: "can't be blank"}}
 
-      case Path.extname(video_upload.filename) do
-        ext when ext in [".mp4", ".avi"] ->
-          File.cp(video_upload.path, "/media/#{video_params.id}#{ext}")
+      {video_upload, video_params} -> (
+        with :ok <- Accounts.permit_create_video(conn.assigns.current_user.id, id) do
+          with {:ok, video_path} <- Bucket.store_video(id, video_params["name"], video_upload) do
+            video_params =
+              video_params
+              |> Map.put("user_id", id)
+              |> Map.put("duration", 0)
+              |> Map.put("source", video_path)
 
-          video_params = Map.put(video_params, :user, id)
+            with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
+              video = Map.put(video, :user, Accounts.get_user!(id))
 
-          with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
-            conn
-            |> put_status(:created)
-            |> render("show.json", video: video)
+              conn
+              |> put_status(:created)
+              |> put_view(YoutubeExApi.VideoView)
+              |> render("show.json", video: video)
+            end
+          else
+            {:error, reason} ->
+              {:error, %{source: "is invalid"}}
           end
-
-        _ ->
-          conn
-          |> put_status(:unprocessable_entity)
-          |> render("400.json", code: "", error_stack: []) # TODO: Send stack error
-      end
+        end
+      )
     end
   end
 end
