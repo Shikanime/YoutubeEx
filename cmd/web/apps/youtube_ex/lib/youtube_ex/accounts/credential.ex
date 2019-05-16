@@ -19,6 +19,19 @@ defmodule YoutubeEx.Accounts.Credential do
     credential
     |> cast(attrs, [:password, :user_id])
     |> validate_required([:password, :user_id])
-    |> put_change(:password, Argon2.hash_pwd_salt(attrs["password"]))
+    |> validate_length(:password, min: 6)
+    |> put_password_hash()
+  end
+
+  ## Helpers
+
+  defp put_password_hash(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
+        put_change(changeset, :password, Argon2.hash_pwd_salt(pass))
+
+      _ ->
+        changeset
+    end
   end
 end
