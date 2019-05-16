@@ -9,8 +9,10 @@ defmodule YoutubeExApi.UserController do
   def index(conn, params) do
     index = Map.get(params, "page", 1)
     offset = Map.get(params, "perPage", 1)
+    pseudo = Map.get(params, "pseudo")
 
-    page = Accounts.paginate_users(index, offset)
+    page = Accounts.paginate_users(index, offset, pseudo)
+
     users = %{entries: page.entries,
               cursor: %{current: page.page_number,
                         total: page.total_pages}}

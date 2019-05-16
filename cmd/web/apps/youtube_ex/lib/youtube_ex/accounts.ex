@@ -13,8 +13,14 @@ defmodule YoutubeEx.Accounts do
     Repo.all(User)
   end
 
-  def paginate_users(index, offset) do
+  def paginate_users(index, offset, pseudo) when is_nil(pseudo) do
     Repo.paginate(User, page: index, page_size: offset)
+  end
+
+  def paginate_users(index, offset, pseudo) do
+    User
+    |> where([u], like(u.pseudo, ^"%#{String.replace(pseudo, "%", "\\%")}%"))
+    |> Repo.paginate(page: index, page_size: offset)
   end
 
   def get_user!(id), do: Repo.get!(User, id)
