@@ -31,9 +31,9 @@ defmodule YoutubeExApi.Router do
       delete "/user/:id", UserController, :delete
       post "/user/:id/video", UserVideoController, :create
 
-      patch "/:id", VideoController, :encode
-      put "/:id", VideoController, :update
-      delete "/:id", VideoController, :delete
+      patch "/video/:id", VideoController, :encode
+      put "/video/:id", VideoController, :update
+      delete "/video/:id", VideoController, :delete
 
       post "/video/:id/comment", VideoCommentController, :create
     end

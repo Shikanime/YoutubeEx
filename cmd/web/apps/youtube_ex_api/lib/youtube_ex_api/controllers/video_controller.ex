@@ -25,8 +25,8 @@ defmodule YoutubeExApi.VideoController do
     render(conn, "show.json", video: video)
   end
 
-  def update(conn, %{"id" => id, "video" => video_params}) do
-    with :ok <- Accounts.permit_update_video(conn.assigns.current_user.id) do
+  def update(conn, %{"id" => id} = video_params) do
+    with :ok <- Accounts.permit_update_video(id, conn.assigns.current_user.id) do
       video = Contents.get_video!(id)
 
       with {:ok, %Video{} = video} <- Contents.update_video(video, video_params) do
@@ -37,29 +37,22 @@ defmodule YoutubeExApi.VideoController do
 
   def encode(conn, %{"id" => id} = video_params) do
     case Map.pop(video_params, "source") do
-      {nil, _} -> (
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("error.json", error_stack: [
-          source: "can't be blank"
-        ])
-      )
+      {nil, _} ->
+        {:error, %{source: "can't be blank"}}
 
       {video_upload, video_params} -> (
-        with :ok <- Accounts.permit_create_video_format(conn.assigns.current_user.id) do
-          with {:ok, _} <- Bucket.store_video(id, video_params["name"], video_upload, format: video_params.format) do
+        with :ok <- Accounts.permit_create_video_format(id, conn.assigns.current_user.id) do
+          with {:ok, _} <- Bucket.store_video(id, video_params["name"], video_upload, format: video_params["format"]) do
             video_params = Map.put(video_params, "user", id)
 
-            with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params) do
-              render(conn, "show.json", video: video)
-            end
+            with {:ok, %VideoFormat{} = video} <- Contents.create_video_format(video_params),
+              do: render(conn, "show.json", video: video)
           else
+            {:error, :unsupported_format} ->
+              {:error, %{format: "is invalid"}}
+
             {:error, _reason} ->
-              conn
-              |> put_status(:unprocessable_entity)
-              |> render("error.json", error_stack: [
-                source: "is invalid"
-              ])
+              {:error, %{source: "is invalid"}}
           end
         end
       )
@@ -67,7 +60,7 @@ defmodule YoutubeExApi.VideoController do
   end
 
   def delete(conn, %{"id" => id}) do
-    with :ok <- Accounts.permit_delete_video(conn.assigns.current_user.id) do
+    with :ok <- Accounts.permit_delete_video(id, conn.assigns.current_user.id) do
       video = Contents.get_video!(id)
 
       with {:ok, %Video{}} <- Contents.delete_video(video) do
