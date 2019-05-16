@@ -36,12 +36,14 @@ defmodule YoutubeEx.Accounts do
       where: u.email == ^login or u.username == ^login,
       preload: [:credential]
 
-    user = Repo.one!(query)
-
-    if Argon2.verify_pass(password, user.credential.password) do
+    with user <- Repo.one(query),
+         false <- is_nil(user),
+         true <- Argon2.verify_pass(password, user.credential.password)
+    do
       {:ok, user}
     else
-      {:error, :bad_credentials}
+      _ ->
+        {:error, :bad_credentials}
     end
   end
 
