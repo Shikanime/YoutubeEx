@@ -8,9 +8,22 @@ defmodule YoutubeExApi.UserVideoController do
 
   action_fallback YoutubeExApi.FallbackController
 
-  def index(conn, %{"id" => id}) do
-    videos = Contents.list_user_videos(id)
-    render(conn, "index.json", videos: videos)
+  def index(conn, %{"id" => id} = params) do
+    index = Map.get(params, "page", 1)
+    offset = Map.get(params, "perPage", 1)
+    page = Contents.list_user_videos(id, index, offset)
+
+    videos = %{
+        entries: page.entries,
+        cursor: %{
+          current: page.page_number,
+          total: page.total_pages
+        }
+      }
+
+    conn
+    |> put_view(YoutubeExApi.VideoView)
+    |> render("index.json", videos: videos)
   end
 
   def create(conn, %{"id" => id} = video_params) do

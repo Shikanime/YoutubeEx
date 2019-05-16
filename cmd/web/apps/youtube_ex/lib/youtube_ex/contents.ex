@@ -58,10 +58,10 @@ defmodule YoutubeEx.Contents do
     Repo.delete(video_format)
   end
 
-  def list_user_videos(id) do
+  def list_user_videos(id, index, offset) do
     query = from v in Video,
-      where: v.user == ^id
+      where: v.user_id == ^id
 
-    Repo.all(query)
+    Repo.paginate(query, page: index, page_size: offset)
   end
 end
