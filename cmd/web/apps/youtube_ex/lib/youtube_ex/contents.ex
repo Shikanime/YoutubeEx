@@ -36,6 +36,12 @@ defmodule YoutubeEx.Contents do
 
       get_video!(video.id)
     end)
+  rescue
+    e in Ecto.InvalidChangesetError ->
+      {:error, e.changeset}
+
+    other ->
+      {:error, other}
   end
 
   def update_video(%Video{} = video, attrs) do
@@ -69,5 +75,11 @@ defmodule YoutubeEx.Contents do
 
       video
     end)
+  rescue
+    e in Ecto.InvalidChangesetError ->
+      {:error, e.changeset}
+
+    other ->
+      {:error, other}
   end
 end

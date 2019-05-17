@@ -55,7 +55,6 @@ defmodule YoutubeEx.Accounts do
         %User{}
         |> User.changeset(attrs)
         |> Repo.insert!()
-
       user
       |> Ecto.build_assoc(:credential)
       |> Credential.changeset(attrs)
@@ -68,6 +67,12 @@ defmodule YoutubeEx.Accounts do
 
       user
     end)
+  rescue
+    e in Ecto.InvalidChangesetError ->
+      {:error, e.changeset}
+
+    other ->
+      {:error, other}
   end
 
   def permit_user(user_id, permission) do
