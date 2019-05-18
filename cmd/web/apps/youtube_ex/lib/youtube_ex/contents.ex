@@ -3,7 +3,6 @@ defmodule YoutubeEx.Contents do
   The Contents context.
   """
 
-  import YoutubeEx.Repo.Helpers, warn: false
   import Ecto.Query, warn: false
   alias YoutubeEx.Repo
 
@@ -11,13 +10,13 @@ defmodule YoutubeEx.Contents do
 
   def paginate_videos(opts \\ []) do
     Video
-    |> with_paginated_videos(opts)
+    |> paginated_videos(opts)
   end
 
   def paginate_user_videos(id, opts \\ []) do
     Video
     |> where(user_id: ^id)
-    |> with_paginated_videos(opts)
+    |> paginated_videos(opts)
   end
 
   def get_video!(id) do
@@ -54,10 +53,16 @@ defmodule YoutubeEx.Contents do
     Repo.delete(video)
   end
 
-  defp with_paginated_videos(query, opts) do
+  defp paginated_videos(query, opts) do
+    opts = Keyword.new(opts, fn
+      {:index, x}  -> {:page, x}
+      {:offset, x} -> {:page_size, x}
+      other -> other
+    end)
+
     query
     |> preload(:formats)
-    |> with_pagination(opts)
+    |> Repo.paginate(opts)
   end
 
   alias YoutubeEx.Contents.VideoFormat

@@ -3,7 +3,6 @@ defmodule YoutubeEx.Accounts do
   The Accounts context.
   """
 
-  import YoutubeEx.Repo.Helpers, warn: false
   import Ecto.Query, warn: false
   alias YoutubeEx.Repo
 
@@ -11,9 +10,15 @@ defmodule YoutubeEx.Accounts do
   alias YoutubeEx.Accounts.User
 
   def paginate_users_by_pseudo(pseudo, opts \\ []) do
+    opts = Keyword.new(opts, fn
+      {:index, x}  -> {:page, x}
+      {:offset, x} -> {:page_size, x}
+      other -> other
+    end)
+
     User
     |> where([u], like(u.pseudo, ^"%#{String.replace(pseudo, "%", "\\%")}%"))
-    |> with_pagination(opts)
+    |> Repo.paginate(opts)
   end
 
   def get_user!(id), do: Repo.get!(User, id)
@@ -32,8 +37,7 @@ defmodule YoutubeEx.Accounts do
 
   def authentitcate_user(login, password) do
     User
-    |> where(email: ^login)
-    |> or_where(username: ^login)
+    |> by_login(login)
     |> preload(:credential)
     |> Repo.one!()
     |> verify_password(password)
@@ -144,5 +148,10 @@ defmodule YoutubeEx.Accounts do
   defp filter_authorisation(query, permission) do
     from p in query,
       where: field(p, ^permission) == true
+  end
+
+  defp by_login(query, login) do
+    from u in query,
+      where: u.email == ^login or u.username == ^login
   end
 end
