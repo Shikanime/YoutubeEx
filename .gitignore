@@ -23,24 +23,24 @@
 !skaffold.yaml
 
 # Application sources
-!cmd/
-!cmd/**/*
+!apps/
+!apps/**/*
 
 # Shared application libraries
 !pkg/
 !pkg/**/*
 
-# Service deployments
-!deployment/
-!deployment/**/
-!deployment/**/Chart.yaml
-!deployment/**/requirements.yaml
-!deployment/**/values.yaml
-!deployment/**/requirements.lock
-!deployment/**/templates/
-!deployment/**/templates/*.yaml
-!deployment/**/templates/_helpers.tpl
-!deployment/**/templates/NOTES.txt
+# Service deploymentss
+!deployments/
+!deployments/**/
+!deployments/**/Chart.yaml
+!deployments/**/requirements.yaml
+!deployments/**/values.yaml
+!deployments/**/requirements.lock
+!deployments/**/templates/
+!deployments/**/templates/*.yaml
+!deployments/**/templates/_helpers.tpl
+!deployments/**/templates/NOTES.txt
 
 # Shared build
 !build/

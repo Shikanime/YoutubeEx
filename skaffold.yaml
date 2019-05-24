@@ -3,13 +3,13 @@ kind: Config
 build:
   artifacts:
   - image: youtube-ex/web
-    context: cmd/web
+    context: apps/web
   local:
     useBuildkit: true
 deploy:
   helm:
     releases:
     - name: youtube-ex-web
-      chartPath: deployment/web
+      chartPath: deployments/web
       values:
         image: youtube-ex/web
