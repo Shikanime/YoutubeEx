@@ -1,5 +1,10 @@
 terraform {
   required_version = ">= 0.11.11"
+
+  backend "gcs" {
+    bucket  = "tf-state-prod"
+    prefix  = "terraform/state"
+  }
 }
 
 resource "google_container_cluster" "prod" {
