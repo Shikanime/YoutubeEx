@@ -26,9 +26,13 @@
 !apps/
 !apps/**/*
 
-# Shared application libraries
-!pkg/
-!pkg/**/*
+# Infrastructures as code
+!infrastructures/
+!infrastructures/**/
+!infrastructures/**/provider.tf
+!infrastructures/**/outputs.tf
+!infrastructures/**/variables.tf
+!infrastructures/**/main.tf
 
 # Service deploymentss
 !deployments/
