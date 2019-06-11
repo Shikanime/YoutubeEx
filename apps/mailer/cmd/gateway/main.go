@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
-
-	"github.com/ImNotAVirus/YouTube.ex/apps/mailer/pkg/config"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
@@ -15,6 +14,16 @@ type sendMailBody struct {
 	To      string
 	Subject string
 	Content string
+}
+
+func getPort() string {
+	port := os.Getenv("PORT")
+
+	if len(port) == 0 {
+		port = "4047"
+	}
+
+	return port
 }
 
 func main() {
@@ -60,5 +69,5 @@ func main() {
 		})
 	}
 
-	r.Run(":" + config.GetPort())
+	r.Run(":" + getPort())
 }
