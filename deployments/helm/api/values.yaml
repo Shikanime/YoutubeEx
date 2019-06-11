@@ -22,6 +22,6 @@ replicas: 1
 
 # PostgreSQL credentials
 postgresql:
-  postgresqlUsername: youtube_ex
+  postgresqlUsername: api
   postgresqlPassword: Jn3QJrnw7pnSjFSR
-  postgresqlDatabase: youtube_ex
+  postgresqlDatabase: api

@@ -26,28 +26,28 @@ spec:
         - name: init-database-migration
           image: "{{ .Values.image }}"
           imagePullPolicy: "{{ .Values.pullPolicy }}"
-          args: ["/opt/youtube-ex/bin/youtube_ex", "migrate"]
+          args: ["api", "migrate"]
           env:
-            - name: POSTGRES_HOST
-              value: {{ include "youtube-ex-api.fullname" . }}-postgresql
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "youtube-ex-api.fullname" . }}-postgresql
-                  key: postgresql-password
-            - name: ERLANG_COOKIE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "youtube-ex-api.fullname" . }}
-                  key: erlang-cookie
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: NODE_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
+          - name: POSTGRES_HOST
+            value: {{ include "youtube-ex-api.fullname" . }}-postgresql
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "youtube-ex-api.fullname" . }}-postgresql
+                key: postgresql-password
+          - name: ERLANG_COOKIE
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "youtube-ex-api.fullname" . }}
+                key: erlang-cookie
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NODE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
       containers:
       - name: {{ template "youtube-ex-api.fullname" . }}
         image: "{{ .Values.image }}"
