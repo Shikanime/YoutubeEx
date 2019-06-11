@@ -18,3 +18,7 @@
 !pkg/
 !pkg/**/
 !pkg/**/*.go
+
+# Global keep
+!**/
+!**/.keep
