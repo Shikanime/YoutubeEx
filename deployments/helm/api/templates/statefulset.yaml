@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "youtube-ex-api.fullname" . }}
+  labels:
+    app: {{ template "youtube-ex-api.name" . }}
+    chart: {{ template "youtube-ex-api.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  serviceName: "web"
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "youtube-ex-api.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "youtube-ex-api.name" . }}
+        chart: {{ template "youtube-ex-api.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      initContainers:
+        - name: init-database-migration
+          image: "{{ .Values.image }}"
+          imagePullPolicy: "{{ .Values.pullPolicy }}"
+          args: ["/opt/youtube-ex/bin/youtube_ex", "migrate"]
+          env:
+            - name: POSTGRES_HOST
+              value: {{ include "youtube-ex-api.fullname" . }}-postgresql
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "youtube-ex-api.fullname" . }}-postgresql
+                  key: postgresql-password
+            - name: ERLANG_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "youtube-ex-api.fullname" . }}
+                  key: erlang-cookie
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+      containers:
+      - name: {{ template "youtube-ex-api.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        env:
+        - name: HOST
+          value: {{ include "youtube-ex-api.fullname" . }}
+        - name: PORT
+          value: "80"
+        - name: POSTGRES_HOST
+          value: {{ include "youtube-ex-api.fullname" . }}-postgresql
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "youtube-ex-api.fullname" . }}-postgresql
+              key: postgresql-password
+        - name: PHOENIX_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "youtube-ex-api.fullname" . }}
+              key: phoenix-secret
+        - name: GOSSIP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "youtube-ex-api.fullname" . }}
+              key: gossip-secret
+        - name: ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "youtube-ex-api.fullname" . }}
+              key: erlang-cookie
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        ports:
+        - name: gateway
+          containerPort: 80
+        - name: erlang-daemon
+          containerPort: 4369
+        - name: erlang-discover
+          containerPort: 45892
+        - name: erlang-mesh-0
+          containerPort: 49200
+        - name: erlang-mesh-1
+          containerPort: 49201
+        - name: erlang-mesh-2
+          containerPort: 49202
+        - name: erlang-mesh-3
+          containerPort: 49203
+        - name: erlang-mesh-4
+          containerPort: 49204
+        - name: erlang-mesh-5
+          containerPort: 49205
+        - name: erlang-mesh-6
+          containerPort: 49206
+        - name: erlang-mesh-7
+          containerPort: 49207
+        - name: erlang-mesh-8
+          containerPort: 49208
+        - name: erlang-mesh-9
+          containerPort: 49209
+        - name: erlang-mesh-10
+          containerPort: 49210

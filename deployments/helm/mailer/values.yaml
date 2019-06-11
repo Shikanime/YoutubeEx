@@ -1,0 +1,12 @@
+# YoutubeExWeb main image
+image: youtube-ex/mailer
+
+# YoutubeExWeb service configuration
+service:
+  # YoutubeExWeb service type
+  type: LoadBalancer
+  # clusterIP: None
+  port: 80
+
+# YoutubeExWeb node replication number
+replicas: 1

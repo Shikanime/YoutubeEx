@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "youtube-ex-mailer.fullname" . }}-headless
+  labels:
+    app: {{ template "youtube-ex-mailer.name" . }}
+    chart: {{ template "youtube-ex-mailer.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  clusterIP: None
+  selector:
+    app: {{ template "youtube-ex-mailer.name" . }}
+    release: {{ .Release.Name | quote }}

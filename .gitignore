@@ -19,45 +19,18 @@
 !LICENSE
 
 # Entrypoints
-!Makefile
 !skaffold.yaml
 
 # Application sources
 !apps/
+!apps/**/
 !apps/**/*
 
-# Infrastructures as code
-!infrastructures/
-!infrastructures/**/
-!infrastructures/**/provider.tf
-!infrastructures/**/outputs.tf
-!infrastructures/**/variables.tf
-!infrastructures/**/main.tf
-
-# Service deploymentss
+# IAC scripts
 !deployments/
 !deployments/**/
-!deployments/**/Chart.yaml
-!deployments/**/requirements.yaml
-!deployments/**/values.yaml
-!deployments/**/requirements.lock
-!deployments/**/templates/
-!deployments/**/templates/*.yaml
-!deployments/**/templates/_helpers.tpl
-!deployments/**/templates/NOTES.txt
-
-# Shared build
-!build/
-!build/**/*
-
-# Global documentations
-!docs/
-!docs/**/*
-
-# Shared mesh APIs
-!api/
-!api/**/*
+!deployments/**/*
 
 # Scripts
 !hack/
-!hack/**/*
+!hack/**/*.sh

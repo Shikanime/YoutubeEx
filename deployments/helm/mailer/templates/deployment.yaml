@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "youtube-ex-mailer.fullname" . }}
+  labels:
+    app: {{ template "youtube-ex-mailer.name" . }}
+    chart: {{ template "youtube-ex-mailer.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "youtube-ex-mailer.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "youtube-ex-mailer.name" . }}
+        chart: {{ template "youtube-ex-mailer.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      containers:
+      - name: {{ template "youtube-ex-mailer.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        env:
+        - name: PORT
+          value: "80"
+        ports:
+        - name: gateway
+          containerPort: 80

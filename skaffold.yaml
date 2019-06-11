@@ -1,15 +1,21 @@
-apiVersion: skaffold/v1beta10
+apiVersion: skaffold/v1beta11
 kind: Config
 build:
   artifacts:
-  - image: youtube-ex/web
-    context: apps/web
+  - image: youtube-ex/api
+    context: apps/api
+  - image: youtube-ex/mailer
+    context: apps/mailer
   local:
     useBuildkit: true
 deploy:
   helm:
     releases:
-    - name: youtube-ex-web
-      chartPath: deployments/web
+    - name: youtube-ex-api
+      chartPath: deployments/helm/api
       values:
-        image: youtube-ex/web
+        image: youtube-ex/api
+    - name: youtube-ex-mailer
+      chartPath: deployments/helm/mailer
+      values:
+        image: youtube-ex/mailer

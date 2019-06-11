@@ -1,0 +1,20 @@
+*
+
+# Meta files
+!.gitignore
+!.dockerignore
+
+# Entrypoints
+!Dockerfile
+!go.mod
+!go.sum
+
+# Application files
+!cmd/
+!cmd/**/
+!cmd/**/*.go
+
+# Application files
+!pkg/
+!pkg/**/
+!pkg/**/*.go

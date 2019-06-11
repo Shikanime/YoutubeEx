@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "youtube-ex-mailer.fullname" . }}
+  labels:
+    app: {{ template "youtube-ex-mailer.name" . }}
+    chart: {{ template "youtube-ex-mailer.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  selector:
+    app: {{ template "youtube-ex-mailer.name" . }}
+    release: {{ .Release.Name | quote }}
+  ports:
+  - name: youtube-ex-mailer
+    port: {{ .Values.service.port }}
+    targetPort: gateway
+    {{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
