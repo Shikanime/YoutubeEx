@@ -59,6 +59,8 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 FROM runtime_base
 
+ENV REPLACE_OS_VARS=true
+
 # Pull build
 COPY --from=app_base /workspace/_build/prod/rel/api/releases/0.1.0/api.tar.gz ./
 

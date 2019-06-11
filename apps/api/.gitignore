@@ -1,8 +1,5 @@
 *
 
-# Documentations
-!**/README.md
-
 # Meta files
 !.gitignore
 !.dockerignore
@@ -38,16 +35,6 @@
 !apps/*/priv/**/
 !apps/*/priv/**/*
 
-# Ignore Phoenix digest files
-apps/*/priv/static
-
-!apps/*/assets/
-!apps/*/assets/**/
-!apps/*/assets/**/*
-
-# Ignore asset node modules
-apps/*/assets/node_modules
-
 # Release files
 !rel/
 !rel/*.exs
@@ -57,3 +44,7 @@ apps/*/assets/node_modules
 !rel/hooks/
 !rel/hooks/**/
 !rel/hooks/**/*.sh
+
+# Global keep
+!**/
+!**/.keep
