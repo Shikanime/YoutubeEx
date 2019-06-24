@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "youtube-ex-api.fullname" . }}
+  name: {{ include "api.fullname" . }}
   labels:
-    app: {{ template "youtube-ex-api.name" . }}
-    chart: {{ template "youtube-ex-api.chart" . }}
+    app: {{ template "api.name" . }}
+    chart: {{ template "api.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
@@ -12,13 +12,13 @@ spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ template "youtube-ex-api.name" . }}
+      app: {{ template "api.name" . }}
       release: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
-        app: {{ template "youtube-ex-api.name" . }}
-        chart: {{ template "youtube-ex-api.chart" . }}
+        app: {{ template "api.name" . }}
+        chart: {{ template "api.chart" . }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
     spec:
@@ -29,66 +29,66 @@ spec:
           args: ["api", "migrate"]
           env:
           - name: POSTGRES_HOST
-            value: {{ include "youtube-ex-api.fullname" . }}-postgresql
+            value: {{ include "api.fullname" . }}-postgresql
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "youtube-ex-api.fullname" . }}-postgresql
+                name: {{ include "api.fullname" . }}-postgresql
                 key: postgresql-password
-          - name: ERLANG_COOKIE
+          - name: RELEASE_COOKIE
             valueFrom:
               secretKeyRef:
-                name: {{ include "youtube-ex-api.fullname" . }}
+                name: {{ include "api.fullname" . }}
                 key: erlang-cookie
-          - name: NODE_NAME
+          - name: RELEASE_NODE
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          - name: NODE_IP
+          - name: RELEASE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
       containers:
-      - name: {{ template "youtube-ex-api.fullname" . }}
+      - name: {{ template "api.fullname" . }}
         image: "{{ .Values.image }}"
         imagePullPolicy: "{{ .Values.pullPolicy }}"
         env:
         - name: HOST
-          value: {{ include "youtube-ex-api.fullname" . }}
+          value: {{ include "api.fullname" . }}
         - name: PORT
           value: "80"
         - name: POSTGRES_HOST
-          value: {{ include "youtube-ex-api.fullname" . }}-postgresql
+          value: {{ include "api.fullname" . }}-postgresql
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "youtube-ex-api.fullname" . }}-postgresql
+              name: {{ include "api.fullname" . }}-postgresql
               key: postgresql-password
         - name: PHOENIX_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ include "youtube-ex-api.fullname" . }}
+              name: {{ include "api.fullname" . }}
               key: phoenix-secret
         - name: GOSSIP_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ include "youtube-ex-api.fullname" . }}
+              name: {{ include "api.fullname" . }}
               key: gossip-secret
-        - name: ERLANG_COOKIE
+        - name: RELEASE_COOKIE
           valueFrom:
             secretKeyRef:
-              name: {{ include "youtube-ex-api.fullname" . }}
+              name: {{ include "api.fullname" . }}
               key: erlang-cookie
-        - name: NODE_NAME
+        - name: RELEASE_NODE
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: NODE_IP
+        - name: RELEASE_IP
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
         ports:
-        - name: gateway
+        - name: web
           containerPort: 80
         - name: erlang-daemon
           containerPort: 4369

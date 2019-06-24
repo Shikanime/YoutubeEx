@@ -1,0 +1,4 @@
+dependencies:
+- name: postfix
+  version: 0.1.1
+  repository: file://../../../third_party/charts/incubator/postfix

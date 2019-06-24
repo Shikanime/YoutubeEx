@@ -8,7 +8,7 @@ terraform {
 }
 
 resource "google_container_cluster" "prod" {
-  name               = "youtube-ex-k8s-cluster"
+  name               = "k8s-cluster"
   description        = "k8s applicative cluster"
   zone               = "${var.gcp_zone}"
   initial_node_count = "${var.initial_node_count}"

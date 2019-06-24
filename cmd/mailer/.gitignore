@@ -1,0 +1,34 @@
+*
+
+# Meta files
+!/.gitignore
+!/.dockerignore
+
+# Entrypoints
+!/Dockerfile
+!/go.mod
+!/go.sum
+
+# Application files
+!/cmd/
+!/cmd/**/
+!/cmd/**/*.go
+
+# Server configurations
+!/configs/
+!/configs/**/
+!/configs/**/*
+
+# Internal files
+!/internal/
+!/internal/**/
+!/internal/**/*.go
+
+# Shared modules
+!/pkg/
+!/pkg/**/
+!/pkg/**/*.go
+
+# Global keep
+!/**/
+!/**/.keep

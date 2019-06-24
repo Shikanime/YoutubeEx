@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "youtube-ex-api.fullname" . }}-headless
+  name: {{ include "api.fullname" . }}-headless
   labels:
-    app: {{ template "youtube-ex-api.name" . }}
-    chart: {{ template "youtube-ex-api.chart" . }}
+    app: {{ template "api.name" . }}
+    chart: {{ template "api.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
   clusterIP: None
   selector:
-    app: {{ template "youtube-ex-api.name" . }}
+    app: {{ template "api.name" . }}
     release: {{ .Release.Name | quote }}

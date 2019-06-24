@@ -1,33 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "youtube-ex-mailer.fullname" . }}
+  name: {{ include "mailer.fullname" . }}
   labels:
-    app: {{ template "youtube-ex-mailer.name" . }}
-    chart: {{ template "youtube-ex-mailer.chart" . }}
+    app: {{ template "mailer.name" . }}
+    chart: {{ template "mailer.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ template "youtube-ex-mailer.name" . }}
+      app: {{ template "mailer.name" . }}
       release: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
-        app: {{ template "youtube-ex-mailer.name" . }}
-        chart: {{ template "youtube-ex-mailer.chart" . }}
+        app: {{ template "mailer.name" . }}
+        chart: {{ template "mailer.chart" . }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
     spec:
       containers:
-      - name: {{ template "youtube-ex-mailer.fullname" . }}
+      - name: {{ template "mailer.fullname" . }}
         image: "{{ .Values.image }}"
         imagePullPolicy: "{{ .Values.pullPolicy }}"
         env:
+        - name: POSTFIX_HOST
+          value: {{ include "mailer.fullname" . }}-postfix
+        - name: POSTFIX_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "mailer.fullname" . }}-postfix
+              key: smtp_password
         - name: PORT
-          value: "80"
+          value: "4047"
         ports:
-        - name: gateway
-          containerPort: 80
+        - name: api
+          containerPort: 4047

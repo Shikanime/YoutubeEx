@@ -3,19 +3,25 @@ kind: Config
 build:
   artifacts:
   - image: youtube-ex/api
-    context: apps/api
+    docker:
+      dockerfile: ../../build/packages/api/Dockerfile
+    context: cmd/api
   - image: youtube-ex/mailer
-    context: apps/mailer
+    docker:
+      dockerfile: ../../build/packages/mailer/Dockerfile
+    context: cmd/mailer
   local:
     useBuildkit: true
 deploy:
   helm:
     releases:
-    - name: youtube-ex-api
-      chartPath: deployments/helm/api
-      values:
-        image: youtube-ex/api
-    - name: youtube-ex-mailer
+    # - name: api
+    #   namespace: youtube-ex
+    #   chartPath: deployments/helm/api
+    #   values:
+    #     image: youtube-ex/api
+    - name: mailer
+      namespace: youtube-ex
       chartPath: deployments/helm/mailer
       values:
         image: youtube-ex/mailer

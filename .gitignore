@@ -22,14 +22,24 @@
 !skaffold.yaml
 
 # Application sources
-!apps/
-!apps/**/
-!apps/**/*
+!cmd/
+!cmd/**/
+!cmd/**/*
+
+# Build scripts
+!build/
+!build/**/
+!build/**/*
 
 # IAC scripts
 !deployments/
 !deployments/**/
 !deployments/**/*
+
+# Third party dependencies
+!third_party/
+!third_party/**/
+!third_party/**/*
 
 # Scripts
 !hack/

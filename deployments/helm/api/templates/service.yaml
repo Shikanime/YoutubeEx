@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "youtube-ex-api.fullname" . }}
+  name: {{ include "api.fullname" . }}
   labels:
-    app: {{ template "youtube-ex-api.name" . }}
-    chart: {{ template "youtube-ex-api.chart" . }}
+    app: {{ template "api.name" . }}
+    chart: {{ template "api.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
@@ -13,12 +13,12 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   selector:
-    app: {{ template "youtube-ex-api.name" . }}
+    app: {{ template "api.name" . }}
     release: {{ .Release.Name | quote }}
   ports:
-  - name: youtube-ex-api
+  - name: api
     port: {{ .Values.service.port }}
-    targetPort: gateway
+    targetPort: web
     {{- if .Values.service.nodePort }}
     nodePort: {{ .Values.service.nodePort }}
     {{- end }}

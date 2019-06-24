@@ -1,0 +1,20 @@
+*
+
+# Entrypoints
+!go.mod
+!go.sum
+
+# Application files
+!cmd/
+!cmd/**/
+!cmd/**/*.go
+
+# Internal files
+!internal/
+!internal/**/
+!internal/**/*.go
+
+# Shared modules
+!pkg/
+!pkg/**/
+!pkg/**/*.go
