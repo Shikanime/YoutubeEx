@@ -5,7 +5,6 @@
 !/.dockerignore
 
 # Entrypoints
-!/Dockerfile
 !/go.mod
 !/go.sum
 
@@ -14,15 +13,12 @@
 !/cmd/**/
 !/cmd/**/*.go
 
-# Server configurations
-!/configs/
-!/configs/**/
-!/configs/**/*
-
 # Internal files
 !/internal/
-!/internal/**/
-!/internal/**/*.go
+!/internal/app/**/
+!/internal/app/**/*.go
+!/internal/pkg/**/
+!/internal/pkg/**/*.go
 
 # Shared modules
 !/pkg/

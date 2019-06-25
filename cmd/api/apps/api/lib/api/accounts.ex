@@ -10,11 +10,12 @@ defmodule Api.Accounts do
   alias Api.Accounts.User
 
   def paginate_users_by_pseudo(pseudo, opts \\ []) do
-    opts = Keyword.new(opts, fn
-      {:index, x}  -> {:page, x}
-      {:offset, x} -> {:page_size, x}
-      other -> other
-    end)
+    opts =
+      Keyword.new(opts, fn
+        {:index, x} -> {:page, x}
+        {:offset, x} -> {:page_size, x}
+        other -> other
+      end)
 
     User
     |> where([u], like(u.pseudo, ^"%#{String.replace(pseudo, "%", "\\%")}%"))
@@ -59,6 +60,7 @@ defmodule Api.Accounts do
         %User{}
         |> User.changeset(attrs)
         |> Repo.insert!()
+
       user
       |> Ecto.build_assoc(:credential)
       |> Credential.changeset(attrs)
@@ -94,14 +96,17 @@ defmodule Api.Accounts do
   end
 
   def permit_show_user(id, id), do: :ok
+
   def permit_show_user(user_id, _),
     do: permit_user(user_id, :show_user)
 
   def permit_update_user(id, id), do: :ok
+
   def permit_update_user(user_id, _),
     do: permit_user(user_id, :update_user)
 
   def permit_delete_user(id, id), do: :ok
+
   def permit_delete_user(user_id, _),
     do: permit_user(user_id, :delete_user)
 
@@ -146,12 +151,14 @@ defmodule Api.Accounts do
   end
 
   defp filter_authorisation(query, permission) do
-    from p in query,
+    from(p in query,
       where: field(p, ^permission) == true
+    )
   end
 
   defp by_login(query, login) do
-    from u in query,
+    from(u in query,
       where: u.email == ^login or u.username == ^login
+    )
   end
 end

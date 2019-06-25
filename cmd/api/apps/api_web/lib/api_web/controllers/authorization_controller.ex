@@ -5,7 +5,7 @@ defmodule Api.Web.AuthorizationController do
 
   def call(conn, _) do
     with {:ok, token} <- check_required_token(conn),
-         {:ok, id}    <- extract_token_payload(token) do
+         {:ok, id} <- extract_token_payload(token) do
       conn
       |> assign(:current_user, Accounts.get_user!(id))
     else

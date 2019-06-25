@@ -95,9 +95,9 @@ defmodule Api.Web.VideoControllerTest do
       conn = delete(conn, Routes.video_path(conn, :delete, video))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, Routes.video_path(conn, :show, video))
-      end
+      end)
     end
   end
 

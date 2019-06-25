@@ -7,9 +7,9 @@ defmodule Api.Accounts.Credential do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "credentials" do
-    field :password, :string
+    field(:password, :string)
 
-    belongs_to :user, User
+    belongs_to(:user, User)
 
     timestamps()
   end

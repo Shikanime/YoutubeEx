@@ -6,8 +6,22 @@ defmodule Api.ContentsTest do
   describe "videos" do
     alias Api.Contents.Video
 
-    @valid_attrs %{duration: 42, enabled: true, format: %{}, name: "some name", source: "some source", view: 42}
-    @update_attrs %{duration: 43, enabled: false, format: %{}, name: "some updated name", source: "some updated source", view: 43}
+    @valid_attrs %{
+      duration: 42,
+      enabled: true,
+      format: %{},
+      name: "some name",
+      source: "some source",
+      view: 42
+    }
+    @update_attrs %{
+      duration: 43,
+      enabled: false,
+      format: %{},
+      name: "some updated name",
+      source: "some updated source",
+      view: 43
+    }
     @invalid_attrs %{duration: nil, enabled: nil, format: nil, name: nil, source: nil, view: nil}
 
     def video_fixture(attrs \\ %{}) do

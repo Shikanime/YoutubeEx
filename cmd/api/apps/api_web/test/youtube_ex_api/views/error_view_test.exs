@@ -10,6 +10,6 @@ defmodule Api.Web.ErrorViewTest do
 
   test "renders 500.json" do
     assert render(Api.Web.ErrorView, "500.json", []) ==
-             %{message:  "Internal Server Error"}
+             %{message: "Internal Server Error"}
   end
 end

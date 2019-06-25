@@ -21,13 +21,13 @@ defmodule Api.Web.AuthenticationController do
         conn
         |> put_status(:unprocessable_entity)
         |> put_view(Api.Web.ErrorView)
-        |> render("error.json", error:  %{password: "doesn't match"})
+        |> render("error.json", error: %{password: "doesn't match"})
     end
   rescue
     e in KeyError ->
       conn
       |> put_status(:unprocessable_entity)
       |> put_view(Api.Web.ErrorView)
-      |> render("error.json", error:  Map.put(%{}, e.key, "can't be empty"))
+      |> render("error.json", error: Map.put(%{}, e.key, "can't be empty"))
   end
 end

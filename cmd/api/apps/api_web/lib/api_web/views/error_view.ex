@@ -23,8 +23,6 @@ defmodule Api.Web.ErrorView do
   end
 
   def render("error.json", %{error: error}) do
-    %{message: "Bad Request",
-      code: "10000",
-      data: error}
+    %{message: "Bad Request", code: "10000", data: error}
   end
 end

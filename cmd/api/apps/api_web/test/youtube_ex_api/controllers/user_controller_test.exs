@@ -83,9 +83,9 @@ defmodule Api.Web.UserControllerTest do
       conn = delete(conn, Routes.user_path(conn, :delete, user))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, Routes.user_path(conn, :show, user))
-      end
+      end)
     end
   end
 

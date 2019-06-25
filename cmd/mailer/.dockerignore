@@ -1,20 +1,22 @@
 *
 
 # Entrypoints
-!go.mod
-!go.sum
+!/go.mod
+!/go.sum
 
 # Application files
-!cmd/
-!cmd/**/
-!cmd/**/*.go
+!/cmd/
+!/cmd/**/
+!/cmd/**/*.go
 
 # Internal files
-!internal/
-!internal/**/
-!internal/**/*.go
+!/internal/
+!/internal/app/**/
+!/internal/app/**/*.go
+!/internal/pkg/**/
+!/internal/pkg/**/*.go
 
 # Shared modules
-!pkg/
-!pkg/**/
-!pkg/**/*.go
+!/pkg/
+!/pkg/**/
+!/pkg/**/*.go

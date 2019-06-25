@@ -8,10 +8,10 @@ defmodule Api.Activities.Comment do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "comments" do
-    field :body, :string
+    field(:body, :string)
 
-    belongs_to :user, User
-    belongs_to :video, Video
+    belongs_to(:user, User)
+    belongs_to(:video, Video)
 
     timestamps()
   end

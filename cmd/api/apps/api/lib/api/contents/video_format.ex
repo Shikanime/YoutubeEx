@@ -7,10 +7,10 @@ defmodule Api.Contents.VideoFormat do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "video_formats" do
-    field :code, :string
-    field :uri, :string
+    field(:code, :string)
+    field(:uri, :string)
 
-    belongs_to :video, Video
+    belongs_to(:video, Video)
 
     timestamps()
   end

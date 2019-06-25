@@ -28,15 +28,15 @@ environment :dev do
   # It is recommended that you build with MIX_ENV=prod and pass
   # the --env flag to Distillery explicitly if you want to use
   # dev mode.
-  set dev_mode: true
-  set include_erts: false
-  set cookie: :"faCUZZwyt!t06^@mZK;_u}.`,tAp~&K`|RghS=fQRd&&.8Tk|aJ*n/s3_RM9Yq.!"
+  set(dev_mode: true)
+  set(include_erts: false)
+  set(cookie: :"faCUZZwyt!t06^@mZK;_u}.`,tAp~&K`|RghS=fQRd&&.8Tk|aJ*n/s3_RM9Yq.!")
 end
 
 environment :prod do
-  set include_erts: true
-  set include_src: false
-  set vm_args: "rel/vm.args"
+  set(include_erts: true)
+  set(include_src: false)
+  set(vm_args: "rel/vm.args")
 end
 
 # You may define one or more releases in this file.
@@ -45,16 +45,20 @@ end
 # will be used by default
 
 release :api do
-  set version: "0.1.0"
+  set(version: "0.1.0")
 
-  set commands: [
-    seed: "rel/commands/seed.sh",
-    migrate: "rel/commands/migrate.sh"
-  ]
+  set(
+    commands: [
+      seed: "rel/commands/seed.sh",
+      migrate: "rel/commands/migrate.sh"
+    ]
+  )
 
-  set applications: [
-    :runtime_tools,
-    api: :permanent,
-    api_web: :permanent
-  ]
+  set(
+    applications: [
+      :runtime_tools,
+      api: :permanent,
+      api_web: :permanent
+    ]
+  )
 end

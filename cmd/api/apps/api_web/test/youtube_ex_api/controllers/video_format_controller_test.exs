@@ -53,8 +53,15 @@ defmodule Api.Web.VideoFormatControllerTest do
   describe "update video_format" do
     setup [:create_video_format]
 
-    test "renders video_format when data is valid", %{conn: conn, video_format: %VideoFormat{id: id} = video_format} do
-      conn = put(conn, Routes.video_format_path(conn, :update, video_format), video_format: @update_attrs)
+    test "renders video_format when data is valid", %{
+      conn: conn,
+      video_format: %VideoFormat{id: id} = video_format
+    } do
+      conn =
+        put(conn, Routes.video_format_path(conn, :update, video_format),
+          video_format: @update_attrs
+        )
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.video_format_path(conn, :show, id))
@@ -67,7 +74,11 @@ defmodule Api.Web.VideoFormatControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, video_format: video_format} do
-      conn = put(conn, Routes.video_format_path(conn, :update, video_format), video_format: @invalid_attrs)
+      conn =
+        put(conn, Routes.video_format_path(conn, :update, video_format),
+          video_format: @invalid_attrs
+        )
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -79,9 +90,9 @@ defmodule Api.Web.VideoFormatControllerTest do
       conn = delete(conn, Routes.video_format_path(conn, :delete, video_format))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, Routes.video_format_path(conn, :show, video_format))
-      end
+      end)
     end
   end
 

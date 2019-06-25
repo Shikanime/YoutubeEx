@@ -7,7 +7,11 @@ defmodule Api.AccountsTest do
     alias Api.Accounts.User
 
     @valid_attrs %{email: "some email", pseudo: "some pseudo", username: "some username"}
-    @update_attrs %{email: "some updated email", pseudo: "some updated pseudo", username: "some updated username"}
+    @update_attrs %{
+      email: "some updated email",
+      pseudo: "some updated pseudo",
+      username: "some updated username"
+    }
     @invalid_attrs %{email: nil, pseudo: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -98,7 +102,10 @@ defmodule Api.AccountsTest do
 
     test "update_credential/2 with valid data updates the credential" do
       credential = credential_fixture()
-      assert {:ok, %Credential{} = credential} = Accounts.update_credential(credential, @update_attrs)
+
+      assert {:ok, %Credential{} = credential} =
+               Accounts.update_credential(credential, @update_attrs)
+
       assert credential.password == "some updated password"
     end
 
@@ -123,9 +130,33 @@ defmodule Api.AccountsTest do
   describe "autorisations" do
     alias Api.Accounts.Autorisation
 
-    @valid_attrs %{comment_video: true, create_video: true, create_video_format: true, delete_user: true, delete_video: true, update_user: true, update_video: true}
-    @update_attrs %{comment_video: false, create_video: false, create_video_format: false, delete_user: false, delete_video: false, update_user: false, update_video: false}
-    @invalid_attrs %{comment_video: nil, create_video: nil, create_video_format: nil, delete_user: nil, delete_video: nil, update_user: nil, update_video: nil}
+    @valid_attrs %{
+      comment_video: true,
+      create_video: true,
+      create_video_format: true,
+      delete_user: true,
+      delete_video: true,
+      update_user: true,
+      update_video: true
+    }
+    @update_attrs %{
+      comment_video: false,
+      create_video: false,
+      create_video_format: false,
+      delete_user: false,
+      delete_video: false,
+      update_user: false,
+      update_video: false
+    }
+    @invalid_attrs %{
+      comment_video: nil,
+      create_video: nil,
+      create_video_format: nil,
+      delete_user: nil,
+      delete_video: nil,
+      update_user: nil,
+      update_video: nil
+    }
 
     def autorisation_fixture(attrs \\ %{}) do
       {:ok, autorisation} =
@@ -163,7 +194,10 @@ defmodule Api.AccountsTest do
 
     test "update_autorisation/2 with valid data updates the autorisation" do
       autorisation = autorisation_fixture()
-      assert {:ok, %Autorisation{} = autorisation} = Accounts.update_autorisation(autorisation, @update_attrs)
+
+      assert {:ok, %Autorisation{} = autorisation} =
+               Accounts.update_autorisation(autorisation, @update_attrs)
+
       assert autorisation.comment_video == false
       assert autorisation.create_video == false
       assert autorisation.create_video_format == false
@@ -175,7 +209,10 @@ defmodule Api.AccountsTest do
 
     test "update_autorisation/2 with invalid data returns error changeset" do
       autorisation = autorisation_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_autorisation(autorisation, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_autorisation(autorisation, @invalid_attrs)
+
       assert autorisation == Accounts.get_autorisation!(autorisation.id)
     end
 
@@ -194,9 +231,33 @@ defmodule Api.AccountsTest do
   describe "autorisations" do
     alias Api.Accounts.Autorisation
 
-    @valid_attrs %{arsdelete_user: true, comment_video: true, create_video: true, create_video_format: true, delete_video: true, update_user: true, update_video: true}
-    @update_attrs %{arsdelete_user: false, comment_video: false, create_video: false, create_video_format: false, delete_video: false, update_user: false, update_video: false}
-    @invalid_attrs %{arsdelete_user: nil, comment_video: nil, create_video: nil, create_video_format: nil, delete_video: nil, update_user: nil, update_video: nil}
+    @valid_attrs %{
+      arsdelete_user: true,
+      comment_video: true,
+      create_video: true,
+      create_video_format: true,
+      delete_video: true,
+      update_user: true,
+      update_video: true
+    }
+    @update_attrs %{
+      arsdelete_user: false,
+      comment_video: false,
+      create_video: false,
+      create_video_format: false,
+      delete_video: false,
+      update_user: false,
+      update_video: false
+    }
+    @invalid_attrs %{
+      arsdelete_user: nil,
+      comment_video: nil,
+      create_video: nil,
+      create_video_format: nil,
+      delete_video: nil,
+      update_user: nil,
+      update_video: nil
+    }
 
     def autorisation_fixture(attrs \\ %{}) do
       {:ok, autorisation} =
@@ -234,7 +295,10 @@ defmodule Api.AccountsTest do
 
     test "update_autorisation/2 with valid data updates the autorisation" do
       autorisation = autorisation_fixture()
-      assert {:ok, %Autorisation{} = autorisation} = Accounts.update_autorisation(autorisation, @update_attrs)
+
+      assert {:ok, %Autorisation{} = autorisation} =
+               Accounts.update_autorisation(autorisation, @update_attrs)
+
       assert autorisation.arsdelete_user == false
       assert autorisation.comment_video == false
       assert autorisation.create_video == false
@@ -246,7 +310,10 @@ defmodule Api.AccountsTest do
 
     test "update_autorisation/2 with invalid data returns error changeset" do
       autorisation = autorisation_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_autorisation(autorisation, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_autorisation(autorisation, @invalid_attrs)
+
       assert autorisation == Accounts.get_autorisation!(autorisation.id)
     end
 

@@ -1,50 +1,44 @@
 *
 
 # Meta files
-!.gitignore
-!.dockerignore
-!Dockerfile
-!docker-entrypoint.sh
+!/.gitignore
+!/.dockerignore
 
 # Mix format
-!**/.formatter.exs
+!/.formatter.exs
 
 # Elixir config files
-!**/config/
-!**/config/**/
-!**/config/**/*.exs
+!/config/
+!/config/**/*.exs
 
 # Mix root
-!mix.exs
-!mix.lock
+!/mix.exs
+!/mix.lock
 
 # Application files
-!apps/
-!apps/*/
-!apps/*/mix.exs
+!/apps/
+!/apps/*/
+!/apps/*/mix.exs
+!/apps/*/.formatter.exs
 
-!apps/*/test/
-!apps/*/test/**/
-!apps/*/test/**/*.exs
+!/apps/*/test/
+!/apps/*/test/**/
+!/apps/*/test/**/*.exs
 
-!apps/*/lib/
-!apps/*/lib/**/
-!apps/*/lib/**/*.ex
+!/apps/*/lib/
+!/apps/*/lib/**/
+!/apps/*/lib/**/*.ex
 
-!apps/*/priv/
-!apps/*/priv/**/
-!apps/*/priv/**/*
+!/apps/*/priv/
+!/apps/*/priv/**/
+!/apps/*/priv/**/*
 
 # Release files
-!rel/
-!rel/*.exs
-!rel/vm.args
-!rel/commands/
-!rel/commands/*.sh
-!rel/hooks/
-!rel/hooks/**/
-!rel/hooks/**/*.sh
-
-# Global keep
-!**/
-!**/.keep
+!/rel/
+!/rel/*.exs
+!/rel/vm.args
+!/rel/commands/
+!/rel/commands/*.sh
+!/rel/hooks/
+!/rel/hooks/**/
+!/rel/hooks/**/*.sh

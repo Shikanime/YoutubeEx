@@ -15,15 +15,16 @@ defmodule Api.Web.Bucket do
       static_video_file = "#{static_dir}/#{video_dir}/#{format}#{ext}"
 
       with :ok <- File.mkdir_p(static_video_dir),
-            :ok <- File.cp(video.path, static_video_file),
-            do: {:ok, video_uri}
+           :ok <- File.cp(video.path, static_video_file),
+           do: {:ok, video_uri}
     end
   end
 
   defp fetch_video_extension(video) do
     ext = Path.extname(video.filename)
+
     with :ok <- verify_video_extension(ext),
-      do: {:ok, ext}
+         do: {:ok, ext}
   end
 
   defp fetch_video_format(opts) do
@@ -33,17 +34,19 @@ defmodule Api.Web.Bucket do
 
       format ->
         with :ok <- verify_video_format(format),
-         do: {:ok, format}
+             do: {:ok, format}
     end
   end
 
   defp verify_video_extension(ext) when ext in @video_extensions,
     do: :ok
+
   defp verify_video_extension(_),
     do: {:error, :bad_extension}
 
   def verify_video_format(format) when format in @video_formats,
     do: :ok
+
   def verify_video_format(_),
     do: {:error, :unsupported_format}
 end

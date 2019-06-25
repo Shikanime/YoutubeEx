@@ -5,5 +5,5 @@ set -o nounset
 set -o pipefail
 
 helm::install() {
-  helm init
+    helm init
 }

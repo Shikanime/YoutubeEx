@@ -2,11 +2,11 @@ FROM elixir:1.8-alpine AS tool_base
 
 # Elixir build toolchain
 RUN apk update \
-    && apk add --no-cache \
-      git \
-      build-base
+  && apk add --no-cache \
+  git \
+  build-base
 RUN mix local.rebar --force \
-    && mix local.hex --force
+  && mix local.hex --force
 
 FROM tool_base AS build_base
 
@@ -48,9 +48,9 @@ FROM alpine:3.9 AS runtime_base
 
 # Erlang runtime requirement
 RUN apk update \
-    && apk add --no-cache \
-      openssl \
-      bash
+  && apk add --no-cache \
+  openssl \
+  bash
 
 # Copy docker entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
@@ -64,7 +64,7 @@ COPY --from=app_base /workspace/_build/prod/rel/api/releases/0.1.0/api.tar.gz ./
 
 # Extract tarball
 RUN tar -xf api.tar.gz --directory /usr/local \
-    && rm api.tar.gz
+  && rm api.tar.gz
 
 # Gossip protocol
 EXPOSE 45892

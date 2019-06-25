@@ -1,6 +1,6 @@
 dependencies:
-- name: postfix
-  repository: file://../../../third_party/charts/incubator/postfix
-  version: 0.1.1
+  - name: postfix
+    repository: file://../../../third_party/charts/incubator/postfix
+    version: 0.1.1
 digest: sha256:f3c01ee200ecc1f734622bf792c45b31d3b84c7d6a9125e853c241096b09d233
 generated: "2019-06-24T15:50:33.458911+02:00"

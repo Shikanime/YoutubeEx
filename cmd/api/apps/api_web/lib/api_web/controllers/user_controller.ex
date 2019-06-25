@@ -11,13 +11,17 @@ defmodule Api.Web.UserController do
     offset = Map.get(user_params, "perPage", 1)
     pseudo = Map.fetch!(user_params, "pseudo")
 
-    page = Accounts.paginate_users_by_pseudo(pseudo,
-             index: index,
-             offset: offset)
+    page =
+      Accounts.paginate_users_by_pseudo(pseudo,
+        index: index,
+        offset: offset
+      )
 
-    users = %{entries: page.entries,
-              cursor: %{current: page.page_number,
-                        total: page.total_pages}}
+    users = %{
+      entries: page.entries,
+      cursor: %{current: page.page_number, total: page.total_pages}
+    }
+
     render(conn, "index.json", users: users)
   end
 
@@ -51,7 +55,7 @@ defmodule Api.Web.UserController do
       user = Accounts.get_user!(id)
 
       with {:ok, %User{}} <- Accounts.delete_user(user),
-        do: send_resp(conn, :no_content, "")
+           do: send_resp(conn, :no_content, "")
     end
   end
 end

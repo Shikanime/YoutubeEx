@@ -2,18 +2,18 @@ terraform {
   required_version = ">= 0.11.11"
 
   backend "gcs" {
-    bucket  = "tf-state-prod"
-    prefix  = "terraform/state"
+    bucket = "tf-state-prod"
+    prefix = "terraform/state"
   }
 }
 
 resource "google_container_cluster" "prod" {
-  name               = "k8s-cluster"
-  description        = "k8s applicative cluster"
-  zone               = "${var.gcp_zone}"
-  initial_node_count = "${var.initial_node_count}"
+  name                    = "k8s-cluster"
+  description             = "k8s applicative cluster"
+  zone                    = "${var.gcp_zone}"
+  initial_node_count      = "${var.initial_node_count}"
   enable_kubernetes_alpha = "true"
-  enable_legacy_abac = "true"
+  enable_legacy_abac      = "true"
 
   provider = "google-beta"
 

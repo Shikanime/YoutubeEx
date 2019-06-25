@@ -11,13 +11,17 @@ defmodule Api.Web.VideoCommentController do
     index = Map.get(comment_params, "page", 1)
     offset = Map.get(comment_params, "perPage", 1)
 
-    page = Activities.paginate_video_comments(id,
-             index: index,
-             offset: offset)
+    page =
+      Activities.paginate_video_comments(id,
+        index: index,
+        offset: offset
+      )
 
-    comments = %{entries: page.entries,
-                 cursor: %{current: page.page_number,
-                           total: page.total_pages}}
+    comments = %{
+      entries: page.entries,
+      cursor: %{current: page.page_number, total: page.total_pages}
+    }
+
     conn
     |> put_view(Api.Web.CommentView)
     |> render("index.json", comments: comments)

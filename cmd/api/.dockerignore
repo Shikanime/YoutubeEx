@@ -1,34 +1,36 @@
 *
 
-# Entrypoints
-!mix.exs
-!mix.lock
-!docker-entrypoint.sh
-
 # Elixir config files
-!config/
-!config/**/
-!config/**/*.exs
+!/config/
+!/config/**/*.exs
+
+# Mix root
+!/mix.exs
+!/mix.lock
 
 # Application files
-!apps/
-!apps/*/
-!apps/*/mix.exs
+!/apps/
+!/apps/*/
+!/apps/*/mix.exs
 
-!apps/*/lib/
-!apps/*/lib/**/
-!apps/*/lib/**/*.ex
+!/apps/*/test/
+!/apps/*/test/**/
+!/apps/*/test/**/*.exs
 
-!apps/*/priv/
-!apps/*/priv/**/
-!apps/*/priv/**/*
+!/apps/*/lib/
+!/apps/*/lib/**/
+!/apps/*/lib/**/*.ex
+
+!/apps/*/priv/
+!/apps/*/priv/**/
+!/apps/*/priv/**/*
 
 # Release files
-!rel/
-!rel/*.exs
-!rel/vm.args
-!rel/commands/
-!rel/commands/*.sh
-!rel/hooks/
-!rel/hooks/**/
-!rel/hooks/**/*.sh
+!/rel/
+!/rel/*.exs
+!/rel/vm.args
+!/rel/commands/
+!/rel/commands/*.sh
+!/rel/hooks/
+!/rel/hooks/**/
+!/rel/hooks/**/*.sh

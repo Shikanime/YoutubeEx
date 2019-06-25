@@ -12,13 +12,16 @@ defmodule Api.Web.UserVideoController do
     index = Map.get(params, "page", 1)
     offset = Map.get(params, "perPage", 1)
 
-    page = Contents.paginate_user_videos(id,
-             index: index,
-             offset: offset)
+    page =
+      Contents.paginate_user_videos(id,
+        index: index,
+        offset: offset
+      )
 
-    videos = %{entries: page.entries,
-               cursor: %{current: page.page_number,
-                         total: page.total_pages}}
+    videos = %{
+      entries: page.entries,
+      cursor: %{current: page.page_number, total: page.total_pages}
+    }
 
     conn
     |> put_view(Api.Web.VideoView)
@@ -30,8 +33,7 @@ defmodule Api.Web.UserVideoController do
     name = Map.fetch!(video_params, "name")
 
     with :ok <- Accounts.permit_create_video(conn.assigns.current_user.id),
-        {:ok, video_path} <- Bucket.store_video(id, name, file)
-    do
+         {:ok, video_path} <- Bucket.store_video(id, name, file) do
       video_params =
         video_params
         |> Map.delete("source")
@@ -52,21 +54,22 @@ defmodule Api.Web.UserVideoController do
         conn
         |> put_status(:unprocessable_entity)
         |> put_view(Api.Web.ErrorView)
-        |> render("error.json", error:  %{format: "is invalid"})
+        |> render("error.json", error: %{format: "is invalid"})
 
       {:error, :unsupported_format} ->
         conn
         |> put_status(:unprocessable_entity)
         |> put_view(Api.Web.ErrorView)
-        |> render("error.json", error:  %{source: "is invalid"})
+        |> render("error.json", error: %{source: "is invalid"})
 
-      other -> other
+      other ->
+        other
     end
   rescue
     e in KeyError ->
       conn
       |> put_status(:unprocessable_entity)
       |> put_view(Api.Web.ErrorView)
-      |> render("error.json", error:  Map.put(%{}, e.key, "can't be empty"))
+      |> render("error.json", error: Map.put(%{}, e.key, "can't be empty"))
   end
 end
