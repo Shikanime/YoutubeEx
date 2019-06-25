@@ -25,20 +25,23 @@ func main() {
 	r.Run(":" + port)
 }
 
-type emailRequest struct {
-	ToName  string `json:"toName" binding:"required"`
-	ToEmail string `json:"toEmail" binding:"required"`
-}
-
 func postPasswordRecovery(c *gin.Context) {
-	var body emailRequest
+	var body struct {
+		ReceiverName  string `json:"receiverName" binding:"required"`
+		ReceiverEmail string `json:"receiverEmail" binding:"required"`
+		Token         string `json:"token" binding:"required"`
+	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusInternalServerError, formatError(c, err))
 		return
 	}
 
-	if err := api.SendPasswordRecoveryEmail(body.ToName, body.ToEmail); err != nil {
+	if err := api.SendPasswordRecoveryEmail(
+		body.ReceiverName,
+		body.ReceiverEmail,
+		body.Token,
+	); err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"message": "Fail to send email",
 			"data":    map[string]string{},
@@ -53,14 +56,22 @@ func postPasswordRecovery(c *gin.Context) {
 }
 
 func postEncodingFinished(c *gin.Context) {
-	var body emailRequest
+	var body struct {
+		ReceiverName  string `json:"receiverName" binding:"required"`
+		ReceiverEmail string `json:"receiverEmail" binding:"required"`
+		VideoID       string `json:"videoId" binding:"required"`
+	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusInternalServerError, formatError(c, err))
 		return
 	}
 
-	if err := api.SendEncodingFinishedEmail(body.ToName, body.ToEmail); err != nil {
+	if err := api.SendEncodingFinishedEmail(
+		body.ReceiverName,
+		body.ReceiverEmail,
+		body.VideoID,
+	); err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"message": "Fail to send email",
 			"data":    map[string]string{},
@@ -75,18 +86,32 @@ func postEncodingFinished(c *gin.Context) {
 }
 
 func formatError(c *gin.Context, err error) map[string]interface{} {
-	if err.Error() == "Key: '.ToName' Error:Field validation for 'ToName' failed on the 'required' tag" {
+	if err.Error() == "Key: '.ReceiverName' Error:Field validation for 'ReceiverName' failed on the 'required' tag" {
 		return map[string]interface{}{
 			"message": "Malformed body",
 			"data": map[string]string{
-				"toName": "can't be empty",
+				"ReceiverName": "can't be empty",
 			},
 		}
-	} else if err.Error() == "Key: '.ToEmail' Error:Field validation for 'ToEmail' failed on the 'required' tag" {
+	} else if err.Error() == "Key: '.ReceiverEmail' Error:Field validation for 'ReceiverEmail' failed on the 'required' tag" {
 		return map[string]interface{}{
 			"message": "Malformed body",
 			"data": map[string]string{
-				"toEmail": "can't be empty",
+				"ReceiverEmail": "can't be empty",
+			},
+		}
+	} else if err.Error() == "Key: '.Token' Error:Field validation for 'Token' failed on the 'required' tag" {
+		return map[string]interface{}{
+			"message": "Malformed body",
+			"data": map[string]string{
+				"token": "can't be empty",
+			},
+		}
+	} else if err.Error() == "Key: '.VideoID' Error:Field validation for 'VideoID' failed on the 'required' tag" {
+		return map[string]interface{}{
+			"message": "Malformed body",
+			"data": map[string]string{
+				"videoID": "can't be empty",
 			},
 		}
 	}

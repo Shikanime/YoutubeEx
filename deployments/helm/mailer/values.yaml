@@ -14,7 +14,7 @@ replicas: 1
 # Postfix configurations
 postfix:
   smtp:
-    domain: "mailer"
+    domain: mailer
     password: DgZLmkh8xZGH3mmWWCdLnQE4f795HARPypVW2qEQNrSrc3JLdTAK3BWMTGVKAmma
   image:
-    repository: "shikanime/postfix"
+    repository: shikanime/postfix

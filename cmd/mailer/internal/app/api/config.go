@@ -35,7 +35,7 @@ func GetPostfixPort() string {
 }
 
 func GetPostfixUsername() string {
-	e := os.Getenv("POSTFIX_HOST")
+	e := os.Getenv("POSTFIX_NAME")
 
 	if len(e) == 0 {
 		e = "postmaster"

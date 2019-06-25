@@ -27,7 +27,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install ./cmd/api
 
 #In this last stage, we start from a fresh Alpine image, to reduce the image size and not ship the Go compiler in our production artifacts.
-FROM scratch AS mailer
+FROM alpine AS mailer
 
 # Gin production mode
 ENV GIN_MODE=release

@@ -19,9 +19,9 @@ var addr = GetPostfixHost() + ":" + GetPostfixPort()
 var senderName = "YoutubeEx"
 var senderEmail = "noreply@youtube-ex.com"
 
-func SendPasswordRecoveryEmail(toName string, toEmail string) error {
-	subject := "Password recovery"
-	body := `Password recovery`
+func SendPasswordRecoveryEmail(toName, toEmail, token string) error {
+	subject := "Récupération du mot de passe"
+	body := fmt.Sprintf(`Voici ton token de récupération de ton mot de passe: %s.`, token)
 	toEmails := []string{toEmail}
 	toNames := []string{toName}
 
@@ -32,9 +32,9 @@ func SendPasswordRecoveryEmail(toName string, toEmail string) error {
 	return nil
 }
 
-func SendEncodingFinishedEmail(toName string, toEmail string) error {
-	subject := "Encoding finished"
-	body := `Password recovery`
+func SendEncodingFinishedEmail(toName, toEmail, videoId string) error {
+	subject := "Encodage terminé"
+	body := fmt.Sprintf(`La vidéo %s a fini d'être encodée.`, videoId)
 	toEmails := []string{toEmail}
 	toNames := []string{toName}
 
@@ -45,7 +45,7 @@ func SendEncodingFinishedEmail(toName string, toEmail string) error {
 	return nil
 }
 
-func SendMail(toNames []string, toEmails []string, subject string, body string) error {
+func SendMail(toNames []string, toEmails []string, subject, body string) error {
 	msg := ""
 	for k, v := range buildHeader(toNames, toEmails, subject) {
 		msg += fmt.Sprintf("%s: %s\r\n", k, v)
