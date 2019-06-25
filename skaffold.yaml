@@ -4,22 +4,22 @@ build:
   artifacts:
   - image: youtube-ex/api
     docker:
-      dockerfile: ../../build/packages/api/Dockerfile
+      dockerfile: ../../build/package/api.Dockerfile
     context: cmd/api
   - image: youtube-ex/mailer
     docker:
-      dockerfile: ../../build/packages/mailer/Dockerfile
+      dockerfile: ../../build/package/mailer.Dockerfile
     context: cmd/mailer
   local:
     useBuildkit: true
 deploy:
   helm:
     releases:
-    # - name: api
-    #   namespace: youtube-ex
-    #   chartPath: deployments/helm/api
-    #   values:
-    #     image: youtube-ex/api
+    - name: api
+      namespace: youtube-ex
+      chartPath: deployments/helm/api
+      values:
+        image: youtube-ex/api
     - name: mailer
       namespace: youtube-ex
       chartPath: deployments/helm/mailer
