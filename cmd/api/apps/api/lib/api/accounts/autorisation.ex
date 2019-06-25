@@ -7,13 +7,13 @@ defmodule Api.Accounts.Autorisation do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "autorisations" do
-    field(:comment_video, :boolean, default: false)
-    field(:create_video, :boolean, default: true)
-    field(:create_video_format, :boolean, default: false)
-    field(:delete_user, :boolean, default: false)
-    field(:delete_video, :boolean, default: false)
-    field(:update_user, :boolean, default: false)
-    field(:update_video, :boolean, default: false)
+    field :comment_video, :boolean, default: false
+    field :create_video, :boolean, default: true
+    field :create_video_format, :boolean, default: false
+    field :delete_user, :boolean, default: false
+    field :delete_video, :boolean, default: false
+    field :update_user, :boolean, default: false
+    field :update_video, :boolean, default: false
 
     belongs_to(:user, User)
 

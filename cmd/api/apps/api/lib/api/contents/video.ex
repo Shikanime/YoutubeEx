@@ -8,11 +8,11 @@ defmodule Api.Contents.Video do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "videos" do
-    field(:duration, :integer)
-    field(:enabled, :boolean, default: false)
-    field(:name, :string)
-    field(:source, :string)
-    field(:view, :integer, default: 0)
+    field :duration, :integer
+    field :enabled, :boolean, default: false
+    field :name, :string
+    field :source, :string
+    field :view, :integer, default: 0
 
     belongs_to(:user, User)
     has_many(:formats, VideoFormat)
