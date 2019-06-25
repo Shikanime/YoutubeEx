@@ -5,6 +5,7 @@ defmodule Api.Web.UserVideoController do
   alias Api.Accounts
   alias Api.Contents
   alias Api.Contents.Video
+  alias Api.Search
 
   action_fallback Api.Web.FallbackController
 
@@ -41,7 +42,8 @@ defmodule Api.Web.UserVideoController do
         |> Map.put("duration", 0)
         |> Map.put("source", video_path)
 
-      with {:ok, %Video{} = video} <- Contents.create_video(video_params) do
+      with {:ok, %Video{} = video} <- Contents.create_video(video_params),
+           {:ok, _video} <- Search.Contents.index_video(video) do
         video = Map.put(video, :user, Accounts.get_user!(id))
 
         conn
@@ -56,13 +58,7 @@ defmodule Api.Web.UserVideoController do
         |> put_view(Api.Web.ErrorView)
         |> render("error.json", error: %{format: "is invalid"})
 
-      {:error, :unsupported_format} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> put_view(Api.Web.ErrorView)
-        |> render("error.json", error: %{source: "is invalid"})
-
-      other ->
+        other ->
         other
     end
   rescue
