@@ -3,6 +3,10 @@ use Mix.Config
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+# ElasticSearch endpoint
+config :api_search, Api.Search.Client,
+  hostname: "localhost:9200"
+
 # Configure your database
 config :api, Api.Repo,
   username: "postgres",
