@@ -29,7 +29,7 @@ defmodule Api.Web do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/youtube_ex_web/templates",
+        root: "lib/api_web/templates",
         namespace: Api.Web
 
       # Import convenience functions from controllers

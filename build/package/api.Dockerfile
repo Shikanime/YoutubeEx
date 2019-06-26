@@ -1,74 +1,63 @@
-FROM elixir:1.8-alpine AS tool_base
+# syntax=docker/dockerfile:experimental
 
-# Elixir build toolchain
-RUN apk update \
-  && apk add --no-cache \
-  git \
-  build-base
+FROM erlang:22-alpine AS builder
+
+# Install Elixir
+ENV ELIXIR_VERSION="v1.9.0"
+ENV LANG=C.UTF-8
+
+RUN set -xe \
+    && ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/${ELIXIR_VERSION}.tar.gz" \
+    && ELIXIR_DOWNLOAD_SHA256="dbf4cb66634e22d60fe4aa162946c992257f700c7db123212e7e29d1c0b0c487" \
+    && buildDeps=' \
+    ca-certificates \
+    make \
+    ' \
+    && apk add --no-cache --virtual .build-deps $buildDeps \
+    && wget $ELIXIR_DOWNLOAD_URL \
+    && echo "$ELIXIR_DOWNLOAD_SHA256  ${ELIXIR_VERSION}.tar.gz" | sha256sum -c - \
+    && mkdir -p /usr/local/src/elixir \
+    && tar -xzC /usr/local/src/elixir --strip-components=1 -f ${ELIXIR_VERSION}.tar.gz \
+    && rm ${ELIXIR_VERSION}.tar.gz \
+    && cd /usr/local/src/elixir \
+    && make install clean \
+    && apk del .build-deps
+
+# Elixir build tools
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk update \
+    && apk add git build-base
 RUN mix local.rebar --force \
-  && mix local.hex --force
+    && mix local.hex --force
 
-FROM tool_base AS build_base
-
-# Default application directory
+# Environment configurations
 WORKDIR /workspace
+ARG MIX_ENV=prod
+ENV MIX_ENV=${MIX_ENV}
 
 # Pull dependencies
 COPY mix.* ./
-COPY apps/api/mix.exs apps/api/
-COPY apps/api_web/mix.exs apps/api_web/
-COPY apps/api_search/mix.exs apps/api_search/
-RUN mix deps.get
+COPY apps/api/mix.exs apps/api/mix.exs
+COPY apps/api_search/mix.exs apps/api_search/mix.exs
+COPY apps/api_web/mix.exs apps/api_web/mix.exs
+RUN --mount=type=ssh \
+    --mount=type=cache,target=/workspace/deps \
+    mix deps.get --only ${MIX_ENV} \
+    && mix deps.compile
 
-# Pull dependency configurations
-COPY config/ config/
+# Compile applications
+COPY . .
+RUN --mount=type=cache,target=/workspace/deps \
+    mix release --quiet
 
-# Precompile dependencies
-ENV MIX_ENV=prod
-RUN mix deps.compile
-
-FROM build_base AS app_base
-
-# Pull application code
-COPY apps/api/lib/ apps/api/lib/
-COPY apps/api_web/lib/ apps/api_web/lib/
-COPY apps/api_search/lib/ apps/api_search/lib/
-
-# Precompile applications
-RUN mix compile
-
-# Pull priv
-COPY apps/api/priv/ apps/api/priv/
-
-# Pull release configurations
-COPY rel rel
-
-# Create release
-RUN mix release --name api --env prod --verbose
-
-FROM alpine:3.9 AS runtime_base
-
-# Erlang runtime requirement
-RUN apk update \
-  && apk add --no-cache \
-  openssl \
-  bash
-
-# Copy docker entrypoint
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
-FROM runtime_base
-
-ENV REPLACE_OS_VARS=true
+FROM erlang:22-alpine
 
 # Pull build
-COPY --from=app_base /workspace/_build/prod/rel/api/releases/0.1.0/api.tar.gz ./
+COPY --from=builder \
+    /workspace/_build/prod/rel/api /opt/api
+ENV PATH=/opt/api/bin:$PATH
 
-# Extract tarball
-RUN tar -xf api.tar.gz --directory /usr/local \
-    && rm api.tar.gz
-
-# Gossip protocol
+# Gossip
 EXPOSE 45892
 
 # EPMD
@@ -80,5 +69,4 @@ EXPOSE 49200-49210
 # HTTP
 EXPOSE 80
 
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["api", "foreground"]
+CMD ["api", "start"]

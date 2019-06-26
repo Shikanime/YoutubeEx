@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Print only warnings and errors during test
 config :logger, level: :warn
@@ -11,7 +11,7 @@ config :api_search, Api.Search.Client,
 config :api, Api.Repo,
   username: "postgres",
   password: "postgres",
-  database: "youtube_ex_test",
+  database: "api_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

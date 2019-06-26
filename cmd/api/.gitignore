@@ -36,10 +36,4 @@
 
 # Release files
 !/rel/
-!/rel/*.exs
-!/rel/vm.args
-!/rel/commands/
-!/rel/commands/*.sh
-!/rel/hooks/
-!/rel/hooks/**/
-!/rel/hooks/**/*.sh
+!/rel/*.eex

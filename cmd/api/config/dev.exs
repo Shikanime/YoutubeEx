@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
@@ -18,7 +18,7 @@ config :phoenix, :stacktrace_depth, 20
 config :api, Api.Repo,
   username: "postgres",
   password: "postgres",
-  database: "youtube_ex_dev",
+  database: "api_dev",
   hostname: "localhost",
   pool_size: 10
 
