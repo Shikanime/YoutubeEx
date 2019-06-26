@@ -25,3 +25,12 @@ postgresql:
   postgresqlUsername: api
   postgresqlPassword: Jn3QJrnw7pnSjFSR
   postgresqlDatabase: api
+  replication:
+    slaveReplicas: 0
+    password: y7KWBCb5m8ycQLBR
+
+elasticsearch:
+  master:
+    replicas: 2
+  client:
+    replicas: 1
