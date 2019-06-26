@@ -16,5 +16,7 @@ postfix:
   smtp:
     domain: mailer
     password: DgZLmkh8xZGH3mmWWCdLnQE4f795HARPypVW2qEQNrSrc3JLdTAK3BWMTGVKAmma
+    relay:
+      enabled: false
   image:
     repository: shikanime/postfix
