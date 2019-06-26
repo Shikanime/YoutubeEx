@@ -23,31 +23,40 @@ spec:
         heritage: {{ .Release.Service | quote }}
     spec:
       initContainers:
-        - name: init-database-migration
-          image: "{{ .Values.image }}"
-          imagePullPolicy: "{{ .Values.pullPolicy }}"
-          args: ["api", "migrate"]
-          env:
-          - name: POSTGRES_HOST
-            value: {{ include "api.fullname" . }}-postgresql
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "api.fullname" . }}-postgresql
-                key: postgresql-password
-          - name: RELEASE_COOKIE
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "api.fullname" . }}
-                key: erlang-cookie
-          - name: RELEASE_NODE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: RELEASE_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
+      - name: postgresql-readiness-check
+        image: postgres
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        command:
+        - 'sh'
+        - '-c'
+        - until pg_isready -h {{ include "api.fullname" . }}-postgresql -p 5432; do
+            sleep 2;
+          done;
+      - name: database-migration
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        args: ["api", "migrate"]
+        env:
+        - name: POSTGRES_HOST
+          value: {{ include "api.fullname" . }}-postgresql
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "api.fullname" . }}-postgresql
+              key: postgresql-password
+        - name: RELEASE_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "api.fullname" . }}
+              key: erlang-cookie
+        - name: RELEASE_NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: RELEASE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
       containers:
       - name: {{ template "api.fullname" . }}
         image: "{{ .Values.image }}"
