@@ -1,6 +1,6 @@
 dependencies:
-  - name: postfix
-    repository: file://../../../third_party/charts/incubator/postfix
-    version: 0.1.1
-digest: sha256:f3c01ee200ecc1f734622bf792c45b31d3b84c7d6a9125e853c241096b09d233
-generated: "2019-06-24T15:50:33.458911+02:00"
+- name: postfix
+  repository: https://charts.cloudposse.com/incubator/
+  version: 0.1.1
+digest: sha256:6f2df68283982b12e35346d911906a74e428c77f09f3fcb18655390fb530b8f0
+generated: "2019-06-26T10:11:22.049796+02:00"
