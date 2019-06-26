@@ -17,6 +17,7 @@ WORKDIR /workspace
 COPY mix.* ./
 COPY apps/api/mix.exs apps/api/
 COPY apps/api_web/mix.exs apps/api_web/
+COPY apps/api_search/mix.exs apps/api_search/
 RUN mix deps.get
 
 # Pull dependency configurations
@@ -31,6 +32,7 @@ FROM build_base AS app_base
 # Pull application code
 COPY apps/api/lib/ apps/api/lib/
 COPY apps/api_web/lib/ apps/api_web/lib/
+COPY apps/api_search/lib/ apps/api_search/lib/
 
 # Precompile applications
 RUN mix compile
@@ -64,7 +66,7 @@ COPY --from=app_base /workspace/_build/prod/rel/api/releases/0.1.0/api.tar.gz ./
 
 # Extract tarball
 RUN tar -xf api.tar.gz --directory /usr/local \
-  && rm api.tar.gz
+    && rm api.tar.gz
 
 # Gossip protocol
 EXPOSE 45892
