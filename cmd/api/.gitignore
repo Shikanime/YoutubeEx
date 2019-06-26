@@ -11,9 +11,10 @@
 !/config/
 !/config/**/*.exs
 
-# Mix root
+# Entrypoints
 !/mix.exs
 !/mix.lock
+!/docker-entrypoint.sh
 
 # Application files
 !/apps/
