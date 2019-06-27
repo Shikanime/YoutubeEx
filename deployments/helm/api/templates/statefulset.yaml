@@ -1,26 +1,26 @@
-x-appLabels: &appLabels
-  app: {{ template "api.name" . }}
-  release: {{ .Release.Name | quote }}
-
-x-helmLabels: &helmLabels
-  chart: {{ template "api.chart" . }}
-  heritage: {{ .Release.Service | quote }}
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "api.fullname" . }}
   labels:
-    <<: [*appLabels, *helmLabels]
+    app: {{ template "api.name" . }}
+    chart: {{ template "api.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 spec:
   serviceName: "web"
   replicas: {{ .Values.replicas }}
   selector:
-    matchLabels: *appLabels
+    matchLabels:
+      app: {{ template "api.name" . }}
+      release: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
-        <<: [*appLabels, *helmLabels]
+        app: {{ template "api.name" . }}
+        chart: {{ template "api.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
     spec:
       initContainers:
       - name: postgresql-readiness-check
