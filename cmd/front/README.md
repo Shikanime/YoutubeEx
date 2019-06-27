@@ -1,4 +1,4 @@
-# youtube-front
+# front
 
 > My groovy Nuxt.js project
 
