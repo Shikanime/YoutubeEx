@@ -21,8 +21,7 @@ FROM base_builder as server_builder
 # build necessary, even if no static files are needed,
 # since it builds the server as well
 COPY . .
-RUN --mount=type=cache,target=/workspace/node_modules \
-    yarn build
+RUN yarn build
 
 FROM node:11.13.0-alpine
 

@@ -29,8 +29,7 @@ FROM base_builder AS server_builder
 # Here we copy the rest of the source code
 COPY . .
 # And compile the project
-RUN --mount=type=cache,target=/go/pkg/mod/cache \
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install ./cmd/mailer
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install ./cmd/mailer
 
 FROM alpine
 

@@ -47,8 +47,7 @@ RUN --mount=type=ssh \
 
 # Compile applications
 COPY . .
-RUN --mount=type=cache,target=/workspace/deps \
-    mix release --quiet
+RUN mix release --quiet
 
 FROM erlang:22-alpine
 
