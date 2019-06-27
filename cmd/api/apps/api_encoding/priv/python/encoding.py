@@ -1,9 +1,11 @@
 #!/bin/env python3
-from os import path
+from os import path, mkdir
 import moviepy.editor as mp
 
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, cast
+
+TMP_PATH = "/tmp/videos"
 
 #
 # VideoEncoder class
@@ -29,13 +31,13 @@ class VideoEncoder:
             return False
 
     def downsize_video(self):
-        base = path.basename(self.filename)
+        base = path.basename(self.filename.decode())
         filename = path.splitext(base)[0]
         ind_size = self.supported_size.index(self.clip.h)
 
         for new_heigth in self.supported_size[ind_size:]:
             resized = self.clip.resize(height=new_heigth)
-            new_filename = 'videos/{}_{}.mp4'.format(filename, new_heigth)
+            new_filename = '{}/{}_{}.mp4'.format(TMP_PATH, filename, new_heigth)
             resized.write_videofile(new_filename, codec='libx264', threads=4, verbose=False, logger=None)
 
 #
@@ -44,12 +46,15 @@ class VideoEncoder:
 
 encoder: VideoEncoder = None
 
+if not path.exists(TMP_PATH):
+    mkdir(TMP_PATH)
+
 def register_video(pid, filename):
     global encoder
 
     def handler(message):
-        print("K mek")
-        cast(pid, message)
+        encoder.downsize_video()
+        # cast(pid, Atom(b'ok'))
 
     encoder = VideoEncoder(pid, filename)
 
