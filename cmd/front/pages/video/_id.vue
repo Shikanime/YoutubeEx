@@ -1,24 +1,24 @@
 <template>
-  <a-card hoverable id="card">
-    <img
-      alt="example"
-      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-      slot="cover"
-    >
-    <a-card-meta :title="video.title" :description="`${video.views} views`">
-    </a-card-meta>
-  </a-card>
+  <div id="container">
+    <VideoPlayer/>
+    <h1>video.title</h1>
+  </div>
 </template>
 
 <script>
+import VideoPlayer from "~/components/VideoPlayer.vue";
 export default {
-  props: [
-    "video"
-  ]
-}
+  components: {
+    VideoPlayer
+  }
+};
 </script>
-<style scoped>
-#card {
-  margin: 2vh 1vw;
+
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 </style>
