@@ -3,8 +3,6 @@
 # Meta files
 !/nuxt.config.js
 !/jest.config.js
-!/.gitignore
-!/.dockerignore
 
 # Entrypoints
 !/yarn.lock
