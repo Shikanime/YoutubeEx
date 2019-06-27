@@ -1,46 +1,41 @@
 *
 
 # Configurations
-!.gitignore
-!.editorconfig
+!/.gitignore
+!/.editorconfig
 
 # Development environment
-!.devcontainer/
-!.devcontainer/Dockerfile
-!.devcontainer/*.json
-!.vscode/
-!.vscode/*.json
+!/.devcontainer/
+!/.devcontainer/Dockerfile
+!/.devcontainer/*.json
+!/.vscode/
+!/.vscode/*.json
 
 # Documentations
-!CODE_OF_CONDUCT.md
-!CONTRIBUTING.md
-!README.md
-!CHANGELOG.md
-!LICENSE
+!/CODE_OF_CONDUCT.md
+!/CONTRIBUTING.md
+!/README.md
+!/CHANGELOG.md
+!/LICENSE
 
 # Entrypoints
-!skaffold.yaml
+!/skaffold.yaml
 
 # Application sources
-!cmd/
-!cmd/**/
-!cmd/**/*
+!/cmd/
+!/cmd/**/
+!/cmd/**/*
 
 # Build scripts
-!build/
-!build/**/
-!build/**/*
+!/build/
+!/build/**/
+!/build/**/*
 
 # IAC scripts
-!deployments/
-!deployments/**/
-!deployments/**/*
-
-# Third party dependencies
-!third_party/
-!third_party/**/
-!third_party/**/*
+!/deployments/
+!/deployments/**/
+!/deployments/**/*
 
 # Scripts
-!hack/
-!hack/**/*.sh
+!/hack/
+!/hack/**/*.sh

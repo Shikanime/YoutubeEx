@@ -1,0 +1,15 @@
+*
+
+# Meta files
+!/.gitignore
+
+# Helm
+!**/
+!**/Chart.yaml
+!**/requirements.yaml
+!**/values.yaml
+!**/requirements.lock
+!**/templates/
+!**/templates/*.yaml
+!**/templates/_helpers.tpl
+!**/templates/NOTES.txt

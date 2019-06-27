@@ -1,0 +1,11 @@
+*
+
+# Meta files
+!/.gitignore
+
+# Terraform
+!**/
+!**/provider.tf
+!**/outputs.tf
+!**/variables.tf
+!**/main.tf
