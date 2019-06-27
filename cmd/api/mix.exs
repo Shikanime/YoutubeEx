@@ -19,7 +19,8 @@ defmodule Api.Umbrella.MixProject do
         applications: [
           api: :permanent,
           api_search: :permanent,
-          api_web: :permanent
+          api_web: :permanent,
+          api_encoding: :permanent
         ]
       ]
     ]

@@ -4,8 +4,7 @@ import Config
 config :logger, level: :warn
 
 # ElasticSearch endpoint
-config :api_search, Api.Search.Client,
-  hostname: "localhost:9200"
+config :api_search, Api.Search.Client, hostname: "localhost:9200"
 
 # Configure your database
 config :api, Api.Repo,

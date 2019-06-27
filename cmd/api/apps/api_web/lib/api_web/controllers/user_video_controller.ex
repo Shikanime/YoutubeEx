@@ -58,7 +58,7 @@ defmodule Api.Web.UserVideoController do
         |> put_view(Api.Web.ErrorView)
         |> render("error.json", error: %{format: "is invalid"})
 
-        other ->
+      other ->
         other
     end
   rescue

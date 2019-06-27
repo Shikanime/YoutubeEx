@@ -4,8 +4,7 @@ import Config
 config :logger, :console, format: "[$level] $message\n"
 
 # ElasticSearch endpoint
-config :api_search, Api.Search.Client,
-  hostname: "localhost:9200"
+config :api_search, Api.Search.Client, hostname: "localhost:9200"
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
