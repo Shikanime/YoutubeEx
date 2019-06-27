@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "front.fullname" . }}
+  labels:
+    app: {{ template "front.name" . }}
+    chart: {{ template "front.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  selector:
+    app: {{ template "front.name" . }}
+    release: {{ .Release.Name | quote }}
+  ports:
+  - name: front
+    port: {{ .Values.service.port }}
+    targetPort: api
+    {{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}

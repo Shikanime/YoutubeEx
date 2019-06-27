@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "front.fullname" . }}
+  labels:
+    app: {{ template "front.name" . }}
+    chart: {{ template "front.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "front.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "front.name" . }}
+        chart: {{ template "front.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      containers:
+      - name: {{ template "front.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        env:
+        - name: NUXT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NUXT_PORT
+          value: "5000"
+        ports:
+        - name: api
+          containerPort: 5000

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-FROM golang:1.11-alpine AS build_base
+FROM golang:1.11-alpine AS base_builder
 
 # Install some dependencies needed to build the project
 RUN --mount=type=cache,target=/var/cache/apk \
@@ -24,7 +24,7 @@ RUN --mount=type=ssh \
     go mod download
 
 # This image builds the weavaite server
-FROM build_base AS server_builder
+FROM base_builder AS server_builder
 
 # Here we copy the rest of the source code
 COPY . .
@@ -32,15 +32,19 @@ COPY . .
 RUN --mount=type=cache,target=/go/pkg/mod/cache \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install ./cmd/mailer
 
-FROM alpine AS mailer
+FROM alpine
+
+WORKDIR /opt/mailer
 
 # Gin production mode
 ENV GIN_MODE=release
 
 # Finally we copy the statically compiled Go binary
+RUN mkdir /opt/mailer/bin
 COPY --from=server_builder \
-     /go/bin/mailer /opts/mailer
+    /go/bin/mailer /opt/mailer/bin/
+ENV PATH=/opt/mailer/bin:$PATH
 
 # Default port
 EXPOSE 4047
-CMD ["/opts/mailer"]
+CMD ["mailer"]

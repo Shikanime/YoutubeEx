@@ -10,6 +10,10 @@ build:
     docker:
       dockerfile: ../../build/package/mailer.Dockerfile
     context: cmd/mailer
+  - image: youtube-ex/front
+    docker:
+      dockerfile: ../../build/package/front.Dockerfile
+    context: cmd/front
   local:
     useBuildkit: true
 deploy:
@@ -23,3 +27,7 @@ deploy:
       chartPath: deployments/helm/mailer
       values:
         image: youtube-ex/mailer
+    - name: front
+      chartPath: deployments/helm/front
+      values:
+        image: youtube-ex/front

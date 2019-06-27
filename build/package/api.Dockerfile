@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-FROM erlang:22-alpine AS builder
+FROM erlang:22-alpine AS base_builder
 
 # Install Elixir
 ENV ELIXIR_VERSION="v1.9.0"
@@ -52,9 +52,12 @@ RUN --mount=type=cache,target=/workspace/deps \
 
 FROM erlang:22-alpine
 
+WORKDIR /opt/api
+
 # Pull build
-COPY --from=builder \
-    /workspace/_build/prod/rel/api /opt/api
+COPY --from=base_builder \
+    /workspace/_build/prod/rel/api \
+    /opt/api
 ENV PATH=/opt/api/bin:$PATH
 
 # Gossip

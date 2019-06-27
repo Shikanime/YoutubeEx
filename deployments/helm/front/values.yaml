@@ -1,0 +1,22 @@
+# YoutubeEx front main image
+image: youtube-ex/front
+
+# YoutubeEx front service configuration
+service:
+  # YoutubeEx front service type
+  type: LoadBalancer
+  # clusterIP: None
+  port: 5000
+
+# YoutubeEx front node replication number
+replicas: 1
+
+# Postfix configurations
+postfix:
+  smtp:
+    domain: front
+    password: DgZLmkh8xZGH3mmWWCdLnQE4f795HARPypVW2qEQNrSrc3JLdTAK3BWMTGVKAmma
+    relay:
+      enabled: false
+  image:
+    repository: shikanime/postfix
