@@ -1,15 +1,21 @@
 const LOGIN = "LOGIN";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGOUT = "LOGOUT";
+const AUTH = "AUTH";
 
 export const state = () => {
   return {
-    isLoggedIn: true,
-    pending: false
-  }
-}
+    isLoggedIn: false,
+    pending: false,
+    auth: null
+  };
+};
 
 export const mutations = {
+  [AUTH](state, value) {
+    state.auth = value;
+    state.isLoggedIn = true;
+  },
   [LOGIN](state) {
     state.pending = true;
   },
@@ -34,12 +40,20 @@ export const actions = {
       }, 1000);
     });
   },
+  setAuth({state, commit}, auth) {
+    commit(AUTH, auth);
+  },
   logout({ commit }) {
     // localStorage.removeItem("user-token");
     commit(LOGOUT);
   },
-  nuxtServerInit({ dispatch }) {
-    return dispatch("user/isLoggedIn");
+  nuxtServerInit({ commit }, { req }) {
+    let accessToken = null;
+    if (req.headers.cookie) {
+      var parsed = cookieparser.parse(req.headers.cookie);
+      accessToken = JSON.parse(parsed.auth);
+    }
+    commit(AUTH, accessToken);
   }
 };
 

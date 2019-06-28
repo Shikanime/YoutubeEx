@@ -56,7 +56,7 @@ export default {
           console.log("Notification Clicked!");
         }
       });
-      this.$store.commit("user/logout");
+      this.$store.dispatch("user/logout");
     },
   }
 };
