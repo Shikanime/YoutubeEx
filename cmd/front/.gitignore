@@ -1,6 +1,7 @@
 *
 
 # Meta files
+!/babel.config.js
 !/nuxt.config.js
 !/jest.config.js
 !/.gitignore

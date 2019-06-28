@@ -1,6 +1,7 @@
 *
 
 # Meta files
+!/babel.config.js
 !/nuxt.config.js
 !/jest.config.js
 
@@ -19,6 +20,9 @@
 !/pages/**/*.vue
 
 # Service level files
+!/middleware/
+!/middleware/*.js
+
 !/plugins/
 !/plugins/*.js
 
