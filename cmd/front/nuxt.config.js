@@ -35,7 +35,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: ["@nuxtjs/axios"],
   /*
    ** Build configuration
    */
@@ -44,5 +44,11 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    "/api/": "http://localhost:4000"
   }
 };

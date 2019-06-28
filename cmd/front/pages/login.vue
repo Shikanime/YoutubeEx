@@ -48,9 +48,18 @@
 </template>
 
 <script>
+import { mapMutations } from 'Vuex';
+import Cookie from "js-cookie";
+
 export default {
+  middleware: "notAuthenticated",
   beforeCreate() {
     this.form = this.$form.createForm(this);
+  },
+  computed: {
+    ...mapMutations({
+      setAuthenticationToken: 'user/AUTH'
+    })
   },
   methods: {
     handleSubmit(e) {
@@ -58,6 +67,15 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
+          setTimeout(() => {
+            const auth = {
+              accessToken: "someStringGotFromApiServiceWithAjax"
+            };
+            console.log("hello world")
+            this.$store.dispatch('user/setAuth', auth);
+            Cookie.set("auth", auth); // sauver le jeton dans un cookie pour le rendu serveur
+            this.$router.push("/");
+          }, 1000);
         }
       });
     }
