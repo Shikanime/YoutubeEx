@@ -21,6 +21,9 @@
 !/pages/**/*.vue
 
 # Service level files
+!/middleware/
+!/middleware/*.js
+
 !/plugins/
 !/plugins/*.js
 
