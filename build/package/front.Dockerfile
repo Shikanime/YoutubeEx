@@ -16,8 +16,6 @@ COPY yarn.lock ./
 RUN --mount=type=cache,target=/workspace/node_modules \
     yarn
 
-FROM base_builder as server_builder
-
 # build necessary, even if no static files are needed,
 # since it builds the server as well
 COPY . .
@@ -29,7 +27,7 @@ FROM node:11.13.0-alpine
 WORKDIR /opt/front
 
 # Fetch deps
-COPY --from=server_builder \
+COPY --from=base_builder \
      /workspace/package.json \
      /workspace/yarn.lock \
      /opt/front/
@@ -38,7 +36,7 @@ COPY --from=server_builder \
 RUN yarn --production
 
 # Fetch application
-COPY --from=server_builder \
+COPY --from=base_builder \
      /workspace/.nuxt/ \
      /opt/front/.nuxt
 
