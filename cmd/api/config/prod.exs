@@ -3,8 +3,7 @@ import Config
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :api_search, Api.Search.Client,
-  hostname: "api-search:9200"
+config :api_search, Api.Search.Client, hostname: "api-search:9200"
 
 config :api, Api.Repo,
   username: "api",

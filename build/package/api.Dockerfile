@@ -1,32 +1,18 @@
 # syntax=docker/dockerfile:experimental
 
-FROM erlang:22-alpine AS base_builder
+FROM python:3 AS encoding_builder
 
-# Install Elixir
-ENV ELIXIR_VERSION="v1.9.0"
-ENV LANG=C.UTF-8
+WORKDIR /workspace/apps/api_encoding/priv/python
+COPY ./apps/api_encoding/priv/python .
 
-RUN set -xe \
-    && ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/${ELIXIR_VERSION}.tar.gz" \
-    && ELIXIR_DOWNLOAD_SHA256="dbf4cb66634e22d60fe4aa162946c992257f700c7db123212e7e29d1c0b0c487" \
-    && buildDeps=' \
-    ca-certificates \
-    make \
-    ' \
-    && apk add --no-cache --virtual .build-deps $buildDeps \
-    && wget $ELIXIR_DOWNLOAD_URL \
-    && echo "$ELIXIR_DOWNLOAD_SHA256  ${ELIXIR_VERSION}.tar.gz" | sha256sum -c - \
-    && mkdir -p /usr/local/src/elixir \
-    && tar -xzC /usr/local/src/elixir --strip-components=1 -f ${ELIXIR_VERSION}.tar.gz \
-    && rm ${ELIXIR_VERSION}.tar.gz \
-    && cd /usr/local/src/elixir \
-    && make install clean \
-    && apk del .build-deps
+RUN pip install -r requirements.txt
+
+FROM elixir:1.9 AS base_builder
 
 # Elixir build tools
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk update \
-    && apk add git build-base
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt update \
+    && apt install -y git build-essential
 RUN mix local.rebar --force \
     && mix local.hex --force
 
@@ -39,6 +25,7 @@ ENV MIX_ENV=${MIX_ENV}
 COPY mix.* ./
 COPY apps/api/mix.exs apps/api/mix.exs
 COPY apps/api_search/mix.exs apps/api_search/mix.exs
+COPY apps/api_encoding/mix.exs apps/api_encoding/mix.exs
 COPY apps/api_web/mix.exs apps/api_web/mix.exs
 RUN --mount=type=ssh \
     --mount=type=cache,target=/workspace/deps \
@@ -46,11 +33,14 @@ RUN --mount=type=ssh \
     && mix deps.compile
 
 # Compile applications
+COPY --from=encoding_builder \
+     /workspace/apps/api_encoding/priv/python \
+     /workspace/apps/api_encoding/priv/python
 COPY . .
 RUN --mount=type=cache,target=/workspace/deps \
     mix release --quiet
 
-FROM erlang:22-alpine
+FROM erlang:22
 
 WORKDIR /opt/api
 
