@@ -12,6 +12,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.5.4",
     "ant-design-vue": "^1.1.10",
     "js-cookie": "^2.2.0",
     "node-sass": "^4.12.0",
