@@ -13,14 +13,12 @@ RUN --mount=type=cache,target=/var/cache/apk \
 # copy the app, note .dockerignore
 COPY package.json ./
 COPY yarn.lock ./
-RUN --mount=type=cache,target=/workspace/node_modules \
-    yarn
+RUN yarn
 
 # build necessary, even if no static files are needed,
 # since it builds the server as well
 COPY . .
-RUN --mount=type=cache,target=/workspace/node_modules \
-    yarn build
+RUN yarn build
 
 FROM node:11.13.0-alpine
 

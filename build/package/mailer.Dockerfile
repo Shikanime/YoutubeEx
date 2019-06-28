@@ -19,18 +19,12 @@ COPY go.sum .
 # Because of how the layer caching system works in Docker, the  go mod download
 # command will _ only_ be re-run when the go.mod or go.sum file change
 # (or when we add another docker instruction this line)
-RUN --mount=type=ssh \
-    --mount=type=cache,target=/go/pkg/mod/cache \
-    go mod download
-
-# This image builds the weavaite server
-FROM base_builder AS server_builder
+RUN go mod download
 
 # Here we copy the rest of the source code
 COPY . .
 # And compile the project
-RUN --mount=type=cache,target=/go/pkg/mod/cache \
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install ./cmd/mailer
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install ./cmd/mailer
 
 FROM alpine
 
@@ -41,7 +35,7 @@ ENV GIN_MODE=release
 
 # Finally we copy the statically compiled Go binary
 RUN mkdir /opt/mailer/bin
-COPY --from=server_builder \
+COPY --from=base_builder \
     /go/bin/mailer /opt/mailer/bin/
 ENV PATH=/opt/mailer/bin:$PATH
 
