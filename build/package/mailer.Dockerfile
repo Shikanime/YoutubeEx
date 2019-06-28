@@ -1,10 +1,7 @@
-# syntax=docker/dockerfile:experimental
-
 FROM golang:1.11-alpine AS base_builder
 
 # Install some dependencies needed to build the project
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk add bash git gcc g++ libc-dev
+RUN apk add bash git gcc g++ libc-dev
 WORKDIR /go/src/github.com/ImNotAVirus/YouTube.ex/cmd/mailer
 
 # Force the go compiler to use modules

@@ -1,14 +1,11 @@
-# syntax=docker/dockerfile:experimental
-
-FROM node:11.13.0-alpine as base_builder
+FROM node:10.16.0 as base_builder
 
 # create destination directory
 WORKDIR /workspace
 
 # update and install dependency
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk update \
-    && apk add git
+RUN apt update \
+    && apt install -y git
 
 # copy the app, note .dockerignore
 COPY package.json ./
@@ -20,7 +17,7 @@ RUN yarn
 COPY . .
 RUN yarn build
 
-FROM node:11.13.0-alpine
+FROM node:10.16.0
 
 WORKDIR /opt/front
 

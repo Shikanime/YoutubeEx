@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:experimental
-
 FROM python:3 AS encoding_builder
 
 WORKDIR /workspace/apps/api_encoding/priv/python
@@ -10,8 +8,7 @@ RUN pip install -r requirements.txt
 FROM elixir:1.9 AS base_builder
 
 # Elixir build tools
-RUN --mount=type=cache,target=/var/cache/apt \
-    apt update \
+RUN apt update \
     && apt install -y git build-essential
 RUN mix local.rebar --force \
     && mix local.hex --force
